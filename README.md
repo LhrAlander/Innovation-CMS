@@ -2,20 +2,19 @@
 
 > 创新创业综合管理与展示平台
 
-## Build Setup
+× 项目介绍及任务分布在 ××文档×× 中
+
+## 如何运行项目
 
 ``` bash
-# install dependencies
+# 安装依赖包
 npm install
 
-# serve with hot reload at localhost:8080
+# 将项目热部署在 localhost:8080
 npm run dev
 
-# build for production with minification
+# 生产发布
 npm run build
 
-# build for production and view the bundle analyzer report
-npm run build --report
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
