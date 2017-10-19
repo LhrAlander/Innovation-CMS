@@ -1,0 +1,113 @@
+<template>
+  <div class="header-wrapper">
+    <header class="header">
+      <div class="container">
+        <!--<h1 class="logo">-->
+          <!--<img class="logo-title" src="../assets/img/logoTitle.png" alt="HZNU">-->
+        <!--</h1>-->
+
+        <el-row>
+          <el-col :span="2">
+            <div class="grid-content bg-purple logo-wrapper">
+              <img class="logo" src="../assets/img/logo.png" alt="HZNU">
+            </div>
+          </el-col>
+          <el-col :span="3"><router-link to="/"><div class="grid-content bg-purple-light nav-item">项目展示</div></router-link></el-col>
+          <el-col :span="3"><router-link to="/"><div class="grid-content bg-purple nav-item">团队展示</div></router-link></el-col>
+          <el-col :span="3"><router-link to="/"><div class="grid-content bg-purple-light nav-item">最近获奖</div></router-link></el-col>
+          <el-col :span="3"><router-link to="/"><div class="grid-content bg-purple nav-item">最新政策</div></router-link></el-col>
+          <el-col :span="3"><router-link to="/"><div class="grid-content bg-purple-light nav-item">学校文件</div></router-link></el-col>
+          <el-col :span="3"><router-link to="/"><div class="grid-content bg-purple nav-item">通知公告</div></router-link></el-col>
+          <el-col :span="4">
+            <div class="grid-content bg-purple-dark search-wrapper">
+              <el-input class="header-search"
+                        placeholder="请选择日期"
+                        icon="search">
+              </el-input>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+    </header>
+  </div>
+</template>
+
+<script>
+  export default {}
+</script>
+
+<style scoped>
+
+  .header-wrapper {
+    height: 80px;
+  }
+
+  .header {
+    height: 80px;
+    color: #fff;
+    background-color: #ebecee;
+  }
+
+
+
+  .header .container {
+    height: 100%;
+    width: 1140px;
+    line-height: 80px;
+    padding: 0 30px;
+    margin: 0 auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+  }
+
+  .logo-wrapper {
+    display: flex;
+    align-items: center;
+    height: 80px;
+  }
+
+  img.logo {
+    width: 75%;
+  }
+
+
+
+  img.logo-title {
+    width: 300px;
+  }
+
+  .search-wrapper {
+    float: right;
+  }
+
+
+
+
+
+  .bg-purple-dark {
+    /*background: #ebecee;*/
+    /*background: #99a9bf;*/
+  }
+  .bg-purple {
+    /*background: #ebecee;*/
+    /*background: #d3dce6;*/
+  }
+  .bg-purple-light {
+    /*background: #ebecee;*/
+    /*background: #e5e9f2;*/
+  }
+  .grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+  }
+
+  .nav-item {
+    cursor: pointer;
+    color: #000;
+    text-align: center;
+  }
+
+
+</style>
