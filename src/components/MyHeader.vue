@@ -2,10 +2,6 @@
   <div class="header-wrapper">
     <header class="header">
       <div class="container">
-        <!--<h1 class="logo">-->
-          <!--<img class="logo-title" src="../assets/img/logoTitle.png" alt="HZNU">-->
-        <!--</h1>-->
-
         <el-row>
           <el-col :span="2">
             <div class="grid-content bg-purple logo-wrapper">
@@ -40,12 +36,14 @@
 
   .header-wrapper {
     height: 80px;
+    margin-bottom: 10px;
   }
 
   .header {
     height: 80px;
     color: #fff;
-    background-color: #ebecee;
+    background-color: #fff;
+    /*background-color: #ebecee;*/
   }
 
 
@@ -72,36 +70,21 @@
     width: 75%;
   }
 
-
-
-  img.logo-title {
-    width: 300px;
+  .el-row {
+    border-bottom: 1px solid #99a9bf;
   }
+
+
 
   .search-wrapper {
     float: right;
   }
 
 
-
-
-
-  .bg-purple-dark {
-    /*background: #ebecee;*/
-    /*background: #99a9bf;*/
-  }
-  .bg-purple {
-    /*background: #ebecee;*/
-    /*background: #d3dce6;*/
-  }
-  .bg-purple-light {
-    /*background: #ebecee;*/
-    /*background: #e5e9f2;*/
-  }
-  .grid-content {
-    border-radius: 4px;
-    min-height: 36px;
-  }
+  /*.grid-content {*/
+    /*border-radius: 4px;*/
+    /*min-height: 36px;*/
+  /*}*/
 
   .nav-item {
     cursor: pointer;
