@@ -31,11 +31,11 @@ p {
 
 @font-face {
   font-family: 'iconfont';  /* project id 448274 */
-  src: url('//at.alicdn.com/t/font_448274_zrqsu0n6b2qbmx6r.eot');
-  src: url('//at.alicdn.com/t/font_448274_zrqsu0n6b2qbmx6r.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_448274_zrqsu0n6b2qbmx6r.woff') format('woff'),
-  url('//at.alicdn.com/t/font_448274_zrqsu0n6b2qbmx6r.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_448274_zrqsu0n6b2qbmx6r.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_448274_dc0kj1iycq7rdx6r.eot');
+  src: url('//at.alicdn.com/t/font_448274_dc0kj1iycq7rdx6r.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_448274_dc0kj1iycq7rdx6r.woff') format('woff'),
+  url('//at.alicdn.com/t/font_448274_dc0kj1iycq7rdx6r.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_448274_dc0kj1iycq7rdx6r.svg#iconfont') format('svg');
 }
 
 
@@ -46,4 +46,13 @@ p {
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;}
 
-
+.el-submenu__title, .el-menu-item {
+  color: #ECF0F1 !important;
+  font-weight: bold;
+}
+.el-submenu .el-menu-item:hover, .el-submenu__title:hover {
+  background-color: #2E7085 !important;
+}
+/*.el-menu {*/
+  /*display: block !important;*/
+/*}*/

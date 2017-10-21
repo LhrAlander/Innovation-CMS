@@ -6,7 +6,7 @@ import 'normalize.css'
 import '@/assets/css/base.css'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
-import locale from 'element-ui/lib/locale/lang/en'
+import locale from 'element-ui/lib/locale/lang/zh-CN'
 
 Vue.config.productionTip = false
 Vue.use(Element, { locale })
