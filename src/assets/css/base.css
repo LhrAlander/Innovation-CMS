@@ -53,6 +53,9 @@ p {
 .el-submenu .el-menu-item:hover, .el-submenu__title:hover {
   background-color: #2E7085 !important;
 }
+.el-menu {
+  background-color: transparent !important;
+}
 /*.el-menu {*/
   /*display: block !important;*/
 /*}*/
