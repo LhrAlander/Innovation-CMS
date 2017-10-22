@@ -16,6 +16,7 @@ export default [
     component: Admin,
     children: [
       {
+        name: 'userinfo',
         path: 'userinfo',
         component: UserInfo
       }

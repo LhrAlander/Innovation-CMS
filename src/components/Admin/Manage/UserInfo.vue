@@ -5,6 +5,8 @@
       :data="tableData"
       stripe
       border
+      :row-key="getRowKeys"
+      :expand-row-keys="expands"
       style="width: 100%;">
       <el-table-column type="expand">
         <template scope="props">
@@ -47,8 +49,8 @@
         <template scope="scope">
           <el-button
             size="small"
-            type="success"
-            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            type="primary"
+            @click="handleEdit(scope.$index, scope.row)" v-html="tableData[scope.$index].expanded ? '收起':'更多'"></el-button>
           <el-button
             size="small"
             type="danger"
@@ -74,24 +76,52 @@
       data() {
         return {
           tableData: [{
+            id: 1,
+            name: '林海瑞',
+            password: '123456',
+            role: '学生',
+            status: '禁用',
+            single: '单身狗',
+            expanded: false
+          },{
+            id: 2,
             name: '林海瑞',
             password: '123456',
             role: '学生',
             status: '禁用',
             single: '单身狗'
-          }],
+          },{
+            id: 3,
+            name: '林海瑞',
+            password: '123456',
+            role: '学生',
+            status: '禁用',
+            single: '单身狗'
+          },{
+            id: 4,
+            name: '林海瑞',
+            password: '123456',
+            role: '学生',
+            status: '禁用',
+            single: '单身狗'
+          }
+          ],
           url: '',
           criteria:'',//搜索条件
           pageSize: 15,
           currentPage: 1,
           start: 1, //查询的页码
-          totalCount: 30
+          totalCount: 30,
+          expands: []
         }
       },
       mounted: function(){
         this.loadData(this.criteria, this.currentName, this.pageSize);
       },
       methods: {
+        getRowKeys(row) {
+          return row.id;
+        },
         loadData(criteria, pageNum, pageSize) {
           axios.get(this.url, {parameter: criteria, pageNum: pageNum, pageSize: pageSize})
             .then(function (res) {
@@ -103,9 +133,25 @@
             console.log(err)
           })
         },
-
+        unique(array) {
+          var r = [];
+          for(var i = 0, l = array.length; i < l; i++) {
+            for(var j = i + 1; j < l; j++)
+              if (array[i] === array[j]) j = ++i;
+            r.push(array[i]);
+          }
+          return r;
+        },
         handleEdit(index, row) {
           console.log(index, row);
+          if (!this.tableData[index].expanded){
+            this.expands.push(this.tableData[index].id)
+            this.tableData[index].expanded = true;
+          } else {
+            this.expands.pop(this.tableData[index].id)
+            this.tableData[index].expanded = false;
+          }
+          this.unique(this.expands)
         },
         handleDelete(index, row) {
           var array = [];

@@ -14,9 +14,11 @@
           <p class="text">用户管理</p>
           <p class="arrow-right"> > </p>
         </template>
-          <el-menu-item index="1-1">
-            <p class="item-text">基本用户信息管理</p>
+        <router-link :to="{name: 'userinfo'}">
+          <el-menu-item index="1-1" class="first">
+              <p class="item-text">基本用户信息管理</p>
           </el-menu-item>
+        </router-link>
         <el-menu-item index="1-2">
           <p class="item-text">用户类别（角色）管理</p>
         </el-menu-item>
@@ -26,7 +28,7 @@
         <el-menu-item index="1-4">
           <p class="item-text">教师信息管理</p>
         </el-menu-item>
-        <el-menu-item index="1-5">
+        <el-menu-item index="1-5" class="last">
           <p class="item-text">企业及其他人员信息</p>
         </el-menu-item>
       </el-submenu>
@@ -37,7 +39,7 @@
           <p class="text">通知公告管理</p>
           <p class="arrow-right"> > </p>
         </template>
-        <el-menu-item index="2-1">
+        <el-menu-item index="2-1" class="first last">
           <p class="item-text">通知公告管理</p>
         </el-menu-item>
       </el-submenu>
@@ -48,7 +50,7 @@
           <p class="text">项目管理</p>
           <p class="arrow-right"> > </p>
         </template>
-        <el-menu-item index="3-1">
+        <el-menu-item index="3-1" class="first">
           <p class="item-text">项目类别管理</p>
         </el-menu-item>
         <el-menu-item index="3-2">
@@ -57,7 +59,7 @@
         <el-menu-item index="3-3">
           <p class="item-text">项目信息管理</p>
         </el-menu-item>
-        <el-menu-item index="3-4">
+        <el-menu-item index="3-4" class="last">
           <p class="item-text">项目成员管理</p>
         </el-menu-item>
       </el-submenu>
@@ -68,13 +70,13 @@
           <p class="text">团队管理</p>
           <p class="arrow-right"> > </p>
         </template>
-        <el-menu-item index="4-1">
+        <el-menu-item index="4-1" class="first">
           <p class="item-text">团队类别管理</p>
         </el-menu-item>
         <el-menu-item index="4-2">
           <p class="item-text">团队基本信息管理</p>
         </el-menu-item>
-        <el-menu-item index="4-3">
+        <el-menu-item index="4-3" class="last">
           <p class="item-text">团队成员管理</p>
         </el-menu-item>
       </el-submenu>
@@ -85,7 +87,7 @@
           <p class="text">获奖管理</p>
           <p class="arrow-right"> > </p>
         </template>
-        <el-menu-item index="5-1">
+        <el-menu-item index="5-1" class="first">
           <p class="item-text">获奖类别管理</p>
         </el-menu-item>
         <el-menu-item index="5-2">
@@ -94,7 +96,7 @@
         <el-menu-item index="5-3">
           <p class="item-text">获奖基本信息管理</p>
         </el-menu-item>
-        <el-menu-item index="5-4">
+        <el-menu-item index="5-4" class="last">
           <p class="item-text">获奖成员管理</p>
         </el-menu-item>
       </el-submenu>
@@ -105,7 +107,7 @@
           <p class="text">文件与制度管理</p>
           <p class="arrow-right"> > </p>
         </template>
-        <el-menu-item index="6-1">
+        <el-menu-item index="6-1" class="first last">
           <p class="item-text">文件与制度管理</p>
         </el-menu-item>
       </el-submenu>
@@ -116,13 +118,13 @@
           <p class="text">政府信息管理</p>
           <p class="arrow-right"> > </p>
         </template>
-        <el-menu-item index="7-1">
+        <el-menu-item index="7-1" class="first">
           <p class="item-text">政府类别管理</p>
         </el-menu-item>
         <el-menu-item index="7-2">
           <p class="item-text">政府信息管理</p>
         </el-menu-item>
-        <el-menu-item index="7-3">
+        <el-menu-item index="7-3" class="last">
           <p class="item-text">信息状态管理</p>
         </el-menu-item>
       </el-submenu>
@@ -133,10 +135,10 @@
           <p class="text">依托单位信息管理</p>
           <p class="arrow-right"> > </p>
         </template>
-        <el-menu-item index="8-1">
+        <el-menu-item index="8-1" class="first">
           <p class="item-text">依托单位信息管理</p>
         </el-menu-item>
-        <el-menu-item index="8-2">
+        <el-menu-item index="8-2" class="last">
           <p class="item-text">依托单位类别管理</p>
         </el-menu-item>
       </el-submenu>
@@ -217,10 +219,10 @@
     background-color: rgba(43,63,84,.5);
     height: auto;
   }
-  .el-menu-item:first-child {
+  .el-menu-item.first {
     padding-top: 50px;
   }
-  .el-menu-item:last-child {
+  .el-menu-item.last {
     padding-bottom: 50px;
   }
   .item-text {
