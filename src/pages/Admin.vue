@@ -27,7 +27,7 @@
   .wrap {
     position: absolute;
     width: 100%;
-    top: 74px;
+    top: 61px;
     bottom: 0;
   }
 

@@ -50,11 +50,15 @@
           <el-button
             size="small"
             type="primary"
-            @click="handleEdit(scope.$index, scope.row)" v-html="tableData[scope.$index].expanded ? '收起':'更多'"></el-button>
+            @click="handleMore(scope.$index, scope.row)" v-html="tableData[scope.$index].expanded ? '收起':'更多'"></el-button>
           <el-button
             size="small"
             type="danger"
             @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          <el-button
+            size="small"
+            class="edit-btn"
+            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -142,7 +146,7 @@
           }
           return r;
         },
-        handleEdit(index, row) {
+        handleMore(index, row) {
           console.log(index, row);
           if (!this.tableData[index].expanded){
             this.expands.push(this.tableData[index].id)
@@ -162,6 +166,9 @@
              }, function () {
                  console.log('failed');
              })
+        },
+        handleEdit(index, row) {
+          console.log(index, row)
         },
         handleSizeChange(val) {
           this.pageSize = val;
@@ -200,6 +207,19 @@
   .pagination {
     float: right;
     margin-top: 20px;
+  }
+  .edit-btn {
+    background-color: #5CB85C;
+    color: #ECF0F1;
+    outline: 0;
+    border: 1px solid #5CB85C;
+  }
+  .edit-btn:hover {
+    opacity: .7;
+  }
+  .edit-btn:active {
+    opacity: 1;
+    background-color: #4E9B4E;
   }
 </style>
 

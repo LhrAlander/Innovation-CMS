@@ -31,11 +31,11 @@ p {
 
 @font-face {
   font-family: 'iconfont';  /* project id 448274 */
-  src: url('//at.alicdn.com/t/font_448274_dc0kj1iycq7rdx6r.eot');
-  src: url('//at.alicdn.com/t/font_448274_dc0kj1iycq7rdx6r.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_448274_dc0kj1iycq7rdx6r.woff') format('woff'),
-  url('//at.alicdn.com/t/font_448274_dc0kj1iycq7rdx6r.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_448274_dc0kj1iycq7rdx6r.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_448274_dit91mhg6sn3766r.eot');
+  src: url('//at.alicdn.com/t/font_448274_dit91mhg6sn3766r.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_448274_dit91mhg6sn3766r.woff') format('woff'),
+  url('//at.alicdn.com/t/font_448274_dit91mhg6sn3766r.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_448274_dit91mhg6sn3766r.svg#iconfont') format('svg');
 }
 
 
@@ -56,6 +56,10 @@ p {
 .el-menu {
   background-color: transparent !important;
 }
+.more .el-menu{
+  border: none !important;
+}
+
 /*.el-menu {*/
   /*display: block !important;*/
 /*}*/

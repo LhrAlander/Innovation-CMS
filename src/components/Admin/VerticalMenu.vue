@@ -35,12 +35,23 @@
 
       <el-submenu index="2">
         <template slot="title" >
-          <i class="iconfont">&#xe6a4;</i>
-          <p class="text">通知公告管理</p>
+          <i class="iconfont">&#xe8d0;</i>
+          <p class="text">基本信息管理</p>
           <p class="arrow-right"> > </p>
         </template>
-        <el-menu-item index="2-1" class="first last">
-          <p class="item-text">通知公告管理</p>
+        <router-link :to="{name: 'userinfo'}">
+          <el-menu-item index="2-1" class="first">
+            <p class="item-text">学院信息管理</p>
+          </el-menu-item>
+        </router-link>
+        <el-menu-item index="2-2">
+          <p class="item-text">系部管理</p>
+        </el-menu-item>
+        <el-menu-item index="2-3">
+          <p class="item-text">专业管理</p>
+        </el-menu-item>
+        <el-menu-item index="2-4" class="last">
+          <p class="item-text">班级管理</p>
         </el-menu-item>
       </el-submenu>
 
@@ -103,44 +114,47 @@
 
       <el-submenu index="6">
         <template slot="title" >
-          <i class="iconfont">&#xe64f;</i>
-          <p class="text">文件与制度管理</p>
+          <i class="iconfont">&#xe618;</i>
+          <p class="text">政府信息管理</p>
           <p class="arrow-right"> > </p>
         </template>
-        <el-menu-item index="6-1" class="first last">
-          <p class="item-text">文件与制度管理</p>
+        <el-menu-item index="6-1" class="first">
+          <p class="item-text">政府类别管理</p>
+        </el-menu-item>
+        <el-menu-item index="6-2">
+          <p class="item-text">政府信息管理</p>
+        </el-menu-item>
+        <el-menu-item index="6-3" class="last">
+          <p class="item-text">信息状态管理</p>
         </el-menu-item>
       </el-submenu>
 
       <el-submenu index="7">
         <template slot="title" >
-          <i class="iconfont">&#xe618;</i>
-          <p class="text">政府信息管理</p>
+          <i class="iconfont">&#xe9e3;</i>
+          <p class="text">依托单位信息管理</p>
           <p class="arrow-right"> > </p>
         </template>
         <el-menu-item index="7-1" class="first">
-          <p class="item-text">政府类别管理</p>
+          <p class="item-text">依托单位信息管理</p>
         </el-menu-item>
-        <el-menu-item index="7-2">
-          <p class="item-text">政府信息管理</p>
-        </el-menu-item>
-        <el-menu-item index="7-3" class="last">
-          <p class="item-text">信息状态管理</p>
+        <el-menu-item index="7-2" class="last">
+          <p class="item-text">依托单位类别管理</p>
         </el-menu-item>
       </el-submenu>
 
       <el-submenu index="8">
         <template slot="title" >
-          <i class="iconfont">&#xe9e3;</i>
-          <p class="text">依托单位信息管理</p>
-          <p class="arrow-right"> > </p>
+          <i class="iconfont">&#xe6a4;</i>
+          <p class="text">通知公告管理</p>
         </template>
-        <el-menu-item index="8-1" class="first">
-          <p class="item-text">依托单位信息管理</p>
-        </el-menu-item>
-        <el-menu-item index="8-2" class="last">
-          <p class="item-text">依托单位类别管理</p>
-        </el-menu-item>
+      </el-submenu>
+
+      <el-submenu index="9">
+        <template slot="title" >
+          <i class="iconfont">&#xe64f;</i>
+          <p class="text">文件与制度管理</p>
+        </template>
       </el-submenu>
     </el-menu>
   </div>
