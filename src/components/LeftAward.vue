@@ -3,11 +3,11 @@
     <el-col :span="6" class="image">
       <img src="../assets/img/logoTitle.png" alt="">
     </el-col>
-    <el-col :span="12" class="content">
+    <el-col :span="18" class="content">
       <div class="cnt-wrapper">
         <h5 class="title">TeamName</h5>
         <p class="introduce">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor</p>
-        <p class="meta"><i class="iconfont calendar">&#xe6eb;</i>2017/10/17</p>
+        <!--<p class="meta"><i class="iconfont calendar">&#xe6eb;</i>2017/10/17</p>-->
       </div>
     </el-col>
   </el-row>
@@ -19,12 +19,12 @@
 
 <style scoped>
   .el-row {
-    margin-bottom: 15px;
+    margin-bottom: 1.7rem;
   }
 
 
   .el-col {
-    height: 130px;
+    height: 100px;
   }
 
 

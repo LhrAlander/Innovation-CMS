@@ -1,41 +1,47 @@
 <template>
-  <el-row>
-    <el-col :span="5" class="time-wrapper">
-      <h4 class="time">2017/10/16</h4>
+  <el-row class="announcement-wrapper">
+    <el-col class="date-col" :span="4">
+      <h5 class="date">{{announcement.date}}</h5>
+      <span class="separate">|</span>
     </el-col>
-    <router-link to="/">
-      <el-col :span="18" :offset="1" class="content">文本标签文本标签文本标签文本标签文本标签文本标签文本标</el-col>
-    </router-link>
+    <el-col class="announcement-item-col" :span="20">
+      <el-row class="announcement-item" v-for="item in announcement.items">{{item}}</el-row>
+    </el-col>
   </el-row>
 </template>
 
 <script>
-    export default {}
+    export default {
+      props: {
+        announcement: Object
+      }
+    }
 </script>
 
 <style scoped>
-  .el-row {
-    height: 40px;
-    /*margin-bottom: 20px;*/
+
+  .el-row.announcement-wrapper {
+    flex: 1;
+    /*text-overflow:ellipsis;*/
+    overflow:hidden;
+    /*white-space:nowrap;*/
   }
 
-  .el-col {
-    height: 100%;
-    line-height: 40px;
+  h5,span,p {
+    display: inline-block;
   }
 
-  h4.time {
-    height: 100%;
-    border-right: 1px solid #999;
+  span.separate {
+    padding: 0 .4rem;
   }
 
-
-
-  .content {
-    color: #000;
-    padding-right: 15px;
-    overflow: hidden;
+  .el-row.announcement-item {
+    font-size: .9rem;
+    margin-bottom: .2rem;
     text-overflow:ellipsis;
-    white-space: nowrap;
+    overflow:hidden;
+    white-space:nowrap;
   }
+
+
 </style>

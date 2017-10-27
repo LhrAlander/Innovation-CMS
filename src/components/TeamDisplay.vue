@@ -14,13 +14,13 @@
 <style scoped>
   .img-wrap {
     position: relative;
-    outline: 15px solid #ddd;
-    margin-bottom: 65px;
+    outline: .5rem solid #ddd;
+    margin-bottom: 1rem;
   }
 
   img {
-    width: 180px;
-    height: 100px;
+    width: 100%;
+    height: 100px
   }
 
   .team-name {

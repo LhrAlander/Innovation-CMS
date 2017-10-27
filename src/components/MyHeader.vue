@@ -14,13 +14,10 @@
           <el-col :span="3"><router-link to="/"><div class="grid-content bg-purple nav-item">最新政策</div></router-link></el-col>
           <el-col :span="3"><router-link to="/"><div class="grid-content bg-purple-light nav-item">学校文件</div></router-link></el-col>
           <el-col :span="3"><router-link to="/"><div class="grid-content bg-purple nav-item">通知公告</div></router-link></el-col>
-          <el-col :span="4">
-            <div class="grid-content bg-purple-dark search-wrapper">
-              <el-input class="header-search"
-                        placeholder="请选择日期"
-                        icon="search">
-              </el-input>
-            </div>
+          <el-col :span="4" class="logAndReg">
+            <router-link to="/">登录</router-link>
+            <span class="separate">|</span>
+            <router-link to="/">注册</router-link>
           </el-col>
         </el-row>
       </div>
@@ -33,6 +30,10 @@
 </script>
 
 <style scoped>
+
+  a {
+    color: #000;
+  }
 
   .header-wrapper {
     height: 80px;
@@ -75,10 +76,11 @@
   }
 
 
-
-  .search-wrapper {
-    float: right;
+  .el-col.logAndReg {
+    color: #333;
+    text-align: center;
   }
+
 
 
 

@@ -1,9 +1,17 @@
 <template>
   <div class="awards">
-    <template v-for="item in 4">
-      <left-award v-if="item % 2 != 0"></left-award>
-      <right-award v-if="item % 2 == 0"></right-award>
-    </template>
+    <el-row :gutter="100">
+      <el-col :span="12">
+        <left-award></left-award>
+        <left-award></left-award>
+        <left-award></left-award>
+      </el-col>
+      <el-col :span="12">
+        <left-award></left-award>
+        <left-award></left-award>
+        <left-award></left-award>
+      </el-col>
+    </el-row>
   </div>
 </template>
 

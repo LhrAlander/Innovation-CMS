@@ -15,7 +15,7 @@ const scrollBehavior =(to, from, savedPosition)=> {
 }
 
 let router = new Router({
-  mode:'hash',
+  // mode:'hash',
   scrollBehavior,
   routes
 })

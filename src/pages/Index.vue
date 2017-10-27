@@ -11,16 +11,18 @@
 
       <el-row>
         <el-col :span="15" class="announcement">
-          <h2 class="title title-left">通知公告</h2>
-          <div class="announcements">
-            <announcement v-for="item in 6"></announcement>
-            <router-link to="/"><span class="more">更多&nbsp;&gt; </span></router-link>
+          <router-link to="/"><h2 class="title title-left">通知公告</h2></router-link>
+          <div class="announcements" ref="indexAnnouncements">
+            <announcement v-for="item in announcements" :announcement="item"></announcement>
           </div>
         </el-col>
-        <el-col :span="7" :offset="2" class="login">
-          <h2 class="title title-right">用户登录</h2>
-          <div class="login-wrapper">
-            <log-and-reg></log-and-reg>
+        <el-col :span="7" :offset="2" class="team-show">
+          <h2 class="title title-left">团队展示</h2>
+          <div class="team-show-wrapper">
+            <el-row v-for="item in 3" :gutter="40">
+              <el-col :span="12"><team-display></team-display></el-col>
+              <el-col :span="12"><team-display></team-display></el-col>
+            </el-row>
           </div>
         </el-col>
       </el-row>
@@ -29,7 +31,7 @@
         <el-col :span="24">
           <h2 class="title">获奖情况</h2>
           <award></award>
-          <router-link to="/"><span class="more award-more">更多&nbsp;&gt; </span></router-link>
+          <!--<router-link to="/"><span class="more award-more">更多&nbsp;&gt; </span></router-link>-->
         </el-col>
       </el-row>
 
@@ -37,32 +39,15 @@
         <el-col :span="12" class="policy">
           <h2 class="title title-left">政府政策</h2>
           <div class="policy-cnt">
-            <template v-for="item in 3"><policy-and-file></policy-and-file></template>
+            <template v-for="item in 9"><policy-and-file></policy-and-file></template>
           </div>
         </el-col>
         <el-col :span="12" class="school-files">
-          <h2 class="title title-right">学校文件</h2>
-          <div class="files-cnt"><template v-for="item in 3"><policy-and-file></policy-and-file></template></div>
+          <h2 class="title title-left">学校文件</h2>
+          <div class="files-cnt"><template v-for="item in 9"><policy-and-file></policy-and-file></template></div>
         </el-col>
       </el-row>
 
-      <el-row>
-        <el-col :span="24">
-          <h2 class="title">团队展示</h2>
-          <div class="team-cnt">
-            <el-row :gutter="100">
-              <el-col :span="6" v-for="item in 4">
-                <team-display></team-display>
-              </el-col>
-            </el-row>
-            <el-row :gutter="100">
-              <el-col :span="6" v-for="item in 4">
-                <team-display></team-display>
-              </el-col>
-            </el-row>
-          </div>
-        </el-col>
-      </el-row>
 
     </div>
 
@@ -80,6 +65,68 @@
   import TeamDisplay from 'components/TeamDisplay'
   import MyHeader from 'components/MyHeader'
   import MyFooter from 'components/MyFooter'
+
+  const constAnnouncements = [
+    {
+      date: "2017/10/18",
+      items: [
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标",
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标",
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标",
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标",
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标",
+      ]
+    },
+    {
+      date: "2017/10/11",
+      items: [
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标",
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标",
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标"
+      ]
+    },
+    {
+      date: "2017/10/10",
+      items: [
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标",
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标",
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标"
+      ]
+    },
+    {
+      date: "2017/10/08",
+      items: [
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标",
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标",
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标"
+      ]
+    },
+    {
+      date: "2017/02/18",
+      items: [
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标",
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标",
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标"
+      ]
+    },
+    {
+      date: "2017/01/18",
+      items: [
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标",
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标",
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标"
+      ]
+    },
+    {
+      date: "2016/01/18",
+      items: [
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标",
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标",
+        "文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标签文本标文本标签文本标签文本标签文本标"
+      ]
+    }
+  ]
+
   export default {
     components: {
       Carousel,
@@ -90,11 +137,45 @@
       TeamDisplay,
       MyHeader,
       MyFooter
+    },
+    data () {
+      return {
+        announcements: []
+      }
+    },
+    mounted () {
+        this.announcements = constAnnouncements
+        this.$nextTick(this.updateAnnouncements)
+    },
+    methods: {
+      updateAnnouncements () {
+        const myBox = this.$refs.indexAnnouncements
+        console.log(myBox.clientHeight)
+        console.log(myBox.scrollHeight)
+        if (myBox.scrollHeight > myBox.clientHeight) {
+          let announcement = this.announcements[this.announcements.length - 1]
+          if (announcement.items.length > 1) {
+            announcement.items.pop()
+            console.log(this.announcements[this.announcements.length - 1])
+          }
+          else {
+            this.announcements.pop();
+          }
+          console.log(announcement)
+          this.$nextTick(function () {
+            this.updateAnnouncements()
+          })
+        }
+      }
     }
   }
 </script>
 
 <style scoped>
+  a {
+    color: #000;
+  }
+
   .container {
     width: 1140px;
     padding: 0 30px;
@@ -106,11 +187,12 @@
   }
 
   .announcement,
-  .login {
+  .team-show {
     height: 500px;
     marigin: 10px 0;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
   }
 
   .title {
@@ -127,7 +209,7 @@
   }
 
   .announcements,
-  .login-wrapper {
+  .team-show-wrapper {
     color: #000;
     padding: 40px 0 0;
     flex: 1;
@@ -140,10 +222,9 @@
     padding: 40px 35px 0;
   }
 
-  .announcements {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
+
+  .team-show-wrapper {
+    padding: 40px 1.5rem;
   }
 
 
