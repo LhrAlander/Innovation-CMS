@@ -1,10 +1,7 @@
-/**
- * Created by Alander on 2017/10/19.
- */
-
 import Index from 'pages/Index'
 import Admin from 'pages/Admin'
-import UserInfo from 'components/Admin/Manage/UserInfo'
+import UserInfo from 'components/Admin/Manage/UserManage/UserInfo'
+import GroupCategory from 'components/Admin/Manage/GroupManage/GroupCategory'
 
 export default [
   {
@@ -14,6 +11,7 @@ export default [
   {
     'path': '/admin',
     component: Admin,
+    redirect: '/admin/userinfo',
     children: [
       {
         name: 'userinfo',
