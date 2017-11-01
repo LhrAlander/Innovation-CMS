@@ -1,6 +1,30 @@
 <template>
   <div class="userinfo">
-    <el-button class="addInfo" type="success" size="large">添加信息</el-button>
+    <el-button class="addInfo" type="success" size="large" v-if="!showFilterBox">添加信息</el-button>
+    <el-button class="filter" size="large" v-if="!showFilterBox" @click="enterFilter">筛选信息</el-button>
+    <div class="filterbox" v-if="showFilterBox">
+      <el-input v-model="filter.username" placeholder="用户名" class="filter-input"></el-input>
+      <el-input v-model="filter.name" placeholder="姓名" class="filter-input"></el-input>
+      <el-select v-model="filter.role" clearable placeholder="用户类别" class="filter-select">
+        <el-option v-for="item in roleOptions"
+                   :key = "item.value"
+                   :label = "item.label"
+                   :value = "item.value">
+        </el-option>
+      </el-select>
+      <el-select v-model="filter.status" clearable placeholder="用户状态" class="filter-select">
+        <el-option v-for="item in statusOptions"
+                   :key = "item.value"
+                   :label = "item.label"
+                   :value = "item.value">
+        </el-option>
+      </el-select>
+      <!--取消按钮-->
+      <i class="iconfont confirm no" @click="filterCancel">&#xe605;</i>
+      <!--确认按钮-->
+      <i class="iconfont confirm yes" @click="filterConfirm">&#xe606;</i>
+
+    </div>
     <el-table
       :data="tableData"
       stripe
@@ -24,12 +48,12 @@
       </el-table-column>
       <el-table-column
         label="用户名"
-        prop="name"
+        prop="username"
         :resizable="false">
       </el-table-column>
       <el-table-column
-        label="密码"
-        prop="password"
+        label="姓名"
+        prop="name"
         :resizable="false">
       </el-table-column>
       <el-table-column
@@ -76,58 +100,71 @@
 </template>
 <script>
     import axios from 'axios'
+    import ElButton from "../../../../../node_modules/element-ui/packages/button/src/button.vue";
     export default {
+      components: {ElButton},
       data() {
         return {
           tableData: [{
             id: 1,
+            username: '2015210405043',
             name: '林海瑞',
-            password: '123456',
             role: '学生',
             status: '禁用',
             single: '单身狗',
             expanded: false
-          },{
-            id: 2,
-            name: '林海瑞',
-            password: '123456',
-            role: '学生',
-            status: '禁用',
-            single: '单身狗'
-          },{
-            id: 3,
-            name: '林海瑞',
-            password: '123456',
-            role: '学生',
-            status: '禁用',
-            single: '单身狗'
-          },{
-            id: 4,
-            name: '林海瑞',
-            password: '123456',
-            role: '学生',
-            status: '禁用',
-            single: '单身狗'
           }
           ],
           url: '',
-          criteria:'',//搜索条件
+          filter: {//搜索条件
+            username: '',
+            name: '',
+            role: '',
+            status: ''
+          },
           pageSize: 15,
           currentPage: 1,
           start: 1, //查询的页码
           totalCount: 30,
-          expands: []
+          expands: [],
+          showFilterBox: true, // 是否显示筛选框
+          roleOptions: [{
+            value: 0,
+            label: '全部'
+          }, {
+            value: 1,
+            label: '学生'
+          }, {
+            value: 2,
+            label: '老师'
+          }, {
+            value: 3,
+            label: '企业'
+          }],
+          statusOptions: [{
+            value: 0,
+            label: '全部'
+          }, {
+            value: 1,
+            label: '可用'
+          }, {
+            value: 2,
+            label: '禁用'
+          }, {
+            value: 3,
+            label: '待审核'
+          }],
         }
       },
       mounted: function(){
-        this.loadData(this.criteria, this.currentName, this.pageSize);
+        this.loadData(this.filter, this.currentName, this.pageSize);
       },
       methods: {
         getRowKeys(row) {
           return row.id;
         },
-        loadData(criteria, pageNum, pageSize) {
-          axios.get(this.url, {parameter: criteria, pageNum: pageNum, pageSize: pageSize})
+        loadData(filter, pageNum, pageSize) {
+          axios.get(this.url, {parameter: filter, pageNum: pageNum, pageSize: pageSize})
             .then(function (res) {
             this.tableData = res.data.pagestudentdata;
             this.totalCount = res.data.number;
@@ -162,7 +199,7 @@
           array.push(row.id);
           axios.post('',{"array":array},{emulateJson: true})
                .then(function (res) {
-                 this.loadData(this.criteria, this.currentPage, this.pageSize);
+                 this.loadData(this.filter, this.currentPage, this.pageSize);
              }, function () {
                  console.log('failed');
              })
@@ -172,11 +209,20 @@
         },
         handleSizeChange(val) {
           this.pageSize = val;
-          this.loadData(this.criteria, this.currentName, this.pageSize);
+          this.loadData(this.filter, this.currentName, this.pageSize);
         },
         handleCurrentChange(val) {
           this.currentPage = val;
-          this.loadData(this.criteria, this.currentName, this.pageSize);
+          this.loadData(this.filter, this.currentName, this.pageSize);
+        },
+        filterConfirm() {
+          this.loadData(this.filter, this.currentName, this.pageSize);
+        },
+        filterCancel() {
+          this.showFilterBox = false;
+        },
+        enterFilter() {
+          this.showFilterBox = true;
         }
       }
     }
@@ -204,6 +250,21 @@
     margin-right: 40px;
     margin-bottom: 20px;
   }
+  .filter {
+    float: right;
+    margin-right: 20px;
+    background-color: #9B59B6;
+    color: #ECF0F1;
+    outline: 0;
+    border: 1px solid #9B59B6;
+  }
+  .filter:hover {
+    opacity: .7;
+  }
+  .filter:active {
+    opacity: 1;
+    background-color: #71468B;
+  }
   .pagination {
     float: right;
     margin-top: 20px;
@@ -220,6 +281,37 @@
   .edit-btn:active {
     opacity: 1;
     background-color: #4E9B4E;
+  }
+
+  .filterbox {
+    height: 45px;
+    margin-bottom: 15px;
+    background-color: #ECF0F1;
+    padding-left: 9%;
+  }
+  .filter-input, .filter-select {
+    width: 14%;
+    margin-left: 2%;
+  }
+  i.confirm {
+    float: right;
+    font-size: 1.5rem;
+    margin-left: 20px;
+    cursor: pointer;
+    opacity: .5;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+  }
+  i.confirm:hover {
+    opacity: 1;
+  }
+  i.confirm.yes {
+    color: green;
+  }
+  i.confirm.no {
+    color: red;
   }
 </style>
 
