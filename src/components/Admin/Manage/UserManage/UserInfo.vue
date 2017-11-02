@@ -1,30 +1,11 @@
 <template>
   <div class="userinfo">
-    <el-button class="addInfo" type="success" size="large" v-if="!showFilterBox">添加信息</el-button>
-    <el-button class="filter" size="large" v-if="!showFilterBox" @click="enterFilter">筛选信息</el-button>
-    <div class="filterbox" v-if="showFilterBox">
-      <el-input v-model="filter.username" placeholder="用户名" class="filter-input"></el-input>
-      <el-input v-model="filter.name" placeholder="姓名" class="filter-input"></el-input>
-      <el-select v-model="filter.role" clearable placeholder="用户类别" class="filter-select">
-        <el-option v-for="item in roleOptions"
-                   :key = "item.value"
-                   :label = "item.label"
-                   :value = "item.value">
-        </el-option>
-      </el-select>
-      <el-select v-model="filter.status" clearable placeholder="用户状态" class="filter-select">
-        <el-option v-for="item in statusOptions"
-                   :key = "item.value"
-                   :label = "item.label"
-                   :value = "item.value">
-        </el-option>
-      </el-select>
-      <!--取消按钮-->
-      <i class="iconfont confirm no" @click="filterCancel">&#xe605;</i>
-      <!--确认按钮-->
-      <i class="iconfont confirm yes" @click="filterConfirm">&#xe606;</i>
-
+    <div class="tagBlock">
+      <el-tag v-for="(value,key,index) in filter" v-if="value != ''" class="tag" >{{key}}</el-tag>
     </div>
+    <el-button class="addInfo" type="success" size="large">添加信息</el-button>
+    <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
+    <filter-box :dialogVisible="showFilterBox" @sendFilter="receiveFilter"></filter-box>
     <el-table
       :data="tableData"
       stripe
@@ -101,8 +82,9 @@
 <script>
     import axios from 'axios'
     import ElButton from "../../../../../node_modules/element-ui/packages/button/src/button.vue";
+    import FilterBox from "components/Admin/Manage/FilterBox"
     export default {
-      components: {ElButton},
+      components: {ElButton, FilterBox},
       data() {
         return {
           tableData: [{
@@ -127,7 +109,7 @@
           start: 1, //查询的页码
           totalCount: 30,
           expands: [],
-          showFilterBox: true, // 是否显示筛选框
+          showFilterBox: false, // 是否显示筛选框
           roleOptions: [{
             value: 0,
             label: '全部'
@@ -154,6 +136,10 @@
             value: 3,
             label: '待审核'
           }],
+        }
+      },
+      filters: {
+        tagFilter: function (value) {
         }
       },
       mounted: function(){
@@ -223,7 +209,13 @@
         },
         enterFilter() {
           this.showFilterBox = true;
-        }
+        },
+        receiveFilter(filter) {
+          if (filter != null)
+            this.filter = filter;
+          this.showFilterBox = false;
+          this.loadData(this.filter, this.currentName, this.pageSize);
+        },
       }
     }
 </script>
@@ -289,10 +281,7 @@
     background-color: #ECF0F1;
     padding-left: 9%;
   }
-  .filter-input, .filter-select {
-    width: 14%;
-    margin-left: 2%;
-  }
+
   i.confirm {
     float: right;
     font-size: 1.5rem;
@@ -312,6 +301,15 @@
   }
   i.confirm.no {
     color: red;
+  }
+  .tagBlock {
+    display: inline-block;
+    margin-top: 10px;
+    margin-left: 20%;
+
+  }
+  .tag {
+    margin: 5px;
   }
 </style>
 
