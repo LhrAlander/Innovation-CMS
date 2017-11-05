@@ -1,0 +1,4 @@
+/*覆盖ElementUI样式*/
+.admin-check-info-wrapper .el-input.is-disabled .el-input__inner {
+  color: #666;
+}
