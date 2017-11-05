@@ -2,3 +2,7 @@
 .admin-check-info-wrapper .el-input.is-disabled .el-input__inner {
   color: #666;
 }
+
+.admin-user-category-wrapper .el-checkbox.is-bordered+.el-checkbox.is-bordered {
+  margin: 1rem;
+}

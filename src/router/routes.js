@@ -6,7 +6,7 @@ import GroupCategory from 'components/Admin/Manage/GroupManage/GroupCategory'
 
 // 管理员查看表单
 import CheckRouterView from 'pages/AdminInfoTables/AdminInfoBaseRouterView'
-import CheckUserInfo from 'pages/AdminInfoTables/UserManage/UserInfo'
+import UserCategory from 'pages/AdminInfoTables/UserManage/UserCategory'
 
 export default [
   {
@@ -101,4 +101,8 @@ export default [
       },
     ]
   },
+  {
+    path: '/usercategory',
+    component: UserCategory
+  }
 ]

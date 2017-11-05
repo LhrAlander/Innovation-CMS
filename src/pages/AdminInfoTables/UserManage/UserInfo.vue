@@ -74,6 +74,8 @@
           this.$confirm('是否确认提交修改?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
+            closeOnClickModal: false,
+            closeOnPressEscape: false,
             type: 'warning',
             beforeClose: (action, instance, done) => {
               if (action === 'confirm') {
@@ -115,6 +117,8 @@
           this.$confirm('是否重置该用户密码?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
+            closeOnClickModal: false,
+            closeOnPressEscape: false,
             type: 'warning',
             beforeClose: (action, instance, done) => {
               if (action === 'confirm') {
