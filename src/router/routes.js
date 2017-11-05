@@ -30,9 +30,75 @@ export default [
     component: CheckRouterView,
     children: [
       {
+        meta: {
+          checkMode: true,
+          tableName: "userInfo"
+        },
         path: 'userInfo/:userId',
-        component: CheckUserInfo
-      }
+        component: CheckRouterView
+      },
+      {
+        meta: {
+          checkMode: true,
+          tableName: "teacherInfo"
+        },
+        path: 'teacherInfo/:userId',
+        component: CheckRouterView
+      },
+      {
+        meta: {
+          checkMode: true,
+          tableName: "companyInfo"
+        },
+        path: 'companyInfo/:userId',
+        component: CheckRouterView
+      },
+      {
+        meta: {
+          checkMode: true,
+          tableName: "studentInfo"
+        },
+        path: 'studentInfo/:userId',
+        component: CheckRouterView
+      },
     ]
-  }
+  },
+  {
+    'path': '/edit',
+    component: CheckRouterView,
+    children: [
+      {
+        meta: {
+          checkMode: false,
+          tableName: "userInfo"
+        },
+        path: 'userInfo/:userId',
+        component: CheckRouterView
+      },
+      {
+        meta: {
+          checkMode: false,
+          tableName: "teacherInfo"
+        },
+        path: 'teacherInfo/:userId',
+        component: CheckRouterView
+      },
+      {
+        meta: {
+          checkMode: false,
+          tableName: "companyInfo"
+        },
+        path: 'companyInfo/:userId',
+        component: CheckRouterView
+      },
+      {
+        meta: {
+          checkMode: false,
+          tableName: "studentInfo"
+        },
+        path: 'studentInfo/:userId',
+        component: CheckRouterView
+      },
+    ]
+  },
 ]

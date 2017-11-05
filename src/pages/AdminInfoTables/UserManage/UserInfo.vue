@@ -1,11 +1,18 @@
 <template>
     <div class="admin-check-info-wrapper">
 
-      <h1 class="title">基本用户信息查看</h1>
+      <h1 class="title">{{ title }}</h1>
 
-      <div class="breadcrumb">
-        <i class="iconfont">&#xe6a0;</i>
-        用户管理&nbsp; >&nbsp;基本用户信息查看
+      <div class="mode-crumb-box">
+        <div class="breadcrumb">
+          <i class="iconfont" v-html="breadCrumbs.iconCode"></i>
+          {{ breadCrumbs.firstLevel}}&nbsp; >&nbsp;<template v-for="level in breadCrumbs.otherLevels">{{ level }}</template>
+        </div>
+        <div class="btn-wrapper">
+          <el-button type="primary" plain class="modify-mode-btn" @click="goCheckMode">查看信息</el-button>
+          <el-button type="warning" plain class="modify-mode-btn" @click="goModifyMode">修改信息</el-button>
+          <el-button type="danger" plain class="modify-mode-btn" @click="delUser">删除用户</el-button>
+        </div>
       </div>
 
       <div class="info-wrapper" v-for="block in displayInfo">
@@ -13,32 +20,41 @@
           <i class="iconfont box" v-html="block.iconCode"></i>
           {{ block.infoTitle }}
           <el-row :gutter="200" class="info-content" v-for="rowIndex in getRowCount(block.items)">
-             <el-col :span="8" class="info-item" v-for="colIndex in 3">
+             <el-col :span="block.items[getItemIndex(rowIndex, colIndex)].span * 8" class="info-item" v-for="colIndex in 3" v-if="block.items[getItemIndex(rowIndex, colIndex)] != null">
               <span class="item-name">{{ block.items[getItemIndex(rowIndex, colIndex)].name }}</span>
               <div class="item-content">
               <el-input disabled v-model="block.items[getItemIndex(rowIndex, colIndex)].value" v-if="checkMode"></el-input>
+              <info-display-temp @clickBtn="btnFunc(block.items[getItemIndex(rowIndex, colIndex)])" v-if="!checkMode" :item="block.items[getItemIndex(rowIndex, colIndex)]"></info-display-temp>
+                      <!--{{ block.items[getItemIndex(rowIndex, colIndex)].value }}-->
               </div>
             </el-col>
           </el-row>
         </span>
       </div>
 
-
+      <el-button v-if="!checkMode" type="primary" class="submitBtn" @click="alertModify">提交修改</el-button>
 
     </div>
 </template>
 
 <script>
-  import INFO from '@/config.js'
+  import InfoDisplayTemp from 'components/Admin/Manage/InfoDisplayTemp'
+
+  const INPUT = 1
+  const SELECT = 2
+  const RADIO = 3
+  const SWITCH = 4
+  const BUTTON = 5
+
     export default {
-      data () {
-        return {
-          displayInfo: [],
-          checkMode: true
-        }
+      props: {
+        title: String,
+        breadCrumbs: Object,
+        displayInfo: Array,
+        checkMode: false
       },
-      created () {
-        this.displayInfo = INFO.adminCheckInfo.userBaseInfo
+      components: {
+        InfoDisplayTemp
       },
       methods: {
         getRowCount (arr) {
@@ -46,6 +62,90 @@
         },
         getItemIndex (rowIndex, colIndex) {
           return (rowIndex - 1) * 3 + colIndex - 1
+        },
+        btnFunc (item) {
+          switch (item.clickFunName) {
+            case 'resetPWD':
+              this.resetPWD()
+              break
+          }
+        },
+        alertModify () {
+          this.$confirm('是否确认提交修改?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            beforeClose: (action, instance, done) => {
+              if (action === 'confirm') {
+                instance.confirmButtonLoading = true
+                instance.confirmButtonText = '执行中...'
+                this.submitModify().then(function () {
+                  instance.confirmButtonLoading = false
+                  done()
+                })
+              } else {
+                console.log("else")
+                done();
+              }
+            }
+          }).then(() => {
+            this.$message({
+              type: 'success',
+              message: '修改成功!'
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消修改'
+            })
+          })
+        },
+        submitModify () {
+          return new Promise((res, reject) => {
+            // 提交修改后的信息
+            setTimeout(() => {
+              if (true)
+                res()
+              else
+                reject()
+            }, 3000)
+          })
+        },
+        resetPWD () {
+          this.$confirm('是否重置该用户密码?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            beforeClose: (action, instance, done) => {
+              if (action === 'confirm') {
+                instance.confirmButtonLoading = true;
+                instance.confirmButtonText = '执行中...';
+                this.submitModify().then(function () {
+                  instance.confirmButtonLoading = false
+                  done()
+                })
+              } else {
+                console.log("else")
+                done();
+              }
+            }
+          }).then(() => {
+            this.$message({
+              type: 'success',
+              message: '重置密码成功!'
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消重置密码'
+            })
+          })
+        },
+        goModifyMode () {
+          this.$emit("goModifyMode")
+        },
+        goCheckMode () {
+          this.$emit("goCheckMode")
         }
       }
     }
@@ -58,6 +158,12 @@
     background-color: #fff;
     height: 100%;
     padding: 1.4rem 5rem;
+  }
+
+  .mode-crumb-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
 
@@ -111,13 +217,22 @@
   .info-item {
     display: flex;
     align-items: center;
-    justify-content: space-between;
   }
 
   .item-name {
     font-size: 1rem;
+    width: 5rem;
+    margin-right: 1rem;
   }
 
+  .item-content {
+    flex: 1;
+  }
+
+  .submitBtn {
+    float: right;
+    margin-right: 3rem;
+  }
 
 
 
