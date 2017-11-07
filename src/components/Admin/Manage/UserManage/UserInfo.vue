@@ -1,7 +1,8 @@
 <template>
   <div class="userinfo">
     <div class="tagBlock">
-      <el-tag v-for="(value,key,index) in filter" v-if="value != ''" class="tag" >{{key}}</el-tag>
+      <span v-if="!tagEmpty" style="font-weight: bold; font-size: .9rem;">筛选条件</span>
+      <el-tag v-for="(value,key,index) in filter" v-if="value !== ''" class="tag" >{{tagFormater(key)}}</el-tag>
     </div>
     <el-button class="addInfo" type="success" size="large">添加信息</el-button>
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
@@ -136,10 +137,13 @@
             value: 3,
             label: '待审核'
           }],
-        }
-      },
-      filters: {
-        tagFilter: function (value) {
+          tagFormatMap: {
+            username: '用户名',
+            name: '姓名',
+            role: '用户类别',
+            status: '用户状态'
+          },
+          tagEmpty: true,
         }
       },
       mounted: function(){
@@ -216,6 +220,25 @@
           this.showFilterBox = false;
           this.loadData(this.filter, this.currentName, this.pageSize);
         },
+        tagFormater: function(value) {
+          if (!value) return '';
+          value = value.toString();
+          return this.tagFormatMap[value];
+        }
+      },
+      watch: {
+        filter: {
+          handler: function (val) {
+            this.tagEmpty = true;
+            for (let item in val) {
+              if (val[item] !== '') {
+                this.tagEmpty = false;
+                break;
+              }
+            }
+          },
+          deep: true
+        }
       }
     }
 </script>

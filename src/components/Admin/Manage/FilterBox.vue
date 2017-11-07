@@ -5,26 +5,38 @@
       @close = "handleCancel"
       :modal = "false"
       :close-on-click-modal = "false"
+      center
       >
-      <el-form :model = "filter">
-
-          <el-input v-model="filter.username" placeholder="用户名" class="filter-input"></el-input>
-        <el-input v-model="filter.name" placeholder="姓名" class="filter-input"></el-input>
-        <el-select v-model="filter.role" clearable placeholder="用户类别" class="filter-select">
-          <el-option v-for="item in roleOptions"
-                     :key = "item.value"
-                     :label = "item.label"
-                     :value = "item.value">
-          </el-option>
-        </el-select>
-        <el-select v-model="filter.status" clearable placeholder="用户状态" class="filter-select">
-          <el-option v-for="item in statusOptions"
-                     :key = "item.value"
-                     :label = "item.label"
-                     :value = "item.value">
-          </el-option>
-        </el-select>
-      </el-form>
+      <el-row>
+        <el-col :span="12">
+          <span style="width: 4rem; display: inline-block;">用户名</span>
+          <el-input v-model="filter.username" placeholder="请输入用户名" class="filter-input"></el-input>
+        </el-col>
+        <el-col :span="12">
+          <span style="width: 4rem; display: inline-block;">姓名</span>
+          <el-input v-model="filter.name" placeholder="请输入姓名" class="filter-input"></el-input>
+        </el-col>
+        <el-col :span="12">
+          <span style="width: 4rem; display: inline-block;">用户类别</span>
+          <el-select v-model="filter.role" clearable placeholder="请选择用户类别" class="filter-select">
+            <el-option v-for="item in roleOptions"
+                       :key = "item.value"
+                       :label = "item.label"
+                       :value = "item.value">
+            </el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="12">
+          <span style="width: 4rem; display: inline-block;">用户状态</span>
+          <el-select v-model="filter.status" clearable placeholder="请选择用户状态" class="filter-select">
+            <el-option v-for="item in statusOptions"
+                       :key = "item.value"
+                       :label = "item.label"
+                       :value = "item.value">
+            </el-option>
+          </el-select>
+        </el-col>
+      </el-row>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleCancel">取 消</el-button>
         <el-button type="primary" @click="handleDetermine">确 定</el-button>
@@ -101,7 +113,7 @@
 
   }
   .filter-input, .filter-select {
-    width: 25%;
+    width: 50%;
     margin-left: 2%;
     margin-top: 1%;
   }
