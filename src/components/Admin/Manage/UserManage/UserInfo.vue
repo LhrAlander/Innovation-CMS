@@ -2,7 +2,7 @@
   <div class="userinfo">
     <div class="tagBlock">
       <span v-if="!tagEmpty" style="font-weight: bold; font-size: .9rem;">筛选条件</span>
-      <el-tag v-for="(value,key,index) in filter" v-if="value !== ''" class="tag" >{{tagFormater(key)}}</el-tag>
+      <el-tag v-for="(value,key,index) in filter" v-if="value !== ''" class="tag" >{{tagFormater(key)}}({{valueFormater(key,value)}})</el-tag>
     </div>
     <el-button class="addInfo" type="success" size="large">添加信息</el-button>
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
@@ -56,7 +56,7 @@
           <el-button
             size="small"
             type="primary"
-            @click="handleMore(scope.$index, scope.row)" v-html="tableData[scope.$index].expanded ? '收起':'更多'"></el-button>
+            @click="handleMore(scope.$index, scope.row)">更多</el-button>
           <el-button
             size="small"
             type="danger"
@@ -109,7 +109,6 @@
           currentPage: 1,
           start: 1, //查询的页码
           totalCount: 30,
-          expands: [],
           showFilterBox: false, // 是否显示筛选框
           roleOptions: [{
             value: 0,
@@ -174,15 +173,6 @@
           return r;
         },
         handleMore(index, row) {
-          console.log(index, row);
-          if (!this.tableData[index].expanded){
-            this.expands.push(this.tableData[index].id)
-            this.tableData[index].expanded = true;
-          } else {
-            this.expands.pop(this.tableData[index].id)
-            this.tableData[index].expanded = false;
-          }
-          this.unique(this.expands)
         },
         handleDelete(index, row) {
           var array = [];
@@ -224,6 +214,23 @@
           if (!value) return '';
           value = value.toString();
           return this.tagFormatMap[value];
+        },
+        valueFormater: function (key, value) {
+          if (key === "role") {
+            for (var item of this.roleOptions) {
+              if (item.value == value) {
+                return item.label;
+              }
+            }
+          } else if (key === "status") {
+            for (var item of this.statusOptions) {
+              if (item.value == value) {
+                return item.label;
+              }
+            }
+          } else {
+            return value;
+          }
         }
       },
       watch: {
