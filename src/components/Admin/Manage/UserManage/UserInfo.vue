@@ -1,18 +1,20 @@
 <template>
   <div class="userinfo">
+    <!--筛选标签区域-->
     <div class="tagBlock">
       <span v-if="!tagEmpty" style="font-weight: bold; font-size: .9rem;">筛选条件</span>
-      <el-tag v-for="(value,key,index) in filter" v-if="value !== ''" class="tag" >{{tagFormater(key)}}({{valueFormater(key,value)}})</el-tag>
+      <el-tag v-for="(value,key,index) in filter" v-if="value !== ''" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value)}})</el-tag>
     </div>
     <el-button class="addInfo" type="success" size="large">添加信息</el-button>
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
+    <!--筛选框-->
     <filter-box :dialogVisible="showFilterBox" @sendFilter="receiveFilter"></filter-box>
+    <!--表格-->
     <el-table
       :data="tableData"
       stripe
       border
       :row-key="getRowKeys"
-      :expand-row-keys="expands"
       style="width: 100%;">
       <el-table-column type="expand">
         <template scope="props">
@@ -68,6 +70,7 @@
         </template>
       </el-table-column>
     </el-table>
+    <!--分页-->
     <div class="pagination">
       <el-pagination
         @size-change="handleSizeChange"
@@ -88,7 +91,7 @@
       components: {ElButton, FilterBox},
       data() {
         return {
-          tableData: [{
+          tableData: [{ // 表格数据
             id: 1,
             username: '2015210405043',
             name: '林海瑞',
@@ -98,19 +101,7 @@
             expanded: false
           }
           ],
-          url: '',
-          filter: {//搜索条件
-            username: '',
-            name: '',
-            role: '',
-            status: ''
-          },
-          pageSize: 15,
-          currentPage: 1,
-          start: 1, //查询的页码
-          totalCount: 30,
-          showFilterBox: false, // 是否显示筛选框
-          roleOptions: [{
+          roleOptions: [{ // 用户类别映射表
             value: 0,
             label: '全部'
           }, {
@@ -123,7 +114,7 @@
             value: 3,
             label: '企业'
           }],
-          statusOptions: [{
+          statusOptions: [{ // 用户状态映射表
             value: 0,
             label: '全部'
           }, {
@@ -136,13 +127,26 @@
             value: 3,
             label: '待审核'
           }],
-          tagFormatMap: {
+          keyFormatMap: { // 格式化标签映射表
             username: '用户名',
             name: '姓名',
             role: '用户类别',
             status: '用户状态'
           },
-          tagEmpty: true,
+//        获取表格数据的地址
+          url: '',
+          filter: {//搜索条件
+            username: '', //用户名
+            name: '', //姓名
+            role: '',//用户类别
+            status: ''//用户状态
+          },
+          pageSize: 15, //每页大小
+          currentPage: 1, //当前页
+          start: 1, //查询的页码
+          totalCount: 30, //返回的记录总数
+          showFilterBox: false, // 是否显示筛选框
+          tagEmpty: true, //标签是否为空
         }
       },
       mounted: function(){
@@ -152,10 +156,11 @@
         getRowKeys(row) {
           return row.id;
         },
+//        异步加载数据
         loadData(filter, pageNum, pageSize) {
-          axios.get(this.url, {parameter: filter, pageNum: pageNum, pageSize: pageSize})
+          axios.get(this.url, {param: filter, pageNum: pageNum, pageSize: pageSize})
             .then(function (res) {
-            this.tableData = res.data.pagestudentdata;
+            this.tableData = res.data.pagesTableData;
             this.totalCount = res.data.number;
           }, function () {
             console.log('failed')
@@ -174,6 +179,7 @@
         },
         handleMore(index, row) {
         },
+//        删除按钮事件
         handleDelete(index, row) {
           var array = [];
           array.push(row.id);
@@ -184,47 +190,48 @@
                  console.log('failed');
              })
         },
+//        编辑按钮事件
         handleEdit(index, row) {
           console.log(index, row)
         },
+//        单页大小改变回调事件
         handleSizeChange(val) {
           this.pageSize = val;
           this.loadData(this.filter, this.currentName, this.pageSize);
         },
+//        当前页改变回调事件
         handleCurrentChange(val) {
           this.currentPage = val;
           this.loadData(this.filter, this.currentName, this.pageSize);
         },
-        filterConfirm() {
-          this.loadData(this.filter, this.currentName, this.pageSize);
-        },
-        filterCancel() {
-          this.showFilterBox = false;
-        },
+//        点击筛选触发的事件
         enterFilter() {
           this.showFilterBox = true;
         },
+//        接收子组件filterbox传递的筛选条件数据
         receiveFilter(filter) {
-          if (filter != null)
+          if (filter !== undefined)
             this.filter = filter;
           this.showFilterBox = false;
           this.loadData(this.filter, this.currentName, this.pageSize);
         },
-        tagFormater: function(value) {
+//        标签的key格式化器
+        keyFormater: function(value) {
           if (!value) return '';
           value = value.toString();
-          return this.tagFormatMap[value];
+          return this.keyFormatMap[value];
         },
+//        标签的value格式化器
         valueFormater: function (key, value) {
           if (key === "role") {
             for (var item of this.roleOptions) {
-              if (item.value == value) {
+              if (item.value === value) {
                 return item.label;
               }
             }
           } else if (key === "status") {
             for (var item of this.statusOptions) {
-              if (item.value == value) {
+              if (item.value === value) {
                 return item.label;
               }
             }
