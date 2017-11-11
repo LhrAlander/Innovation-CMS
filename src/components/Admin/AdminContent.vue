@@ -1,13 +1,13 @@
 <template>
   <div class="container">
     <div class="breadcrumb">
-      <i class="iconfont" v-html="currentPage.iconCode"></i>
-      {{currentPage.firstLevel}}&nbsp; >&nbsp; {{currentPage.secondLevel}}
+      <i class="iconfont" v-html="this.$route.meta.iconCode"></i>
+      {{this.$route.meta.firstLevel}}
+      <span v-if="this.$route.meta.secondLevel">&nbsp; >&nbsp; {{this.$route.meta.secondLevel}}</span>
     </div>
     <keep-alive>
       <router-view></router-view>
     </keep-alive>
-    <div class="pagination"></div>
   </div>
 </template>
 <script>

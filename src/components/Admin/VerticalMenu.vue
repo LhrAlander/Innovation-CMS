@@ -165,17 +165,17 @@
       <el-submenu index="6">
         <template slot="title" >
           <i class="iconfont">&#xe618;</i>
-          <p class="text">政府信息管理</p>
+          <p class="text">政策信息管理</p>
           <p class="arrow-right"> > </p>
         </template>
         <router-link :to="{name: 'GovCategory'}">
           <el-menu-item index="6-1" class="first">
-            <p class="item-text">政府类别管理</p>
+            <p class="item-text">政策类别管理</p>
           </el-menu-item>
         </router-link>
         <router-link :to="{name: 'GovInfo'}">
           <el-menu-item index="6-2">
-            <p class="item-text">政府信息管理</p>
+            <p class="item-text">政策信息管理</p>
           </el-menu-item>
         </router-link>
         <router-link :to="{name: 'InfoStatus'}">
@@ -203,23 +203,23 @@
         </router-link>
       </el-submenu>
 
-      <el-submenu index="8">
-        <router-link :to="{name: 'Notification'}">
+      <router-link :to="{name: 'Notification'}">
+        <el-submenu index="8">
           <template slot="title" >
             <i class="iconfont">&#xe6a4;</i>
             <p class="text">通知公告管理</p>
           </template>
-        </router-link>
-      </el-submenu>
+        </el-submenu>
+      </router-link>
 
-      <el-submenu index="9">
-        <router-link :to="{name: 'FileAndSystem'}">
+      <router-link :to="{name: 'FileAndSystem'}">
+        <el-submenu index="9">
           <template slot="title" >
             <i class="iconfont">&#xe64f;</i>
             <p class="text">文件与制度管理</p>
           </template>
-        </router-link>
-      </el-submenu>
+        </el-submenu>
+      </router-link>
     </el-menu>
   </div>
 </template>
