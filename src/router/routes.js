@@ -37,8 +37,11 @@ import AwardLevel from 'components/Admin/Manage/AwardManage/AwardLevel'
 import AwardMember from 'components/Admin/Manage/AwardManage/AwardMember'
 
 // 管理员查看表单
-import CheckRouterView from 'pages/AdminInfoTables/AdminInfoBaseRouterView'
 import UserCategory from 'pages/AdminInfoTables/UserManage/UserCategory'
+import UserInfoAdmin from 'pages/AdminInfoTables/UserManage/UserInfo'
+import StudentInfoAdmin from 'pages/AdminInfoTables/UserManage/StudentInfo'
+import TeacherInfoAdmin from 'pages/AdminInfoTables/UserManage/TeacherInfo'
+import CompanyInfoAdmin from 'pages/AdminInfoTables/UserManage/CompanyInfo'
 
 export default [
   {
@@ -182,82 +185,59 @@ export default [
       },
     ]
   },
+  // 基本用户信息查看
+  // 用户基本信息查看
   {
-    'path': '/check',
-    component: CheckRouterView,
-    children: [
-      {
-        meta: {
-          checkMode: true,
-          tableName: "userInfo"
-        },
-        path: 'userInfo/:userId',
-        component: CheckRouterView
-      },
-      {
-        meta: {
-          checkMode: true,
-          tableName: "teacherInfo"
-        },
-        path: 'teacherInfo/:userId',
-        component: CheckRouterView
-      },
-      {
-        meta: {
-          checkMode: true,
-          tableName: "companyInfo"
-        },
-        path: 'companyInfo/:userId',
-        component: CheckRouterView
-      },
-      {
-        meta: {
-          checkMode: true,
-          tableName: "studentInfo"
-        },
-        path: 'studentInfo/:userId',
-        component: CheckRouterView
-      },
-    ]
+    'path': '/check/userInfo/:userId',
+    component: UserInfoAdmin,
+    meta: {checkMode: true}
   },
+  // 学生信息查看
   {
-    'path': '/edit',
-    component: CheckRouterView,
-    children: [
-      {
-        meta: {
-          checkMode: false,
-          tableName: "userInfo"
-        },
-        path: 'userInfo/:userId',
-        component: CheckRouterView
-      },
-      {
-        meta: {
-          checkMode: false,
-          tableName: "teacherInfo"
-        },
-        path: 'teacherInfo/:userId',
-        component: CheckRouterView
-      },
-      {
-        meta: {
-          checkMode: false,
-          tableName: "companyInfo"
-        },
-        path: 'companyInfo/:userId',
-        component: CheckRouterView
-      },
-      {
-        meta: {
-          checkMode: false,
-          tableName: "studentInfo"
-        },
-        path: 'studentInfo/:userId',
-        component: CheckRouterView
-      },
-    ]
+    'path': '/check/studentInfo/:userId',
+    component: StudentInfoAdmin,
+    meta: {checkMode: true}
   },
+  // 教师信息查看
+  {
+    'path': '/check/teacherInfo/:userId',
+    component: TeacherInfoAdmin,
+    meta: {checkMode: true}
+  },
+  // 企业信息查看
+  {
+    'path': '/check/companyInfo/:userId',
+    component: CompanyInfoAdmin,
+    meta: {checkMode: true}
+  },
+
+  // 基本用户信息编辑
+  // 用户基本信息编辑
+  {
+    'path': '/edit/userInfo/:userId',
+    component: UserInfoAdmin,
+    meta: {checkMode: false}
+  },
+  // 学生信息编辑
+  {
+    'path': '/edit/studentInfo/:userId',
+    component: StudentInfoAdmin,
+    meta: {checkMode: false}
+  },
+  // 教师信息编辑
+  {
+    'path': '/edit/teacherInfo/:userId',
+    component: TeacherInfoAdmin,
+    meta: {checkMode: false}
+  },
+  // 企业信息编辑
+  {
+    'path': '/edit/companyInfo/:userId',
+    component: CompanyInfoAdmin,
+    meta: {checkMode: false}
+  },
+
+  // 用户类别管理
   {
     path: '/usercategory',
     component: UserCategory
