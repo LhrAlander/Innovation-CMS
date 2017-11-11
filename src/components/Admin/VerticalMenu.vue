@@ -14,23 +14,31 @@
           <p class="text">用户管理</p>
           <p class="arrow-right"> > </p>
         </template>
-        <router-link :to="{name: 'userinfo'}">
+        <router-link :to="{name: 'UserInfo'}">
           <el-menu-item index="1-1" class="first">
               <p class="item-text">基本用户信息管理</p>
           </el-menu-item>
         </router-link>
-        <el-menu-item index="1-2">
-          <p class="item-text">用户类别（角色）管理</p>
-        </el-menu-item>
-        <el-menu-item index="1-3">
-          <p class="item-text">学生信息管理</p>
-        </el-menu-item>
-        <el-menu-item index="1-4">
-          <p class="item-text">教师信息管理</p>
-        </el-menu-item>
-        <el-menu-item index="1-5" class="last">
-          <p class="item-text">企业及其他人员信息</p>
-        </el-menu-item>
+        <router-link :to="{name: 'Role'}">
+          <el-menu-item index="1-2">
+            <p class="item-text">用户类别（角色）管理</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'StudentInfo'}">
+          <el-menu-item index="1-3">
+            <p class="item-text">学生信息管理</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'TeacherInfo'}">
+          <el-menu-item index="1-4">
+            <p class="item-text">教师信息管理</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'Others'}">
+          <el-menu-item index="1-5" class="last">
+            <p class="item-text">企业及其他人员信息</p>
+          </el-menu-item>
+        </router-link>
       </el-submenu>
 
       <el-submenu index="2">
@@ -39,20 +47,26 @@
           <p class="text">基本信息管理</p>
           <p class="arrow-right"> > </p>
         </template>
-        <router-link :to="{name: 'userinfo'}">
+        <router-link :to="{name: 'InstituteInfo'}">
           <el-menu-item index="2-1" class="first">
             <p class="item-text">学院信息管理</p>
           </el-menu-item>
         </router-link>
-        <el-menu-item index="2-2">
-          <p class="item-text">系部管理</p>
-        </el-menu-item>
-        <el-menu-item index="2-3">
-          <p class="item-text">专业管理</p>
-        </el-menu-item>
-        <el-menu-item index="2-4" class="last">
-          <p class="item-text">班级管理</p>
-        </el-menu-item>
+        <router-link :to="{name: 'Department'}">
+          <el-menu-item index="2-2">
+            <p class="item-text">系部管理</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'Specialty'}">
+          <el-menu-item index="2-3">
+            <p class="item-text">专业管理</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'Class'}">
+          <el-menu-item index="2-4" class="last">
+            <p class="item-text">班级管理</p>
+          </el-menu-item>
+        </router-link>
       </el-submenu>
 
       <el-submenu index="3">
@@ -61,18 +75,31 @@
           <p class="text">项目管理</p>
           <p class="arrow-right"> > </p>
         </template>
-        <el-menu-item index="3-1" class="first">
-          <p class="item-text">项目类别管理</p>
-        </el-menu-item>
-        <el-menu-item index="3-2">
-          <p class="item-text">项目级别管理</p>
-        </el-menu-item>
-        <el-menu-item index="3-3">
-          <p class="item-text">项目信息管理</p>
-        </el-menu-item>
-        <el-menu-item index="3-4" class="last">
-          <p class="item-text">项目成员管理</p>
-        </el-menu-item>
+        <router-link :to="{name: 'ProjectCategory'}">
+          <el-menu-item index="3-1" class="first">
+            <p class="item-text">项目类别管理</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'ProjectLevel'}">
+          <el-menu-item index="3-2">
+            <p class="item-text">项目级别管理</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'ProjectInfo'}">
+          <el-menu-item index="3-3">
+            <p class="item-text">项目信息管理</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'ProjectMember'}">
+          <el-menu-item index="3-4" class="last">
+            <p class="item-text">项目成员管理</p>
+          </el-menu-item>
+        </router-link>
+
+
+
+
+
       </el-submenu>
 
       <el-submenu index="4">
@@ -81,15 +108,25 @@
           <p class="text">团队管理</p>
           <p class="arrow-right"> > </p>
         </template>
-        <el-menu-item index="4-1" class="first">
-          <p class="item-text">团队类别管理</p>
-        </el-menu-item>
-        <el-menu-item index="4-2">
-          <p class="item-text">团队基本信息管理</p>
-        </el-menu-item>
-        <el-menu-item index="4-3" class="last">
-          <p class="item-text">团队成员管理</p>
-        </el-menu-item>
+        <router-link :to="{name: 'GroupCategory'}">
+          <el-menu-item index="4-1" class="first">
+            <p class="item-text">团队类别管理</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'GroupInfo'}">
+          <el-menu-item index="4-2">
+            <p class="item-text">团队基本信息管理</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'GroupMember'}">
+          <el-menu-item index="4-3" class="last">
+            <p class="item-text">团队成员管理</p>
+          </el-menu-item>
+        </router-link>
+
+
+
+
       </el-submenu>
 
       <el-submenu index="5">
@@ -98,18 +135,31 @@
           <p class="text">获奖管理</p>
           <p class="arrow-right"> > </p>
         </template>
-        <el-menu-item index="5-1" class="first">
-          <p class="item-text">获奖类别管理</p>
-        </el-menu-item>
-        <el-menu-item index="5-2">
-          <p class="item-text">获奖等级管理</p>
-        </el-menu-item>
-        <el-menu-item index="5-3">
-          <p class="item-text">获奖基本信息管理</p>
-        </el-menu-item>
-        <el-menu-item index="5-4" class="last">
-          <p class="item-text">获奖成员管理</p>
-        </el-menu-item>
+
+        <router-link :to="{name: 'AwardCategory'}">
+          <el-menu-item index="5-1" class="first">
+            <p class="item-text">获奖类别管理</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'AwardLevel'}">
+          <el-menu-item index="5-2">
+            <p class="item-text">获奖等级管理</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'AwardInfo'}">
+          <el-menu-item index="5-3">
+            <p class="item-text">获奖基本信息管理</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'AwardMember'}">
+          <el-menu-item index="5-4" class="last">
+            <p class="item-text">获奖成员管理</p>
+          </el-menu-item>
+        </router-link>
+
+
+
+
       </el-submenu>
 
       <el-submenu index="6">
@@ -118,15 +168,21 @@
           <p class="text">政府信息管理</p>
           <p class="arrow-right"> > </p>
         </template>
-        <el-menu-item index="6-1" class="first">
-          <p class="item-text">政府类别管理</p>
-        </el-menu-item>
-        <el-menu-item index="6-2">
-          <p class="item-text">政府信息管理</p>
-        </el-menu-item>
-        <el-menu-item index="6-3" class="last">
-          <p class="item-text">信息状态管理</p>
-        </el-menu-item>
+        <router-link :to="{name: 'GovCategory'}">
+          <el-menu-item index="6-1" class="first">
+            <p class="item-text">政府类别管理</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'GovInfo'}">
+          <el-menu-item index="6-2">
+            <p class="item-text">政府信息管理</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'InfoStatus'}">
+          <el-menu-item index="6-3" class="last">
+            <p class="item-text">信息状态管理</p>
+          </el-menu-item>
+        </router-link>
       </el-submenu>
 
       <el-submenu index="7">
@@ -135,26 +191,34 @@
           <p class="text">依托单位信息管理</p>
           <p class="arrow-right"> > </p>
         </template>
-        <el-menu-item index="7-1" class="first">
-          <p class="item-text">依托单位信息管理</p>
-        </el-menu-item>
-        <el-menu-item index="7-2" class="last">
-          <p class="item-text">依托单位类别管理</p>
-        </el-menu-item>
+        <router-link :to="{name: 'DepUnitInfo'}">
+          <el-menu-item index="7-1" class="first">
+            <p class="item-text">依托单位信息管理</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'DepUnitCategory'}">
+          <el-menu-item index="7-2" class="last">
+            <p class="item-text">依托单位类别管理</p>
+          </el-menu-item>
+        </router-link>
       </el-submenu>
 
       <el-submenu index="8">
-        <template slot="title" >
-          <i class="iconfont">&#xe6a4;</i>
-          <p class="text">通知公告管理</p>
-        </template>
+        <router-link :to="{name: 'Notification'}">
+          <template slot="title" >
+            <i class="iconfont">&#xe6a4;</i>
+            <p class="text">通知公告管理</p>
+          </template>
+        </router-link>
       </el-submenu>
 
       <el-submenu index="9">
-        <template slot="title" >
-          <i class="iconfont">&#xe64f;</i>
-          <p class="text">文件与制度管理</p>
-        </template>
+        <router-link :to="{name: 'FileAndSystem'}">
+          <template slot="title" >
+            <i class="iconfont">&#xe64f;</i>
+            <p class="text">文件与制度管理</p>
+          </template>
+        </router-link>
       </el-submenu>
     </el-menu>
   </div>

@@ -19,8 +19,8 @@
       <el-table-column type="expand">
         <template scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="单身情况">
-              <span>{{ props.row.single }}</span>
+            <el-form-item v-for="(value, key, index) in expandFormatMap" :label="value">
+              <span>{{ props.row[key] }}</span>
             </el-form-item>
           </el-form>
         </template>
@@ -30,25 +30,10 @@
         width="50"
         :resizable="false">
       </el-table-column>
-      <el-table-column
-        label="用户名"
-        prop="username"
-        :resizable="false">
-      </el-table-column>
-      <el-table-column
-        label="姓名"
-        prop="name"
-        :resizable="false">
-      </el-table-column>
-      <el-table-column
-        label="用户类别"
-        prop="role"
-        :resizable="false">
-      </el-table-column>
-      <el-table-column
-        label="用户状态"
-        prop="status"
-        :resizable="false">
+      <el-table-column v-for="(value, key, index) in keyFormatMap"
+                       :label="value"
+                       :prop = "key"
+                        :resizable="false">
       </el-table-column>
       <el-table-column
         label="操作"
@@ -132,6 +117,9 @@
             name: '姓名',
             role: '用户类别',
             status: '用户状态'
+          },
+          expandFormatMap: { // 格式化额外信息映射表
+            single: '单身情况'
           },
 //        获取表格数据的地址
           url: '',
