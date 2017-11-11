@@ -3,12 +3,17 @@
     <!--筛选标签区域-->
     <div class="tagBlock">
       <span v-if="!tagEmpty" style="font-weight: bold; font-size: .9rem;">筛选条件</span>
-      <el-tag v-for="(value,key,index) in filter" v-if="value !== ''" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value)}})</el-tag>
+      <el-tag v-for="(value,key,index) in filter" v-if="value !== ''" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value,valueLabelMap)}})</el-tag>
     </div>
     <el-button class="addInfo" type="success" size="large">添加信息</el-button>
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
+    <el-button class="exit-filter" size="large" @click="filter = resetObject(filter)">退出筛选</el-button>
     <!--筛选框-->
-    <filter-box :dialogVisible="showFilterBox" @sendFilter="receiveFilter"></filter-box>
+    <filter-box :dialogVisible="showFilterBox"
+                :filter="filter"
+                :valueLabelMap = "valueLabelMap"
+                :keyFormatMap = "keyFormatMap"
+                @sendFilter="receiveFilter"></filter-box>
     <!--表格-->
     <el-table
       :data="tableData"
@@ -72,6 +77,7 @@
     import axios from 'axios'
     import ElButton from "../../../../../node_modules/element-ui/packages/button/src/button.vue";
     import FilterBox from "components/Admin/Manage/FilterBox"
+    import * as utils from '../../../../utils/utils'
     export default {
       components: {ElButton, FilterBox},
       data() {
@@ -86,32 +92,35 @@
             expanded: false
           }
           ],
-          roleOptions: [{ // 用户类别映射表
-            value: 0,
-            label: '全部'
-          }, {
-            value: 1,
-            label: '学生'
-          }, {
-            value: 2,
-            label: '老师'
-          }, {
-            value: 3,
-            label: '企业'
-          }],
-          statusOptions: [{ // 用户状态映射表
-            value: 0,
-            label: '全部'
-          }, {
-            value: 1,
-            label: '可用'
-          }, {
-            value: 2,
-            label: '禁用'
-          }, {
-            value: 3,
-            label: '待审核'
-          }],
+          valueLabelMap: {
+            role: [{ // 用户类别映射表
+              value: 0,
+              label: '全部'
+            }, {
+              value: 1,
+              label: '学生'
+            }, {
+              value: 2,
+              label: '老师'
+            }, {
+              value: 3,
+              label: '企业'
+            }],
+            status: [{ // 用户状态映射表
+              value: 0,
+              label: '全部'
+            }, {
+              value: 1,
+              label: '可用'
+            }, {
+              value: 2,
+              label: '禁用'
+            }, {
+              value: 3,
+              label: '待审核'
+            }],
+          },
+
           keyFormatMap: { // 格式化标签映射表
             username: '用户名',
             name: '姓名',
@@ -165,6 +174,7 @@
           }
           return r;
         },
+
         handleMore(index, row) {
         },
 //        删除按钮事件
@@ -209,24 +219,9 @@
           value = value.toString();
           return this.keyFormatMap[value];
         },
-//        标签的value格式化器
-        valueFormater: function (key, value) {
-          if (key === "role") {
-            for (var item of this.roleOptions) {
-              if (item.value === value) {
-                return item.label;
-              }
-            }
-          } else if (key === "status") {
-            for (var item of this.statusOptions) {
-              if (item.value === value) {
-                return item.label;
-              }
-            }
-          } else {
-            return value;
-          }
-        }
+        resetObject: utils.resetObject,
+        valueFormater: utils.valueFormater,
+
       },
       watch: {
         filter: {
@@ -281,6 +276,21 @@
   .filter:active {
     opacity: 1;
     background-color: #71468B;
+  }
+  .exit-filter {
+    float: right;
+    margin-right: 20px;
+    background-color: #f19500;
+    color: #ECF0F1;
+    outline: 0;
+    border: 1px solid #f19500;
+  }
+  .exit-filter:hover {
+    opacity: .7;
+  }
+  .exit-filter:active {
+    opacity: 1;
+    background-color: #c77800;
   }
   .pagination {
     float: right;

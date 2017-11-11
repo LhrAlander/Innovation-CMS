@@ -8,28 +8,11 @@
       center
       >
       <el-row>
-        <el-col :span="12">
-          <span style="width: 4rem; display: inline-block;">用户名</span>
-          <el-input v-model="filter.username" placeholder="请输入用户名" class="filter-input"></el-input>
-        </el-col>
-        <el-col :span="12">
-          <span style="width: 4rem; display: inline-block;">姓名</span>
-          <el-input v-model="filter.name" placeholder="请输入姓名" class="filter-input"></el-input>
-        </el-col>
-        <el-col :span="12">
-          <span style="width: 4rem; display: inline-block;">用户类别</span>
-          <el-select v-model="filter.role" clearable placeholder="请选择用户类别" class="filter-select">
-            <el-option v-for="item in roleOptions"
-                       :key = "item.value"
-                       :label = "item.label"
-                       :value = "item.value">
-            </el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="12">
-          <span style="width: 4rem; display: inline-block;">用户状态</span>
-          <el-select v-model="filter.status" clearable placeholder="请选择用户状态" class="filter-select">
-            <el-option v-for="item in statusOptions"
+        <el-col :span="12" v-for="(value,key,index) in filter" :key="index">
+          <span style="width: 4rem; display: inline-block;">{{keyFormatMap[key]}}</span>
+          <el-input v-if="isInput(key)" v-model="filter[key]" :placeholder="placeholderFilter(key)" class="filter-input"></el-input>
+          <el-select v-else v-model="filter[key]" clearable :placeholder="placeholderFilter(key)" class="filter-select">
+            <el-option v-for="item in valueLabelMap[key]"
                        :key = "item.value"
                        :label = "item.label"
                        :value = "item.value">
@@ -47,45 +30,16 @@
   import ElDialog from "../../../../node_modules/element-ui/packages/dialog/src/component.vue";
   import ElForm from "../../../../node_modules/element-ui/packages/form/src/form.vue";
   import ElFormItem from "../../../../node_modules/element-ui/packages/form/src/form-item.vue";
+  import ElCol from "element-ui/packages/col/src/col";
 
   export default {
-    props: ["dialogVisible"],
+    props: ["dialogVisible","filter","valueLabelMap", "keyFormatMap"],
     data() {
       return {
         visible: this.dialogVisible,
-        filter: {//搜索条件
-          username: '',
-          name: '',
-          role: '',
-          status: ''
-        },
-        roleOptions: [{
-          value: 0,
-          label: '全部'
-        }, {
-          value: 1,
-          label: '学生'
-        }, {
-          value: 2,
-          label: '老师'
-        }, {
-          value: 3,
-          label: '企业'
-        }],
-        statusOptions: [{
-          value: 0,
-          label: '全部'
-        }, {
-          value: 1,
-          label: '可用'
-        }, {
-          value: 2,
-          label: '禁用'
-        }, {
-          value: 3,
-          label: '待审核'
-        }],
       }
+    },
+    computed: {
     },
     methods: {
       handleCancel() {
@@ -95,9 +49,23 @@
       handleDetermine() {
         this.$emit("sendFilter", this.filter);
         this.visible = false;
+      },
+      isInput: function (type) { // 如果在valueLabelMap中没有type类，则type为input类型
+        return this.valueLabelMap[type] === undefined;
+      },
+      placeholderFilter: function(key) {
+        var str = '';
+        if (this.isInput(key)) {
+          str = "请输入";
+        } else {
+          str = "请选择";
+        }
+        str = str + this.keyFormatMap[key];
+        return str;
       }
     },
     components: {
+      ElCol,
       ElFormItem,
       ElForm,
       ElDialog},
@@ -105,7 +73,7 @@
       dialogVisible(val) {
         this.visible = val;
       }
-    }
+    },
   }
 </script>
 <style scoped>
