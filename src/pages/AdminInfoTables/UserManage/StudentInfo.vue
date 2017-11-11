@@ -22,7 +22,6 @@
       </template>
     </edit-user-info>
   </div>
-
 </template>
 
 <script>
@@ -36,11 +35,11 @@
     },
     data () {
       return {
-        title: "用户基本信息查看",
+        title: "学生信息查看",
         breadCrumbs: {
           iconCode: "&#xe6a0;",
           firstLevel: "用户管理",
-          otherLevels: ["用户基本信息查看"]
+          otherLevels: ["学生信息查看"]
         },
         displayInfo: [],
         checkMode: true
@@ -59,7 +58,11 @@
         let meta = this.$route.meta
         this.checkMode = meta.checkMode
         this.displayInfo = []
-        this.getUserInfo ()
+        this.getStudentInfo()
+      },
+      getStudentInfo () {
+        this.displayInfo = JSON.parse(JSON.stringify(INFO.adminCheckInfo.users[this.$route.params.userId].userBaseInfo))
+        this.displayInfo.push(INFO.adminCheckInfo.studentAttachInfo.users[this.$route.params.userId].attachInfo)
       },
       // 前往修改模式
       goToEditMode () {
@@ -77,10 +80,6 @@
       confirmModify () {
         console.log("click Confirm")
       },
-      // 获取用户信息
-      getUserInfo () {
-        this.displayInfo = INFO.adminCheckInfo.users[this.$route.params.userId].userBaseInfo
-      }
     }
   }
 </script>
