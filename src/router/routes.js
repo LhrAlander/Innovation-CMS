@@ -39,11 +39,12 @@ import AwardLevel from 'components/Admin/Manage/AwardManage/AwardLevel'
 import AwardMember from 'components/Admin/Manage/AwardManage/AwardMember'
 
 // 管理员查看表单
-import UserCategory from 'pages/AdminInfoTables/UserManage/UserCategory'
 import UserInfoAdmin from 'pages/AdminInfoTables/UserManage/UserInfo'
 import StudentInfoAdmin from 'pages/AdminInfoTables/UserManage/StudentInfo'
 import TeacherInfoAdmin from 'pages/AdminInfoTables/UserManage/TeacherInfo'
 import CompanyInfoAdmin from 'pages/AdminInfoTables/UserManage/CompanyInfo'
+
+import TeamInfoAdmin from 'pages/AdminInfoTables/TeamManage/TeamInfo'
 
 export default [
   {
@@ -378,9 +379,10 @@ export default [
     meta: {checkMode: false}
   },
 
-  // 用户类别管理
+  // 团队基本信息查看
   {
-    path: '/usercategory',
-    component: UserCategory
-  }
+    'path': '/check/teamInfo/:teamId',
+    component: TeamInfoAdmin
+  },
+
 ]
