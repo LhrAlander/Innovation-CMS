@@ -1,7 +1,7 @@
 <!--产生 编辑基本用户信息 时所需的不同的input-->
 <template>
   <div>
-    <el-input v-if="item.type == INPUT" v-model="item.value"></el-input>
+    <el-input v-if="item.type == INPUT" v-model="item.value" :disabled="item.disabled"></el-input>
     <template v-if="item.type == RADIO">
       <el-radio v-for="radioItem in item.radioItems" v-model="item.value" :label="radioItem.label">
         {{ radioItem.value }}
@@ -22,6 +22,14 @@
       :active-text="item.activeValue"
       :inactive-text="item.inactiveValue">
     </el-switch>
+
+    <el-input
+      v-if="item.type == INPUT_AREA"
+      type="textarea"
+      :rows="3"
+      v-model="item.value">
+    </el-input>
+
   </div>
 </template>
 
@@ -36,14 +44,15 @@
         SELECT : 2,
         RADIO : 3,
         SWITCH : 4,
-        BUTTON : 5
+        BUTTON : 5,
+        INPUT_AREA : 6,
       }
     },
     methods: {
       clickBtn (item) {
         this.$emit("clickBtn")
       }
-    }
+    },
   }
 </script>
 

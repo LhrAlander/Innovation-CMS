@@ -34,7 +34,7 @@
 </template>
 
 <script>
-  import InfoDisplayTemp from './InfoDisplayTemp'
+  import InfoDisplayTemp from '../BaseCompent/InfoDisplayTemp'
 
   const INPUT = 1
   const SELECT = 2
