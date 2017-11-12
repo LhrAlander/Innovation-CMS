@@ -20,6 +20,10 @@
             secondLevel: '基本用户信息管理'
           }
         }
+      },
+      created() {
+
+//        console.log(this.$route)
       }
     }
 </script>

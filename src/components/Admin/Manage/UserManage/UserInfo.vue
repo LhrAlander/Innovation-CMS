@@ -7,7 +7,7 @@
     </div>
     <el-button class="addInfo" type="success" size="large">添加信息</el-button>
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
-    <el-button class="exit-filter" size="large" @click="filter = resetObject(filter)">退出筛选</el-button>
+    <el-button class="exit-filter" size="large" @click="quitFilter">退出筛选</el-button>
     <!--筛选框-->
     <filter-box :dialogVisible="showFilterBox"
                 :filter="filter"
@@ -89,7 +89,6 @@
             role: '学生',
             status: '禁用',
             single: '单身狗',
-            expanded: false
           }
           ],
           valueLabelMap: {
@@ -221,6 +220,10 @@
         },
         resetObject: utils.resetObject,
         valueFormater: utils.valueFormater,
+        quitFilter: function () {
+          this.filter = this.resetObject(this.filter);
+          this.loadData(this.filter, this.currentName, this.pageSize);
+        }
 
       },
       watch: {
