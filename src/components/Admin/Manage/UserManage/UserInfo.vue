@@ -5,7 +5,7 @@
       <span v-if="!tagEmpty" style="font-weight: bold; font-size: .9rem;">筛选条件</span>
       <el-tag v-for="(value,key,index) in filter" v-if="value !== ''" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value,valueLabelMap)}})</el-tag>
     </div>
-    <el-button class="addInfo" type="success" size="large">添加信息</el-button>
+    <el-button class="addInfo" type="success" size="large" @click="enterAdd">添加信息</el-button>
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
     <el-button class="exit-filter" size="large" @click="quitFilter">退出筛选</el-button>
     <!--筛选框-->
@@ -14,6 +14,11 @@
                 :valueLabelMap = "valueLabelMap"
                 :keyFormatMap = "keyFormatMap"
                 @sendFilter="receiveFilter"></filter-box>
+    <info-add :show="showInfoAdd"
+              :tmpl = "infoAddTmpl"
+              :valueLabelMap = "valueLabelMap"
+              @sendInfo = "receiveInfo"
+              ></info-add>
     <!--表格-->
     <el-table
       :data="tableData"
@@ -77,9 +82,10 @@
     import axios from 'axios'
     import ElButton from "../../../../../node_modules/element-ui/packages/button/src/button.vue";
     import FilterBox from "components/Admin/Manage/FilterBox"
-    import * as utils from '../../../../utils/utils'
+    import InfoAdd from "components/Admin/Manage/InfoAdd"
+    import * as utils from 'utils/utils'
     export default {
-      components: {ElButton, FilterBox},
+      components: {ElButton, FilterBox, InfoAdd},
       data() {
         return {
           tableData: [{ // 表格数据
@@ -124,10 +130,32 @@
             username: '用户名',
             name: '姓名',
             role: '用户类别',
-            status: '用户状态'
+            status: '用户状态',
           },
           expandFormatMap: { // 格式化额外信息映射表
             single: '单身情况'
+          },
+          infoAddTmpl: {
+            username: {
+              label: '用户名',
+              inputType: 0, // 0 代表 input
+            },
+            name: {
+              label: '姓名',
+              inputType: 0, // 0 代表 input
+            },
+            role: {
+              label: '用户类别',
+              inputType: 1, // 1 代表 select
+            },
+            status: {
+              label: '用户状态',
+              inputType: 1, // 1 代表 select
+            },
+            single: {
+              label: '单身情况',
+              inputType: 0, // 0 代表 input
+            },
           },
 //        获取表格数据的地址
           url: '',
@@ -143,6 +171,7 @@
           totalCount: 30, //返回的记录总数
           showFilterBox: false, // 是否显示筛选框
           tagEmpty: true, //标签是否为空
+          showInfoAdd: false, // 是否显示信息添加框
         }
       },
       mounted: function(){
@@ -223,6 +252,21 @@
         quitFilter: function () {
           this.filter = this.resetObject(this.filter);
           this.loadData(this.filter, this.currentName, this.pageSize);
+        },
+        enterAdd: function () {
+          this.showInfoAdd = true;
+        },
+        receiveInfo: function (data) {
+          if (data) {
+            axios.post("",{'data':data}, {emulateJson: true})
+              .then(function (res) {
+              this.loadData(this.filter, this.currentPage, this.pageSize);
+            }, function () {
+              console.log('failed');
+            })
+          }
+          this.showInfoAdd = false;
+
         }
 
       },

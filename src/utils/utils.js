@@ -10,10 +10,11 @@ function valueFormater(type, value, map){
   }
 }
 function resetObject(object) {
-  for (var key in object) {
-    object[key] = '';
+  let o = object;
+  for (var key in o) {
+    o[key] = '';
   }
-  return object;
+  return o;
 }
 
 export {

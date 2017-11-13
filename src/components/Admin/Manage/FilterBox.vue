@@ -9,7 +9,9 @@
       >
       <el-row>
         <el-col :span="12" v-for="(value,key,index) in filter" :key="index">
-          <span style="width: 4rem; display: inline-block;">{{keyFormatMap[key]}}</span>
+          <span style="width: 4rem; display: inline-block;transform: translateY(5px)">
+            <span style="float: right;">{{keyFormatMap[key]}}</span>
+          </span>
           <el-input v-if="isInput(key)" v-model="filter[key]" :placeholder="placeholderFilter(key)" class="filter-input"></el-input>
           <el-select v-else v-model="filter[key]" clearable :placeholder="placeholderFilter(key)" class="filter-select">
             <el-option v-for="item in valueLabelMap[key]"
