@@ -21,19 +21,6 @@
         </el-form-item>
       </el-col>
     </el-form>
-    <!--<el-row>-->
-      <!--<el-col :span="12" v-for="(value,key,index) in infoadd" :key="index">-->
-        <!--<span style="width: 4rem; display: inline-block;">{{keyFormatMap[key]}}</span>-->
-        <!--<el-input v-if="isInput(key)" v-model="infoadd[key]" :placeholder="placeholderFilter(key)" class="infoadd-input"></el-input>-->
-        <!--<el-select v-else v-model="infoadd[key]" clearable :placeholder="placeholderFilter(key)" class="infoadd-select">-->
-          <!--<el-option v-for="item in valueLabelMap[key]"-->
-                     <!--:key = "item.value"-->
-                     <!--:label = "item.label"-->
-                     <!--:value = "item.value">-->
-          <!--</el-option>-->
-        <!--</el-select>-->
-      <!--</el-col>-->
-    <!--</el-row>-->
     <div slot="footer" class="dialog-footer">
       <el-button @click="handleCancel">取 消</el-button>
       <el-button type="primary" @click="handleDetermine">确 定</el-button>
