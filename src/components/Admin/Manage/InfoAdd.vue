@@ -7,9 +7,9 @@
     :close-on-click-modal = "false"
     center
   >
-    <el-form :inline="true" ref="form" :model="form" label-width="80px">
+    <el-form :inline="true" ref="form" :model="form" label-width="80px" :rules = "rules">
       <el-col :span="12" v-for="(value, key, index) in tmpl" :key="index">
-        <el-form-item :label="value.label" prop="key" >
+        <el-form-item :label="value.label" :prop="key" >
           <el-input v-if="value.inputType === 0" v-model="form[key]" :placeholder="placeholderFilter(value.inputType, value.label)"></el-input>
           <el-select v-else-if="value.inputType === 1" v-model="form[key]" clearable :placeholder="placeholderFilter(value.inputType, value.label)" class="infoadd-select">
             <el-option v-for="item in valueLabelMap[key]"
@@ -35,13 +35,14 @@
   import {resetObject} from "utils/utils"
 
   export default {
-    props: ["show","tmpl","valueLabelMap"],
+    props: ["show","tmpl","valueLabelMap","rules"],
     data() {
       return {
         form: {},
       }
     },
     created() {
+//      console.log(this.rules)
     },
     computed: {
     },
@@ -55,9 +56,16 @@
         this.reset();
       },
       handleDetermine() {
-        this.$emit("sendInfo", this.form);
-        this.visible = false;
-        this.reset();
+        this.$refs.form.validate((valid) => {
+          if (valid) {
+            this.$emit("sendInfo", this.form);
+            this.visible = false;
+            this.reset();
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
       },
       placeholderFilter: function(type, label) {
         var str = '';

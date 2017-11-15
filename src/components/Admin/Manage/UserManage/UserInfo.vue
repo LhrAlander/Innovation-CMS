@@ -17,6 +17,7 @@
     <info-add :show="showInfoAdd"
               :tmpl = "infoAddTmpl"
               :valueLabelMap = "valueLabelMap"
+              :rules = "infoAddRules"
               @sendInfo = "receiveInfo"
               ></info-add>
     <!--表格-->
@@ -156,6 +157,11 @@
               label: '单身情况',
               inputType: 0, // 0 代表 input
             },
+          },
+          infoAddRules: {
+            username: [
+              {required: true, message: '请输入用户名', trigger: 'blur'}
+            ]
           },
 //        获取表格数据的地址
           url: '',
