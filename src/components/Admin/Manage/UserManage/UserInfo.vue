@@ -95,7 +95,8 @@
             name: '林海瑞',
             role: '学生',
             status: '禁用',
-            single: '单身狗',
+            phone: '13588221234',
+            email: '123456789@163.com'
           }
           ],
           valueLabelMap: {
@@ -134,7 +135,8 @@
             status: '用户状态',
           },
           expandFormatMap: { // 格式化额外信息映射表
-            single: '单身情况'
+            phone: '手机号',
+            email: '邮箱'
           },
           infoAddTmpl: {
             username: {
@@ -153,8 +155,12 @@
               label: '用户状态',
               inputType: 1, // 1 代表 select
             },
-            single: {
-              label: '单身情况',
+            phone: {
+              label: '手机号',
+              inputType: 0, // 0 代表 input
+            },
+            email: {
+              label: '邮箱',
               inputType: 0, // 0 代表 input
             },
           },
