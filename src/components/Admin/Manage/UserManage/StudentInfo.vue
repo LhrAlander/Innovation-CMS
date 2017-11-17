@@ -1,5 +1,5 @@
 <template>
-  <div class="studentInfo">
+  <div class="studentinfo">
     <!--筛选标签区域-->
     <div class="tagBlock">
       <span v-if="!tagEmpty" style="font-weight: bold; font-size: .9rem;">筛选条件</span>
@@ -91,11 +91,10 @@
       return {
         tableData: [{ // 表格数据
           id: 1,
-          username: '2015210405043',
+          studentId: '2015210405043',
           name: '林海瑞',
-          role: '学生',
+          phone: '13588221234',
           status: '禁用',
-          single: '单身狗',
         }
         ],
         valueLabelMap: {
@@ -319,7 +318,7 @@
     width: 50%;
   }
 
-  .userinfo {
+  .studentinfo {
     position: relative;
     padding: 40px 50px;
   }
