@@ -7,7 +7,7 @@
     :close-on-click-modal = "false"
     center
   >
-    <el-form :inline="true" ref="form" :model="form" label-width="80px" :rules = "rules">
+    <el-form :inline="true" ref="form" :model="form" label-width="9rem" :rules = "rules">
       <el-col :span="12" v-for="(value, key, index) in tmpl" :key="index">
         <el-form-item :label="value.label" :prop="key" >
           <el-input v-if="value.inputType === 0" v-model="form[key]" :placeholder="placeholderFilter(value.inputType, value.label)"></el-input>
@@ -32,7 +32,6 @@
   import ElForm from "../../../../node_modules/element-ui/packages/form/src/form.vue";
   import ElFormItem from "../../../../node_modules/element-ui/packages/form/src/form-item.vue";
   import ElCol from "element-ui/packages/col/src/col";
-  import {resetObject} from "utils/utils"
 
   export default {
     props: ["show","tmpl","valueLabelMap","rules"],
@@ -47,20 +46,17 @@
     computed: {
     },
     methods: {
-      reset() {
-        this.form = resetObject(this.form);
-      },
       handleCancel() {
         this.$emit("sendInfo");
         this.visible = false;
-        this.reset();
+        this.$refs.form.resetFields();
       },
       handleDetermine() {
         this.$refs.form.validate((valid) => {
           if (valid) {
             this.$emit("sendInfo", this.form);
             this.visible = false;
-            this.reset();
+            this.$refs.form.resetFields();
           } else {
             console.log('error submit!!');
             return false;

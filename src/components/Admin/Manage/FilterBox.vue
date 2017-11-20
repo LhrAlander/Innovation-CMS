@@ -8,8 +8,8 @@
       center
       >
       <el-row>
-        <el-col :span="12" v-for="(value,key,index) in filter" :key="index">
-          <span style="width: 4rem; display: inline-block;transform: translateY(5px)">
+        <el-col :span="12" v-for="(value,key,index) in filter" :key="index" class="col">
+          <span style="width: 8rem; display: inline-block;transform: translateY(5px)">
             <span style="float: right;">{{keyFormatMap[key]}}</span>
           </span>
           <el-input v-if="isInput(key)" v-model="filter[key]" :placeholder="placeholderFilter(key)" class="filter-input"></el-input>
@@ -79,8 +79,8 @@
   }
 </script>
 <style scoped>
-  .filterbox {
-
+  .col {
+    margin-bottom: 10px;
   }
   .filter-input, .filter-select {
     width: 50%;
