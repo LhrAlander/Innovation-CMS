@@ -46,7 +46,6 @@ import StudentInfoAdmin from 'pages/AdminInfoTables/UserManage/StudentInfo'
 import TeacherInfoAdmin from 'pages/AdminInfoTables/UserManage/TeacherInfo'
 import CompanyInfoAdmin from 'pages/AdminInfoTables/UserManage/CompanyInfo'
 
-import TeamInfoAdmin from 'pages/AdminInfoTables/TeamManage/TeamInfo'
 
 export default [
   {
@@ -391,10 +390,6 @@ export default [
     meta: {checkMode: false}
   },
 
-  // 团队基本信息查看
-  {
-    'path': '/check/teamInfo/:teamId',
-    component: TeamInfoAdmin
-  },
+
 
 ]
