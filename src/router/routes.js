@@ -21,7 +21,6 @@ import GroupMember from 'components/Admin/Manage/GroupManage/GroupMember'
 
 import GovCategory from 'components/Admin/Manage/GovernmentManage/GovCategory'
 import GovInfo from 'components/Admin/Manage/GovernmentManage/GovInfo'
-import InfoStatus from 'components/Admin/Manage/GovernmentManage/InfoStatus'
 
 import FileAndSystem from 'components/Admin/Manage/FileAndSystemManage/FileAndSystem'
 
@@ -205,16 +204,6 @@ export default [
           iconCode: '&#xe618;',
           firstLevel: '政策信息管理',
           secondLevel: '政策信息管理'
-        },
-      },
-      {
-        name: 'InfoStatus',
-        path: 'InfoStatus',
-        component: InfoStatus,
-        meta: {
-          iconCode: '&#xe618;',
-          firstLevel: '政策信息管理',
-          secondLevel: '信息状态变更'
         },
       },
       {
