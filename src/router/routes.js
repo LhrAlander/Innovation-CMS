@@ -32,6 +32,8 @@ import Class from 'components/Admin/Manage/BasicInfoManage/Class'
 import Department from 'components/Admin/Manage/BasicInfoManage/Department'
 import InstituteInfo from 'components/Admin/Manage/BasicInfoManage/InstituteInfo'
 import Specialty from 'components/Admin/Manage/BasicInfoManage/Specialty'
+import Status from 'components/Admin/Manage/BasicInfoManage/Status'
+
 
 import AwardCategory from 'components/Admin/Manage/AwardManage/AwardCategory'
 import AwardInfo from 'components/Admin/Manage/AwardManage/AwardInfo'
@@ -283,6 +285,16 @@ export default [
           iconCode: '&#xe8d0;',
           firstLevel: '基本信息管理',
           secondLevel: '专业管理'
+        },
+      },
+      {
+        name: 'Status',
+        path: 'Status',
+        component: Status,
+        meta: {
+          iconCode: '&#xe8d0;',
+          firstLevel: '基本信息管理',
+          secondLevel: '状态管理'
         },
       },
       {

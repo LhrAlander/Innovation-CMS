@@ -63,8 +63,13 @@
           </el-menu-item>
         </router-link>
         <router-link :to="{name: 'Class'}">
-          <el-menu-item index="2-4" class="last">
+          <el-menu-item index="2-4">
             <p class="item-text">班级管理</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'Status'}">
+          <el-menu-item index="2-5" class="last">
+            <p class="item-text">状态管理</p>
           </el-menu-item>
         </router-link>
       </el-submenu>

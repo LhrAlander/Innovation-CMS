@@ -11,6 +11,7 @@
     <!--筛选框-->
     <filter-box :dialogVisible="showFilterBox"
                 :filter="filter"
+                :tmpl = "filterTmpl"
                 :valueLabelMap = "valueLabelMap"
                 :keyFormatMap = "Object.assign({},keyFormatMap,expandFormatMap)"
                 @sendFilter="receiveFilter"></filter-box>
@@ -148,6 +149,37 @@
         },
 //        获取表格数据的地址
         url: '',
+        filterTmpl: {
+          unitName: {
+            label: '单位名称',
+            inputType: 0, // 0 代表 input
+          },
+          unitCategory: {
+            label: '单位类别',
+            inputType: 0, // 0 代表 input
+          },
+          leader: {
+            label: '负责人',
+            inputType: 0,
+          },
+          leaderPhone: {
+            label: '负责人联系方式',
+            inputType: 0,
+          },
+          leaderId: {
+            label: '负责人用户名(学号)',
+            inputType: 0, // 0 代表 input
+          },
+          address: {
+            label: '单位地址',
+            inputType: 0, // 0 代表 input
+          },
+          email: {
+            label: '负责人邮箱',
+            inputType: 0,
+          },
+
+        },
         filter: {//搜索条件
           unitName: '',//单位名称
           unitCategory: '',//单位类别
@@ -237,7 +269,7 @@
       keyFormater: function(value) {
         if (!value) return '';
         value = value.toString();
-        return this.keyFormatMap[value];
+        return Object.assign({},this.keyFormatMap,this.expandFormatMap)[value];
       },
       resetObject: utils.resetObject,
       valueFormater: utils.valueFormater,

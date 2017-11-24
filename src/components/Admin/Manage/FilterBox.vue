@@ -7,21 +7,38 @@
       :close-on-click-modal = "false"
       center
       >
-      <el-row>
-        <el-col :span="12" v-for="(value,key,index) in filter" :key="index" class="col">
-          <span style="width: 8rem; display: inline-block;transform: translateY(5px)">
-            <span style="float: right;">{{keyFormatMap[key]}}</span>
-          </span>
-          <el-input v-if="isInput(key)" v-model="filter[key]" :placeholder="placeholderFilter(key)" class="filter-input"></el-input>
-          <el-select v-else v-model="filter[key]" clearable :placeholder="placeholderFilter(key)" class="filter-select">
-            <el-option v-for="item in valueLabelMap[key]"
-                       :key = "item.value"
-                       :label = "item.label"
-                       :value = "item.value">
-            </el-option>
-          </el-select>
+      <el-form :inline="true" ref="form" :model="filter" label-width="9rem">
+        <el-col :span="12" v-for="(value, key, index) in tmpl" :key="index">
+          <el-form-item :label="value.label" :prop="key" >
+            <el-input v-if="value.inputType === 0" v-model="filter[key]" :placeholder="placeholderFilter(value.inputType, value.label)"></el-input>
+            <el-select v-else-if="value.inputType === 1" v-model="filter[key]" clearable :placeholder="placeholderFilter(value.inputType, value.label)" class="infoadd-select">
+              <el-option v-for="item in valueLabelMap[key]"
+                         :key = "item.value"
+                         :label = "item.label"
+                         :value = "item.value">
+              </el-option>
+            </el-select>
+            <el-date-picker v-else-if="value.inputType === 2"
+                            style="width: 11.5rem"
+                            v-model="filter[key]"
+                            align="right"
+                            type="date"
+                            placeholder="选择日期"
+                            clearable
+                            :picker-options="datePickerOptions">
+            </el-date-picker>
+            <el-date-picker
+              v-else-if="value.inputType === 3"
+              v-model="filter[key]"
+              align="right"
+              type="year"
+              placeholder="选择年"
+              clearable>
+            </el-date-picker>
+
+          </el-form-item>
         </el-col>
-      </el-row>
+      </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleCancel">取 消</el-button>
         <el-button type="primary" @click="handleDetermine">确 定</el-button>
@@ -35,10 +52,15 @@
   import ElCol from "element-ui/packages/col/src/col";
 
   export default {
-    props: ["dialogVisible","filter","valueLabelMap", "keyFormatMap"],
+    props: ["dialogVisible","filter","tmpl","valueLabelMap", "keyFormatMap"],
     data() {
       return {
         visible: this.dialogVisible,
+        datePickerOptions: {
+          disabledDate(time) {
+            return time.getTime() > Date.now();
+          },
+        }
       }
     },
     computed: {
@@ -52,17 +74,21 @@
         this.$emit("sendFilter", this.filter);
         this.visible = false;
       },
-      isInput: function (type) { // 如果在valueLabelMap中没有type类，则type为input类型
-        return this.valueLabelMap[type] === undefined;
-      },
-      placeholderFilter: function(key) {
+//      isInput: function (type) { // 如果在valueLabelMap中没有type类，则type为input类型
+//        return this.valueLabelMap[type] === undefined;
+//      },
+      placeholderFilter: function(type, label) {
         var str = '';
-        if (this.isInput(key)) {
-          str = "请输入";
-        } else {
-          str = "请选择";
+        switch (type) {
+          case 0:
+            str = "请输入";
+            break;
+          case 1:
+            str = "请选择";
+            break;
+          default:
         }
-        str = str + this.keyFormatMap[key];
+        str = str + label;
         return str;
       }
     },

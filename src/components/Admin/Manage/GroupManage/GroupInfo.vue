@@ -11,6 +11,7 @@
     <!--筛选框-->
     <filter-box :dialogVisible="showFilterBox"
                 :filter="filter"
+                :tmpl = "filterTmpl"
                 :valueLabelMap = "valueLabelMap"
                 :keyFormatMap = "Object.assign({},keyFormatMap,expandFormatMap)"
                 @sendFilter="receiveFilter"></filter-box>
@@ -104,7 +105,7 @@
           teacherId: '2222222222',
         }
         ],
-        valueLabelMap: {
+        valueLabelMap: { // 下拉类型的input的具体数据
 //          role: [{ // 用户类别映射表
 //            value: 0,
 //            label: '全部'
@@ -155,6 +156,7 @@
             label: '指导老师用户名',
             inputType: 0,
           },
+
         },
         infoAddRules: {
           groupName: [
@@ -172,6 +174,52 @@
         },
 //        获取表格数据的地址
         url: '',
+        filterTmpl: {
+          groupName: {
+            label: '团队名称',
+            inputType: 0, // 0 代表 input
+          },
+          leaderName: {
+            label: '所在依托单位',
+            inputType: 0, // 0 代表 input
+          },
+          leaderSpecialty: {
+            label: '负责人专业',
+            inputType: 0,
+          },
+          teacher: {
+            label: '指导老师',
+            inputType: 0,
+          },
+          dependentUnit: {
+            label: '所在依托单位',
+            inputType: 0, // 0 代表 input
+          },
+          intro: {
+            label: '团队简介',
+            inputType: 0, // 0 代表 input
+          },
+          leaderPhone: {
+            label: '负责人手机号',
+            inputType: 0,
+          },
+          leaderClass: {
+            label: '负责人班级',
+            inputType: 0,
+          },
+          leaderId: {
+            label: '负责人用户名(学号)',
+            inputType: 0,
+          },
+          teacherPhone: {
+            label: '指导老师手机号',
+            inputType: 0,
+          },
+          teacherId: {
+            label: '指导老师用户名',
+            inputType: 0,
+          },
+        },
         filter: {//搜索条件
           groupName: '', //团队名称
           leaderName: '',//团队负责人姓名
@@ -265,7 +313,7 @@
       keyFormater: function(value) {
         if (!value) return '';
         value = value.toString();
-        return this.keyFormatMap[value];
+        return Object.assign({},this.keyFormatMap,this.expandFormatMap)[value];
       },
       resetObject: utils.resetObject,
       valueFormater: utils.valueFormater,

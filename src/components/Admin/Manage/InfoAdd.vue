@@ -18,6 +18,50 @@
                        :value = "item.value">
             </el-option>
           </el-select>
+          <el-date-picker v-else-if="value.inputType === 2"
+                          style="width: 11.5rem"
+                          v-model="form[key]"
+                          align="right"
+                          type="date"
+                          placeholder="选择日期"
+                          clearable
+                          :picker-options="datePickerOptions">
+          </el-date-picker>
+          <el-date-picker
+            v-else-if="value.inputType === 3"
+            v-model="form[key]"
+            align="right"
+            type="year"
+            placeholder="选择年"
+            clearable>
+          </el-date-picker>
+          <el-input
+            v-else-if="value.inputType === 4"
+            type="textarea"
+            autosize
+            placeholder="请输入内容"
+            v-model="form[key]">
+          </el-input>
+          <el-upload
+            v-else-if="value.inputType === 5"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            multiple
+            :limit="3"
+            :on-exceed="handleExceed"
+            :file-list="fileList"
+            style="width: 12rem;">
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
+          <el-input
+            v-else-if="value.inputType === 6"
+            type="textarea"
+            autosize
+            placeholder="请输入内容"
+            v-model="form[key]">
+          </el-input>
         </el-form-item>
       </el-col>
     </el-form>
@@ -32,12 +76,22 @@
   import ElForm from "../../../../node_modules/element-ui/packages/form/src/form.vue";
   import ElFormItem from "../../../../node_modules/element-ui/packages/form/src/form-item.vue";
   import ElCol from "element-ui/packages/col/src/col";
+  import ElInput from "../../../../node_modules/element-ui/packages/input/src/input.vue";
 
   export default {
     props: ["show","tmpl","valueLabelMap","rules"],
     data() {
       return {
         form: {},
+        datePickerOptions: {
+          disabledDate(time) {
+            return time.getTime() > Date.now();
+          },
+        },
+        fileList: [
+          {name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'},
+          {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'},
+        ]
       }
     },
     created() {
@@ -76,9 +130,21 @@
         }
         str = str + label;
         return str;
+      },
+
+      // 上传控件的钩子
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      },
+      handleExceed(files, fileList) {
+        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
       }
     },
     components: {
+      ElInput,
       ElCol,
       ElFormItem,
       ElForm,
