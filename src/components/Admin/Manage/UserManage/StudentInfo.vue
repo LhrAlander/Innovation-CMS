@@ -1,5 +1,5 @@
 <template>
-  <div class="studentinfo">
+  <div class="wrap">
     <!--筛选标签区域-->
     <div class="tagBlock">
       <span v-if="!tagEmpty" style="font-weight: bold; font-size: .9rem;">筛选条件</span>
@@ -11,8 +11,9 @@
     <!--筛选框-->
     <filter-box :dialogVisible="showFilterBox"
                 :filter="filter"
+                :tmpl = "filterTmpl"
                 :valueLabelMap = "valueLabelMap"
-                :keyFormatMap = "keyFormatMap"
+                :keyFormatMap = "Object.assign({},keyFormatMap,expandFormatMap)"
                 @sendFilter="receiveFilter"></filter-box>
     <info-add :show="showInfoAdd"
               :tmpl = "infoAddTmpl"
@@ -91,31 +92,33 @@
       return {
         tableData: [{ // 表格数据
           id: 1,
-          studentId: '2015210405043',
-          name: '林海瑞',
-          phone: '13588221234',
-          status: '禁用',
+          username: '用户名',
+          name: '姓名',
+          role: '用户类别',
+          status: '用户状态',
+          phone: '手机号',
+          email: '邮箱',
         }
         ],
-        valueLabelMap: {
+        valueLabelMap: { // 下拉类型的input的具体数据
+//          role: [{ // 用户类别映射表
+//            value: 0,
+//            label: '全部'
+//          }, {
+//            value: 1,
+//            label: '学生'
+//          }, {
+//            value: 2,
+//            label: '老师'
+//          }, {
+//            value: 3,
+//            label: '企业'
+//          }],
 
-          status: [{ // 用户状态映射表
-            value: 0,
-            label: '全部'
-          }, {
-            value: 1,
-            label: '可用'
-          }, {
-            value: 2,
-            label: '禁用'
-          }, {
-            value: 3,
-            label: '待审核'
-          }],
         },
 
         keyFormatMap: { // 格式化标签映射表
-          studentId: '学号',
+          studentId: '用户名',
           name: '姓名',
           phone: '手机号码',
           status: '用户状态',
@@ -130,7 +133,7 @@
         },
         infoAddTmpl: {
           studentId: {
-            label: '学号',
+            label: '用户名',
             inputType: 0, // 0 代表 input
           },
           name: {
@@ -139,49 +142,87 @@
           },
           phone: {
             label: '手机号码',
-            inputType: 1, // 1 代表 select
+            inputType: 0,
           },
           status: {
             label: '用户状态',
-            inputType: 1, // 1 代表 select
+            inputType: 0,
           },
           institute: {
             label: '学院',
-            inputType: 0, // 0 代表 input
+            inputType: 0,
           },
           department: {
             label: '系部',
-            inputType: 0, // 0 代表 input
+            inputType: 0,
           },
           specialty: {
             label: '专业',
-            inputType: 0, // 0 代表 input
+            inputType: 0,
           },
           class: {
             label: '班级',
-            inputType: 0, // 0 代表 input
+            inputType: 0,
           },
           gender: {
             label: '性别',
-            inputType: 0, // 0 代表 input
+            inputType: 0,
           },
           email: {
             label: '邮箱',
-            inputType: 0, // 0 代表 input
+            inputType: 0,
           },
+
         },
         infoAddRules: {
-          username: [
-            {required: true, message: '请输入用户名', trigger: 'blur'}
-          ]
+          groupName: [
+            {required: true, message: '请输入团队名称', trigger: 'blur'}
+          ],
+          leaderName: [
+            {required: true, message: '请输入依托单位', trigger: 'blur'}
+          ],
+          leaderId: [
+            {required: true, message: '请输入负责人用户名(学号)', trigger: 'blur'}
+          ],
+          teacherId: [
+            {required: true, message: '请输入指导老师用户名', trigger: 'blur'}
+          ],
         },
 //        获取表格数据的地址
         url: '',
+        filterTmpl: {
+          username: {
+            label: '用户名',
+            inputType: 0, // 0 代表 input
+          },
+          name: {
+            label: '姓名',
+            inputType: 0, // 0 代表 input
+          },
+          role: {
+            label: '用户类别',
+            inputType: 0,
+          },
+          phone: {
+            label: '手机号',
+            inputType: 0,
+          },
+          email: {
+            label: '邮箱',
+            inputType: 0,
+          },
+        },
         filter: {//搜索条件
-          username: '', //用户名
+          studentId: '', //用户名
           name: '', //姓名
-          role: '',//用户类别
-          status: ''//用户状态
+          phone: '', //手机号码
+          status: '', //用户状态
+          institute: '', //学院
+          department: '', //系部
+          specialty: '', //专业
+          class: '', //班级
+          gender: '', //性别
+          email: '', //邮箱
         },
         pageSize: 15, //每页大小
         currentPage: 1, //当前页
@@ -263,7 +304,7 @@
       keyFormater: function(value) {
         if (!value) return '';
         value = value.toString();
-        return this.keyFormatMap[value];
+        return Object.assign({},this.keyFormatMap,this.expandFormatMap)[value];
       },
       resetObject: utils.resetObject,
       valueFormater: utils.valueFormater,
@@ -318,7 +359,7 @@
     width: 50%;
   }
 
-  .studentinfo {
+  .wrap {
     position: relative;
     padding: 40px 50px;
   }
@@ -375,33 +416,6 @@
     background-color: #4E9B4E;
   }
 
-  .filterbox {
-    height: 45px;
-    margin-bottom: 15px;
-    background-color: #ECF0F1;
-    padding-left: 9%;
-  }
-
-  i.confirm {
-    float: right;
-    font-size: 1.5rem;
-    margin-left: 20px;
-    cursor: pointer;
-    opacity: .5;
-    -webkit-user-select:none;
-    -moz-user-select:none;
-    -ms-user-select:none;
-    user-select:none;
-  }
-  i.confirm:hover {
-    opacity: 1;
-  }
-  i.confirm.yes {
-    color: green;
-  }
-  i.confirm.no {
-    color: red;
-  }
   .tagBlock {
     display: inline-block;
     margin-top: 10px;
