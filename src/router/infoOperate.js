@@ -6,6 +6,9 @@ import DependentUnitInfo from 'pages/AdminInfoTables/DependentUnitManage/Depende
 import TeamInfoAdmin from 'pages/AdminInfoTables/TeamManage/TeamInfo'
 import ProjectInfoAdmin from 'pages/AdminInfoTables/ProjectManage/ProjectInfo'
 import AwardInfoAdmin from 'pages/AdminInfoTables/AwardManage/AwardInfo'
+import PolicyInfoAdmin from 'pages/AdminInfoTables/PolicyManage/PolicyInfo'
+import NotificationInfoAdmin from 'pages/AdminInfoTables/NotificationManage/NotificationInfo'
+import FileInfoAdmin from 'pages/AdminInfoTables/FileManage/FileInfo'
 
 export default [
   // 团队基本信息查看
@@ -27,5 +30,20 @@ export default [
   {
     path: "/check/awardInfo/:id",
     component: AwardInfoAdmin
+  },
+  // 政府政策信息
+  {
+    path: "/check/policyInfo/:id",
+    component: PolicyInfoAdmin
+  },
+  // 通知公告信息
+  {
+    path: "/check/notificationInfo/:id",
+    component: NotificationInfoAdmin
+  },
+  // 文件制度信息
+  {
+    path: "/check/fileInfo/:id",
+    component: FileInfoAdmin
   }
 ]

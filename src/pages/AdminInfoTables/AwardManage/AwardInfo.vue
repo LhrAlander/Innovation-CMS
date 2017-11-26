@@ -101,9 +101,37 @@
     {
       key: 'awardName',
       name: '获奖名称',
-      value: '鼓励奖',
+      value: '创新创业大赛',
       type: INPUT,
       span: 1,
+      disabled: false
+    },
+    {
+      key: 'awardCategory',
+      name: '获奖类别',
+      value: '校级',
+      type: SELECT,
+      span: 1,
+      options: [
+        {
+          value: "国家级",
+          label: "国家级"
+        },
+        {
+          value: "省部级",
+          label: "省部级"
+        }
+        ,
+        {
+          value: "校级",
+          label: "校级"
+        }
+        ,
+        {
+          value: "院级",
+          label: "院级"
+        }
+      ],
       disabled: false
     },
     {

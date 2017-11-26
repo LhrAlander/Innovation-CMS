@@ -77,16 +77,6 @@ export default [
         },
       },
       {
-        name: 'Role',
-        path: 'Role',
-        component: Role,
-        meta: {
-          iconCode: '&#xe6a0;',
-          firstLevel: '用户管理',
-          secondLevel: '用户类别(角色)管理'
-        },
-      },
-      {
         name: 'StudentInfo',
         path: 'StudentInfo',
         component: StudentInfo,
@@ -107,16 +97,6 @@ export default [
         },
       },
       {
-        name: 'ProjectCategory',
-        path: 'ProjectCategory',
-        component: ProjectCategory,
-        meta: {
-          iconCode: '&#xe601;',
-          firstLevel: '项目管理',
-          secondLevel: '项目类别管理'
-        },
-      },
-      {
         name: 'ProjectInfo',
         path: 'ProjectInfo',
         component: ProjectInfo,
@@ -124,16 +104,6 @@ export default [
           iconCode: '&#xe601;',
           firstLevel: '项目管理',
           secondLevel: '项目信息管理'
-        },
-      },
-      {
-        name: 'ProjectLevel',
-        path: 'ProjectLevel',
-        component: ProjectLevel,
-        meta: {
-          iconCode: '&#xe601;',
-          firstLevel: '项目管理',
-          secondLevel: '项目级别管理'
         },
       },
       {
@@ -157,16 +127,6 @@ export default [
         },
       },
       {
-        name: 'GroupCategory',
-        path: 'GroupCategory',
-        component: GroupCategory,
-        meta: {
-          iconCode: '&#xe61e;',
-          firstLevel: '团队管理',
-          secondLevel: '团队类别管理'
-        },
-      },
-      {
         name: 'GroupInfo',
         path: 'GroupInfo',
         component: GroupInfo,
@@ -187,16 +147,6 @@ export default [
         },
       },
       {
-        name: 'GovCategory',
-        path: 'GovCategory',
-        component: GovCategory,
-        meta: {
-          iconCode: '&#xe618;',
-          firstLevel: '政策信息管理',
-          secondLevel: '政策类别管理'
-        },
-      },
-      {
         name: 'GovInfo',
         path: 'GovInfo',
         component: GovInfo,
@@ -213,16 +163,6 @@ export default [
         meta: {
           iconCode: '&#xe64f;',
           firstLevel: '文件与制度管理'
-        },
-      },
-      {
-        name: 'DepUnitCategory',
-        path: 'DepUnitCategory',
-        component: DepUnitCategory,
-        meta: {
-          iconCode: '&#xe9e3;',
-          firstLevel: '依托单位信息管理',
-          secondLevel: '依托单位类别管理'
         },
       },
       {
@@ -303,16 +243,6 @@ export default [
           iconCode: '&#xe631;',
           firstLevel: '获奖管理',
           secondLevel: '获奖基本信息管理'
-        },
-      },
-      {
-        name: 'AwardLevel',
-        path: 'AwardLevel',
-        component: AwardLevel,
-        meta: {
-          iconCode: '&#xe631;',
-          firstLevel: '获奖管理',
-          secondLevel: '获奖等级管理'
         },
       },
       {
