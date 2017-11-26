@@ -58,6 +58,11 @@
             @click="handleMore(scope.$index, scope.row)">更多</el-button>
           <el-button
             size="small"
+            type="primary"
+            @click="handlePublic(scope.$index, scope.row)"
+            v-html="scope.row.status==='published' ? '下架' : '发布'"></el-button>
+          <el-button
+            size="small"
             class="edit-btn"
             @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <el-button
@@ -86,6 +91,8 @@
   import FilterBox from "components/Admin/Manage/FilterBox"
   import InfoAdd from "components/Admin/Manage/InfoAdd"
   import * as utils from 'utils/utils'
+
+
   export default {
     components: {ElButton, FilterBox, InfoAdd},
     data() {
@@ -94,7 +101,7 @@
           id: 1,
           govCategory: '政策类别',
           title: '标题',
-          status: '状态',
+          status: 'published',
           intro: '政策简介',
         }
         ],
@@ -220,6 +227,13 @@
 
       handleMore(index, row) {
       },
+      handlePublic(index, row) {
+        if (row.status === 'published') {
+          row.status = 'unpublished'
+        } else {
+          row.status = 'published'
+        }
+      },
 //        删除按钮事件
       handleDelete(index, row) {
         var array = [];
@@ -269,7 +283,8 @@
         this.loadData(this.filter, this.currentName, this.pageSize);
       },
       enterAdd: function () {
-        this.showInfoAdd = true;
+//        this.showInfoAdd = true;
+        this.$router.push({name: 'StudentInfo'});
       },
       receiveInfo: function (data) {
         if (data) {
