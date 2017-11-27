@@ -102,20 +102,19 @@
         }
         ],
         valueLabelMap: {
-//          role: [{ // 用户类别映射表
-//            value: 0,
-//            label: '全部'
-//          }, {
-//            value: 1,
-//            label: '学生'
-//          }, {
-//            value: 2,
-//            label: '老师'
-//          }, {
-//            value: 3,
-//            label: '企业'
-//          }],
-
+          unitName: [{ // 用户类别映射表
+            value: 0,
+            label: '单位0'
+          }, {
+            value: 1,
+            label: '单位1'
+          }, {
+            value: 2,
+            label: '单位2'
+          }, {
+            value: 3,
+            label: '单位3'
+          }]
         },
 
         keyFormatMap: { // 格式化标签映射表
@@ -126,8 +125,8 @@
         },
         expandFormatMap: { // 格式化额外信息映射表
           leaderId: '负责人用户名(学号)',
-          address: '单位地址',
           email: '负责人邮箱',
+          address: '单位地址',
         },
         infoAddTmpl: {
           unitName: {
@@ -152,7 +151,7 @@
         filterTmpl: {
           unitName: {
             label: '单位名称',
-            inputType: 0, // 0 代表 input
+            inputType: 1, // 0 代表 input
           },
           unitCategory: {
             label: '单位类别',

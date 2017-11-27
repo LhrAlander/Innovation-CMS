@@ -1,14 +1,14 @@
 <template>
     <el-dialog
+      class="dialog"
       title="请填写筛选信息"
       :visible.sync = "visible"
       @close = "handleCancel"
       :modal = "false"
       :close-on-click-modal = "false"
-      center
       >
       <el-form :inline="true" ref="form" :model="filter" label-width="9rem">
-        <el-col :span="12" v-for="(value, key, index) in tmpl" :key="index">
+        <el-row><el-col :span="12" v-for="(value, key, index) in tmpl" :key="index">
           <el-form-item :label="value.label" :prop="key" >
             <el-input v-if="value.inputType === 0" v-model="filter[key]" :placeholder="placeholderFilter(value.inputType, value.label)"></el-input>
             <el-select v-else-if="value.inputType === 1" v-model="filter[key]" clearable :placeholder="placeholderFilter(value.inputType, value.label)" class="infoadd-select">
@@ -35,9 +35,17 @@
               placeholder="选择年"
               clearable>
             </el-date-picker>
+            <el-cascader
+              v-else-if="value.inputType === 4"
+              expand-trigger="hover"
+              :options="options"
+              :show-all-levels="false"
+              v-model="filter[key]">
+            </el-cascader>
 
           </el-form-item>
-        </el-col>
+        </el-col></el-row>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleCancel">取 消</el-button>
@@ -52,7 +60,7 @@
   import ElCol from "element-ui/packages/col/src/col";
 
   export default {
-    props: ["dialogVisible","filter","tmpl","valueLabelMap", "keyFormatMap"],
+    props: ["dialogVisible","filter","tmpl","valueLabelMap", "keyFormatMap","options"],
     data() {
       return {
         visible: this.dialogVisible,
@@ -112,5 +120,15 @@
     width: 50%;
     margin-left: 2%;
     margin-top: 1%;
+  }
+  .el-dialog {
+  }
+  .footer {
+    display: block;
+  }
+</style>
+<style>
+  .el-dialog {
+    padding-bottom: 40px;
   }
 </style>

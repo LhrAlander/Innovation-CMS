@@ -28,15 +28,6 @@
       border
       :row-key="getRowKeys"
       style="width: 100%;">
-      <el-table-column type="expand">
-        <template scope="props">
-          <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item v-for="(value, key, index) in expandFormatMap" :label="value">
-              <span>{{ props.row[key] }}</span>
-            </el-form-item>
-          </el-form>
-        </template>
-      </el-table-column>
       <el-table-column
         type="index"
         width="50"
@@ -129,8 +120,6 @@
 
         },
         expandFormatMap: { // 格式化额外信息映射表
-          intro: '政策简介',
-          attachment: '附件',
         },
         infoAddTmpl: {
           govCategory: {
@@ -144,15 +133,7 @@
           status: {
             label: '状态',
             inputType: 0,
-          },
-          intro: {
-            label: '政策简介',
-            inputType: 6,
-          },
-          attachment: {
-            label: '附件',
-            inputType: 5,
-          },
+          }
 
         },
         infoAddRules: {

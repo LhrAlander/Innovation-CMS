@@ -28,15 +28,7 @@
       border
       :row-key="getRowKeys"
       style="width: 100%;">
-      <el-table-column type="expand">
-        <template scope="props">
-          <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item v-for="(value, key, index) in expandFormatMap" :label="value">
-              <span>{{ props.row[key] }}</span>
-            </el-form-item>
-          </el-form>
-        </template>
-      </el-table-column>
+
       <el-table-column
         type="index"
         width="50"
@@ -50,7 +42,7 @@
       <el-table-column
         label="操作"
         :resizable="false"
-        min-width="150">
+        min-width="200">
         <template scope="scope">
           <el-button
             size="small"
@@ -58,7 +50,7 @@
             @click="handleMore(scope.$index, scope.row)">更多</el-button>
           <el-button
             size="small"
-            type="primary"
+            type="warning"
             @click="handlePublic(scope.$index, scope.row)"
             v-html="scope.row.status==='published' ? '下架' : '发布'"></el-button>
           <el-button
@@ -122,12 +114,10 @@
           title: '标题',
           status: '状态',
           publishTime: '发布时间',
-          publisherName: '发布者姓名'
-
+          publisherName: '发布者姓名',
+          effectiveDate: '生效日期',
         },
         expandFormatMap: { // 格式化额外信息映射表
-          remark: '备注',
-          effectiveDate: '生效日期',
         },
         infoAddTmpl: {
           category: {
@@ -148,10 +138,6 @@
           },
           publisherName: {
             label: '发布者姓名',
-            inputType: 0,
-          },
-          remark: {
-            label: '备注',
             inputType: 0,
           },
           effectiveDate: {

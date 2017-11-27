@@ -119,7 +119,32 @@
 //            value: 3,
 //            label: '企业'
 //          }],
-
+          groupName: [{
+            value: 0,
+            label: '团队0'
+          },{
+            value: 1,
+            label: '团队1'
+          },{
+            value: 2,
+            label: '团队2'
+          },{
+            value: 3,
+            label: '团队3'
+          }],
+          dependentUnit: [{
+            value: 0,
+            label: '依托单位0'
+          },{
+            value: 1,
+            label: '依托单位1'
+          },{
+            value: 2,
+            label: '依托单位2'
+          },{
+            value: 3,
+            label: '依托单位3'
+          }],
         },
 
         keyFormatMap: { // 格式化标签映射表
@@ -131,7 +156,6 @@
 
         },
         expandFormatMap: { // 格式化额外信息映射表
-          intro: '团队简介',
           leaderPhone: '负责人手机号',
           leaderClass: '负责人班级',
           leaderId: '负责人用户名(学号)',
@@ -140,12 +164,12 @@
 
         },
         infoAddTmpl: {
+          dependentUnit: {
+            label: '所在依托单位',
+            inputType: 1, // 0 代表 input
+          },
           groupName: {
             label: '团队名称',
-            inputType: 0, // 0 代表 input
-          },
-          leaderName: {
-            label: '所在依托单位',
             inputType: 0, // 0 代表 input
           },
           leaderId: {
@@ -177,15 +201,11 @@
         filterTmpl: {
           groupName: {
             label: '团队名称',
-            inputType: 0, // 0 代表 input
+            inputType: 1, // 0 代表 input
           },
           leaderName: {
-            label: '所在依托单位',
+            label: '负责人姓名',
             inputType: 0, // 0 代表 input
-          },
-          leaderSpecialty: {
-            label: '负责人专业',
-            inputType: 0,
           },
           teacher: {
             label: '指导老师',
@@ -193,26 +213,10 @@
           },
           dependentUnit: {
             label: '所在依托单位',
-            inputType: 0, // 0 代表 input
-          },
-          intro: {
-            label: '团队简介',
-            inputType: 0, // 0 代表 input
-          },
-          leaderPhone: {
-            label: '负责人手机号',
-            inputType: 0,
-          },
-          leaderClass: {
-            label: '负责人班级',
-            inputType: 0,
+            inputType: 1, // 0 代表 input
           },
           leaderId: {
             label: '负责人用户名(学号)',
-            inputType: 0,
-          },
-          teacherPhone: {
-            label: '指导老师手机号',
             inputType: 0,
           },
           teacherId: {
@@ -223,14 +227,9 @@
         filter: {//搜索条件
           groupName: '', //团队名称
           leaderName: '',//团队负责人姓名
-          leaderSpecialty: '',//负责人专业
           teacher: '',//指导老师
           dependentUnit: '',//所在依托单位
-          intro: '',//团队简介
-          leaderPhone: '',//负责人手机号
-          leaderClass: '',//负责人班级
           leaderId: '',//负责人用户名(学号)
-          teacherPhone: '',//指导老师手机号
           teacherId: '',//指导老师用户名
         },
         pageSize: 15, //每页大小

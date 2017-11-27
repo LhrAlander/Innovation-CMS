@@ -165,7 +165,7 @@ export default [
         meta: {
           iconCode: '&#xe9e3;',
           firstLevel: '依托单位信息管理',
-          secondLevel: '依托单位信息管理'
+          secondLevel: '信息管理'
         },
       },
       {

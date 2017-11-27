@@ -5,65 +5,66 @@
     @close = "handleCancel"
     :modal = "false"
     :close-on-click-modal = "false"
-    center
   >
     <el-form :inline="true" ref="form" :model="form" label-width="9rem" :rules = "rules">
-      <el-col :span="12" v-for="(value, key, index) in tmpl" :key="index">
-        <el-form-item :label="value.label" :prop="key" >
-          <el-input v-if="value.inputType === 0" v-model="form[key]" :placeholder="placeholderFilter(value.inputType, value.label)"></el-input>
-          <el-select v-else-if="value.inputType === 1" v-model="form[key]" clearable :placeholder="placeholderFilter(value.inputType, value.label)" class="infoadd-select">
-            <el-option v-for="item in valueLabelMap[key]"
-                       :key = "item.value"
-                       :label = "item.label"
-                       :value = "item.value">
-            </el-option>
-          </el-select>
-          <el-date-picker v-else-if="value.inputType === 2"
-                          style="width: 11.5rem"
-                          v-model="form[key]"
-                          align="right"
-                          type="date"
-                          placeholder="选择日期"
-                          clearable
-                          :picker-options="datePickerOptions">
-          </el-date-picker>
-          <el-date-picker
-            v-else-if="value.inputType === 3"
-            v-model="form[key]"
-            align="right"
-            type="year"
-            placeholder="选择年"
-            clearable>
-          </el-date-picker>
-          <el-input
-            v-else-if="value.inputType === 4"
-            type="textarea"
-            autosize
-            placeholder="请输入内容"
-            v-model="form[key]">
-          </el-input>
-          <el-upload
-            v-else-if="value.inputType === 5"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            multiple
-            :limit="3"
-            :on-exceed="handleExceed"
-            :file-list="fileList"
-            style="width: 12rem;">
-            <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-          </el-upload>
-          <el-input
-            v-else-if="value.inputType === 6"
-            type="textarea"
-            autosize
-            placeholder="请输入内容"
-            v-model="form[key]">
-          </el-input>
-        </el-form-item>
-      </el-col>
+      <el-row>
+        <el-col :span="12" v-for="(value, key, index) in tmpl" :key="index">
+          <el-form-item :label="value.label" :prop="key" >
+            <el-input v-if="value.inputType === 0" v-model="form[key]" :placeholder="placeholderFilter(value.inputType, value.label)"></el-input>
+            <el-select v-else-if="value.inputType === 1" v-model="form[key]" clearable :placeholder="placeholderFilter(value.inputType, value.label)" class="infoadd-select">
+              <el-option v-for="item in valueLabelMap[key]"
+                         :key = "item.value"
+                         :label = "item.label"
+                         :value = "item.value">
+              </el-option>
+            </el-select>
+            <el-date-picker v-else-if="value.inputType === 2"
+                            style="width: 11.5rem"
+                            v-model="form[key]"
+                            align="right"
+                            type="date"
+                            placeholder="选择日期"
+                            clearable
+                            :picker-options="datePickerOptions">
+            </el-date-picker>
+            <el-date-picker
+              v-else-if="value.inputType === 3"
+              v-model="form[key]"
+              align="right"
+              type="year"
+              placeholder="选择年"
+              clearable>
+            </el-date-picker>
+            <el-input
+              v-else-if="value.inputType === 97"
+              type="textarea"
+              autosize
+              placeholder="请输入内容"
+              v-model="form[key]">
+            </el-input>
+            <el-upload
+              v-else-if="value.inputType === 98"
+              action="https://jsonplaceholder.typicode.com/posts/"
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              multiple
+              :limit="3"
+              :on-exceed="handleExceed"
+              :file-list="fileList"
+              style="width: 12rem;">
+              <el-button size="small" type="primary">点击上传</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            </el-upload>
+            <el-input
+              v-else-if="value.inputType === 99"
+              type="textarea"
+              autosize
+              placeholder="请输入内容"
+              v-model="form[key]">
+            </el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="handleCancel">取 消</el-button>

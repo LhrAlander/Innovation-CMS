@@ -100,7 +100,7 @@
           gender: '1', //性别
           email: '1', //邮箱
           birth: '1', //出生年月
-          specAddress: '1', //企业具体位置
+          specAddress: '浙江省杭州市海曙路58号杭州师范大学仓前校区博文苑8号楼', //企业具体位置
           fixedTel: '1', //企业固定电话
         }
         ],
@@ -132,8 +132,8 @@
           gender: '性别',
           email: '邮箱',
           birth: '出生年月',
-          specAddress: '企业具体位置',
           fixedTel: '企业固定电话',
+          specAddress: '企业具体位置',
         },
         infoAddTmpl: {
           companyName: {

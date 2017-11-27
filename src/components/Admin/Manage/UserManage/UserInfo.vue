@@ -138,16 +138,8 @@
           },
           role: {
             label: '用户类别',
-            inputType: 0,
-          },
-          phone: {
-            label: '手机号',
-            inputType: 0,
-          },
-          email: {
-            label: '邮箱',
-            inputType: 0,
-          },
+            inputType: 1, // 1 代表下拉框
+          }
         },
         infoAddRules: {
           groupName: [
@@ -284,7 +276,7 @@
         this.loadData(this.filter, this.currentName, this.pageSize);
       },
       enterAdd: function () {
-        this.showInfoAdd = true;
+        this.$router.push("/edit/userInfo/1");
       },
       receiveInfo: function (data) {
         if (data) {

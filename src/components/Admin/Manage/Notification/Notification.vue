@@ -28,15 +28,6 @@
       border
       :row-key="getRowKeys"
       style="width: 100%;">
-      <el-table-column type="expand">
-        <template scope="props">
-          <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item v-for="(value, key, index) in expandFormatMap" :label="value">
-              <span>{{ props.row[key] }}</span>
-            </el-form-item>
-          </el-form>
-        </template>
-      </el-table-column>
       <el-table-column
         type="index"
         width="50"
@@ -126,9 +117,6 @@
 
         },
         expandFormatMap: { // 格式化额外信息映射表
-          attachment: '附件',
-          log: '日志记录',
-          content: '内容',
         },
         infoAddTmpl: {
           category: {
@@ -149,14 +137,6 @@
           },
           publisherName: {
             label: '发布者姓名',
-            inputType: 0,
-          },
-          attachment: {
-            label: '附件',
-            inputType: 0,
-          },
-          content: {
-            label: '内容',
             inputType: 0,
           }
         },
@@ -205,10 +185,6 @@
           publisherName: {
             label: '发布者姓名',
             inputType: 0,
-          },
-          content: {
-            label: '内容',
-            inputType: 0,
           }
         },
         filter: {//搜索条件
@@ -217,8 +193,6 @@
           status: '', //状态
           publishTime: '', //发布时间
           publisherName: '', //发布者姓名
-          content: '', //内容
-
         },
         pageSize: 15, //每页大小
         currentPage: 1, //当前页

@@ -14,6 +14,7 @@
                 :tmpl = "filterTmpl"
                 :valueLabelMap = "valueLabelMap"
                 :keyFormatMap = "Object.assign({},keyFormatMap,expandFormatMap)"
+                :options = "projectOptions"
                 @sendFilter="receiveFilter"></filter-box>
     <info-add :show="showInfoAdd"
               :tmpl = "infoAddTmpl"
@@ -28,15 +29,6 @@
       border
       :row-key="getRowKeys"
       style="width: 100%;">
-      <el-table-column type="expand">
-        <template scope="props">
-          <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item v-for="(value, key, index) in expandFormatMap" :label="value">
-              <span>{{ props.row[key] }}</span>
-            </el-form-item>
-          </el-form>
-        </template>
-      </el-table-column>
       <el-table-column
         type="index"
         width="50"
@@ -98,6 +90,55 @@
           contact: '联系方式',
         }
         ],
+        projectOptions: [{
+          value: 'depUnit1',
+          label: '依托单位1',
+          children:[{
+            value: 'group1',
+            label: '团队1',
+            children: [{
+              value: 'project1',
+              label: '项目1'
+            }, {
+              value: 'project2',
+              label: '项目2'
+            }]
+          },{
+            value: 'group2',
+            label: '团队2',
+            children: [{
+              value: 'project3',
+              label: '项目3'
+            }, {
+              value: 'project4',
+              label: '项目4'
+            }]
+          }]
+        }, {
+          value: 'depUnit2',
+          label: '依托单位2',
+          children:[{
+            value: 'group3',
+            label: '团队3',
+            children: [{
+              value: 'project5',
+              label: '项目5'
+            }, {
+              value: 'project6',
+              label: '项目6'
+            }]
+          },{
+            value: 'group4',
+            label: '团队4',
+            children: [{
+              value: 'project7',
+              label: '项目7'
+            }, {
+              value: 'project8',
+              label: '项目8'
+            }]
+          }]
+        }],
         valueLabelMap: { // 下拉类型的input的具体数据
 //          role: [{ // 用户类别映射表
 //            value: 0,
@@ -112,7 +153,31 @@
 //            value: 3,
 //            label: '企业'
 //          }],
-
+          projectName: [{
+            value: 'project1',
+            label: '项目1'
+          }, {
+            value: 'project2',
+            label: '项目2'
+          },{
+            value: 'project3',
+            label: '项目3'
+          }, {
+            value: 'project4',
+            label: '项目4'
+          },{
+            value: 'project5',
+            label: '项目5'
+          }, {
+            value: 'project6',
+            label: '项目6'
+          },{
+            value: 'project7',
+            label: '项目7'
+          }, {
+            value: 'project8',
+            label: '项目8'
+          }]
         },
 
         keyFormatMap: { // 格式化标签映射表
@@ -120,6 +185,7 @@
           userId: '用户名',
           username: '用户姓名',
           contact: '联系方式',
+          joinTime: '加入时间'
 
         },
         expandFormatMap: { // 格式化额外信息映射表
@@ -133,14 +199,10 @@
             label: '用户名',
             inputType: 0, // 0 代表 input
           },
-          username: {
-            label: '用户姓名',
-            inputType: 0,
-          },
-          contact: {
-            label: '联系方式',
-            inputType: 0,
-          },
+          joinTime: {
+            label: '加入时间',
+            inputType: 0
+          }
 
         },
         infoAddRules: {
@@ -162,7 +224,7 @@
         filterTmpl: {
           projectName: {
             label: '项目名称',
-            inputType: 0, // 0 代表 input
+            inputType: 4, // 0 代表 input
           },
           userId: {
             label: '用户名',
@@ -170,12 +232,12 @@
           },
           username: {
             label: '用户姓名',
-            inputType: 0,
+            inputType: 0, // 0 代表 input
           },
           contact: {
             label: '联系方式',
-            inputType: 0,
-          },
+            inputType: 0, // 0 代表 input
+          }
         },
         filter: {//搜索条件
           projectName: '', //项目名称
@@ -266,7 +328,23 @@
         return Object.assign({},this.keyFormatMap,this.expandFormatMap)[value];
       },
       resetObject: utils.resetObject,
-      valueFormater: utils.valueFormater,
+      valueFormater: function(type, value, map){
+        if (type === "projectName") {
+          for (var item of map[type]) {
+            if (item.value === value[2]) {
+              return item.label;
+            }
+          }
+        }
+        if (map[type] === undefined) {
+          return value;
+        }
+        for (var item of map[type]) {
+          if (item.value === value) {
+            return item.label;
+          }
+        }
+      },
       quitFilter: function () {
         this.filter = this.resetObject(this.filter);
         this.loadData(this.filter, this.currentName, this.pageSize);
