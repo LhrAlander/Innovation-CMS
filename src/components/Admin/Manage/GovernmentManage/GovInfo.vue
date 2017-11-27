@@ -284,7 +284,7 @@
       },
       enterAdd: function () {
 //        this.showInfoAdd = true;
-        this.$router.push({name: 'StudentInfo'});
+        this.$router.push({name: 'PolicyInfo'});
       },
       receiveInfo: function (data) {
         if (data) {

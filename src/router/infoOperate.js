@@ -33,16 +33,19 @@ export default [
   },
   // 政府政策信息
   {
+    name: "PolicyInfo",
     path: "/check/policyInfo/:id",
     component: PolicyInfoAdmin
   },
   // 通知公告信息
   {
+    name: "NotificationInfo",
     path: "/check/notificationInfo/:id",
     component: NotificationInfoAdmin
   },
   // 文件制度信息
   {
+    name: "FileInfo",
     path: "/check/fileInfo/:id",
     component: FileInfoAdmin
   }

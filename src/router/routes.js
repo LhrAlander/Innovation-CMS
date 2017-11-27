@@ -5,26 +5,20 @@ import Admin from 'pages/Admin'
 import UserInfo from 'components/Admin/Manage/UserManage/UserInfo'
 import StudentInfo from 'components/Admin/Manage/UserManage/StudentInfo'
 import TeacherInfo from 'components/Admin/Manage/UserManage/TeacherInfo'
-import Role from 'components/Admin/Manage/UserManage/Role'
 import Others from 'components/Admin/Manage/UserManage/Others'
 
-import ProjectCategory from 'components/Admin/Manage/ProjectManage/ProjectCategory'
 import ProjectInfo from 'components/Admin/Manage/ProjectManage/ProjectInfo'
-import ProjectLevel from 'components/Admin/Manage/ProjectManage/ProjectLevel'
 import ProjectMember from 'components/Admin/Manage/ProjectManage/ProjectMember'
 
 import Notification from 'components/Admin/Manage/Notification/Notification'
 
-import GroupCategory from 'components/Admin/Manage/GroupManage/GroupCategory'
 import GroupInfo from 'components/Admin/Manage/GroupManage/GroupInfo'
 import GroupMember from 'components/Admin/Manage/GroupManage/GroupMember'
 
-import GovCategory from 'components/Admin/Manage/GovernmentManage/GovCategory'
 import GovInfo from 'components/Admin/Manage/GovernmentManage/GovInfo'
 
 import FileAndSystem from 'components/Admin/Manage/FileAndSystemManage/FileAndSystem'
 
-import DepUnitCategory from 'components/Admin/Manage/DependentUnitManage/DepUnitCategory'
 import DepUnitInfo from 'components/Admin/Manage/DependentUnitManage/DepUnitInfo'
 
 import Class from 'components/Admin/Manage/BasicInfoManage/Class'
@@ -36,7 +30,6 @@ import Status from 'components/Admin/Manage/BasicInfoManage/Status'
 
 import AwardCategory from 'components/Admin/Manage/AwardManage/AwardCategory'
 import AwardInfo from 'components/Admin/Manage/AwardManage/AwardInfo'
-import AwardLevel from 'components/Admin/Manage/AwardManage/AwardLevel'
 import AwardMember from 'components/Admin/Manage/AwardManage/AwardMember'
 
 // 管理员查看表单
@@ -193,16 +186,6 @@ export default [
           iconCode: '&#xe8d0;',
           firstLevel: '基本信息管理',
           secondLevel: '系部管理'
-        },
-      },
-      {
-        name: 'InstituteInfo',
-        path: 'InstituteInfo',
-        component: InstituteInfo,
-        meta: {
-          iconCode: '&#xe8d0;',
-          firstLevel: '基本信息管理',
-          secondLevel: '学院信息管理'
         },
       },
       {

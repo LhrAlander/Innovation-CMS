@@ -319,7 +319,8 @@
         this.loadData(this.filter, this.currentName, this.pageSize);
       },
       enterAdd: function () {
-        this.showInfoAdd = true;
+//        this.showInfoAdd = true;
+        this.$router.push({name: 'FileInfo'});
       },
       receiveInfo: function (data) {
         if (data) {

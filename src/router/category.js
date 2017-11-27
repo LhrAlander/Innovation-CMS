@@ -9,6 +9,7 @@ import ProjectCategory from 'pages/AdminInfoTables/CategoryManage/ProjectCategor
 import ProjectLevel from 'pages/AdminInfoTables/CategoryManage/ProjectLevel'
 import AwardLevel from 'pages/AdminInfoTables/CategoryManage/AwardLevel'
 import PolicyCategory from 'pages/AdminInfoTables/CategoryManage/PolicyCategory'
+import Academy from 'pages/AdminInfoTables/CategoryManage/Academy'
 
 export default [
   // 用户类别管理
@@ -52,5 +53,11 @@ export default [
     name: 'GovCategory',
     path: '/policyCategory',
     component: PolicyCategory
+  },
+  // 学院管理
+  {
+    name: 'InstituteInfo',
+    path: '/academy',
+    component: Academy
   },
 ]
