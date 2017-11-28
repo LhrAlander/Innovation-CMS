@@ -199,30 +199,40 @@
             label: '姓名',
             inputType: 0, // 0 代表 input
           },
-          role: {
-            label: '用户类别',
+          status: {
+            label: '用户状态',
             inputType: 0,
           },
-          phone: {
-            label: '手机号',
+          institute: {
+            label: '学院',
             inputType: 0,
           },
-          email: {
-            label: '邮箱',
+          department: {
+            label: '系部',
+            inputType: 0,
+          },
+          specialty: {
+            label: '专业',
+            inputType: 0,
+          },
+          class: {
+            label: '班级',
+            inputType: 0,
+          },
+          gender: {
+            label: '性别',
             inputType: 0,
           },
         },
         filter: {//搜索条件
           studentId: '', //用户名
           name: '', //姓名
-          phone: '', //手机号码
           status: '', //用户状态
           institute: '', //学院
           department: '', //系部
           specialty: '', //专业
           class: '', //班级
           gender: '', //性别
-          email: '', //邮箱
         },
         pageSize: 15, //每页大小
         currentPage: 1, //当前页

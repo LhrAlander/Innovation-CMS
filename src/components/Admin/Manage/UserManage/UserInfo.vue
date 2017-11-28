@@ -169,23 +169,13 @@
           role: {
             label: '用户类别',
             inputType: 0,
-          },
-          phone: {
-            label: '手机号',
-            inputType: 0,
-          },
-          email: {
-            label: '邮箱',
-            inputType: 0,
-          },
+          }
         },
         filter: {//搜索条件
           username: '', //用户名
           name: '', //姓名
           role: '', //用户类别
           status: '', //用户状态
-          phone: '', //手机号
-          email: '', //邮箱
         },
         pageSize: 15, //每页大小
         currentPage: 1, //当前页

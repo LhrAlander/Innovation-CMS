@@ -161,32 +161,17 @@
             label: '负责人',
             inputType: 0,
           },
-          leaderPhone: {
-            label: '负责人联系方式',
-            inputType: 0,
-          },
           leaderId: {
             label: '负责人用户名(学号)',
             inputType: 0, // 0 代表 input
-          },
-          address: {
-            label: '单位地址',
-            inputType: 0, // 0 代表 input
-          },
-          email: {
-            label: '负责人邮箱',
-            inputType: 0,
-          },
+          }
 
         },
         filter: {//搜索条件
           unitName: '',//单位名称
           unitCategory: '',//单位类别
           leader: '',//负责人
-          leaderPhone: '',//负责人联系方式
           leaderId: '',//负责人用户名(学号)
-          address: '',//单位地址
-          email: '',//负责人邮箱
         },
         pageSize: 15, //每页大小
         currentPage: 1, //当前页

@@ -197,10 +197,6 @@
             label: '姓名',
             inputType: 0, // 0 代表 input
           },
-          phone: {
-            label: '手机号码',
-            inputType: 0,
-          },
           status: {
             label: '用户状态',
             inputType: 0,
@@ -220,22 +216,16 @@
           gender: {
             label: '性别',
             inputType: 0,
-          },
-          email: {
-            label: '邮箱',
-            inputType: 0,
-          },
+          }
         },
         filter: {//搜索条件
           teacherId: '', //工号
           name: '', //姓名
-          phone: '', //手机号码
           status: '', //用户状态
           background: '', //学历
           degree: '', //学位
           specialty: '', //专业
           gender: '', //性别
-          email: '', //邮箱
         },
         pageSize: 15, //每页大小
         currentPage: 1, //当前页

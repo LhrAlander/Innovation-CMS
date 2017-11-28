@@ -203,24 +203,12 @@
             label: '负责人姓名',
             inputType: 0, // 0 代表 input
           },
-          companyAccess: {
-            label: '企业联系方式',
-            inputType: 0,
-          },
           status: {
             label: '用户状态',
             inputType: 0,
           },
-          principalPhone: {
-            label: '负责人手机号',
-            inputType: 0,
-          },
           gender: {
             label: '性别',
-            inputType: 0,
-          },
-          email: {
-            label: '邮箱',
             inputType: 0,
           },
           birth: {
@@ -230,23 +218,15 @@
           specAddress: {
             label: '企业具体位置',
             inputType: 0,
-          },
-          fixedTel: {
-            label: '企业固定电话',
-            inputType: 0,
-          },
+          }
         },
         filter: {//搜索条件
           companyName: '', //企业名称
           principalName : '', //负责人姓名
-          companyAccess: '', //企业联系方式
           status: '', //用户状态
-          principalPhone: '', //负责人手机号
           gender: '', //性别
-          email: '', //邮箱
           birth: '', //出生年月
           specAddress: '', //企业具体位置
-          fixedTel: '', //企业固定电话
         },
         pageSize: 15, //每页大小
         currentPage: 1, //当前页

@@ -181,18 +181,13 @@
           username: {
             label: '用户姓名',
             inputType: 0,
-          },
-          contact: {
-            label: '联系方式',
-            inputType: 0,
-          },
+          }
         },
         filter: {//搜索条件
           awardName: '', //获奖名称
           projectName: '', //项目名称
           userId: '', //用户名
           username: '', //用户姓名
-          contact: '', //联系方式
         },
         pageSize: 15, //每页大小
         currentPage: 1, //当前页

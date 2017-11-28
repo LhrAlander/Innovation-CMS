@@ -3,7 +3,9 @@
     <!--筛选标签区域-->
     <div class="tagBlock">
       <span v-if="!tagEmpty" style="font-weight: bold; font-size: .9rem;">筛选条件</span>
-      <el-tag v-for="(value,key,index) in filter" v-if="value !== ''" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value,valueLabelMap)}})</el-tag>
+      <el-tag v-for="(value,key,index) in filter" v-if="value !== ''" class="tag">
+        {{keyFormater(key)}}({{valueFormater(key, value, valueLabelMap)}})
+      </el-tag>
     </div>
     <el-button class="addInfo" type="success" size="large" @click="enterAdd">添加信息</el-button>
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
@@ -11,15 +13,15 @@
     <!--筛选框-->
     <filter-box :dialogVisible="showFilterBox"
                 :filter="filter"
-                :tmpl = "filterTmpl"
-                :valueLabelMap = "valueLabelMap"
-                :keyFormatMap = "Object.assign({},keyFormatMap,expandFormatMap)"
+                :tmpl="filterTmpl"
+                :valueLabelMap="valueLabelMap"
+                :keyFormatMap="Object.assign({},keyFormatMap,expandFormatMap)"
                 @sendFilter="receiveFilter"></filter-box>
     <info-add :show="showInfoAdd"
-              :tmpl = "infoAddTmpl"
-              :valueLabelMap = "valueLabelMap"
-              :rules = "infoAddRules"
-              @sendInfo = "receiveInfo"
+              :tmpl="infoAddTmpl"
+              :valueLabelMap="valueLabelMap"
+              :rules="infoAddRules"
+              @sendInfo="receiveInfo"
     ></info-add>
     <!--表格-->
     <el-table
@@ -28,17 +30,29 @@
       border
       :row-key="getRowKeys"
       style="width: 100%;">
-
       <el-table-column
         type="index"
         width="50"
         :resizable="false">
       </el-table-column>
-      <el-table-column v-for="(value, key, index) in keyFormatMap"
-                       :label="value"
-                       :prop = "key"
-                       :resizable="false">
-      </el-table-column>
+      <div v-for="(value, key, index) in keyFormatMap">
+
+        <el-table-column
+          :label="value"
+          :prop = "key"
+          :resizable="false"
+          v-if="key !== 'status'"
+        >
+        </el-table-column>
+
+        <el-table-column  v-else-if="key === 'status'"
+                          :label="value"
+                          :resizable="false">
+          <template scope="scope">
+            <el-button>sdfs</el-button>
+          </template>
+        </el-table-column>
+      </div>
       <el-table-column
         label="操作"
         :resizable="false"
@@ -47,7 +61,8 @@
           <el-button
             size="small"
             type="primary"
-            @click="handleMore(scope.$index, scope.row)">更多</el-button>
+            @click="handleMore(scope.$index, scope.row)">更多
+          </el-button>
           <el-button
             size="small"
             type="warning"
@@ -56,11 +71,13 @@
           <el-button
             size="small"
             class="edit-btn"
-            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            @click="handleEdit(scope.$index, scope.row)">编辑
+          </el-button>
           <el-button
             size="small"
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            @click="handleDelete(scope.$index, scope.row)">删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -83,14 +100,38 @@
   import FilterBox from "components/Admin/Manage/FilterBox"
   import InfoAdd from "components/Admin/Manage/InfoAdd"
   import * as utils from 'utils/utils'
+
   export default {
     components: {ElButton, FilterBox, InfoAdd},
     data() {
       return {
         tableData: [{ // 表格数据
           id: 1,
+          category: '类型',
+          title: '标题',
           status: 'published',
-        }
+          publishTime: '发布时间',
+          publisherName: '发布者姓名',
+          effectiveDate: '生效日期',
+        },
+          { // 表格数据
+            id: 1,
+            category: '类型',
+            title: '标题',
+            status: 'published',
+            publishTime: '发布时间',
+            publisherName: '发布者姓名',
+            effectiveDate: '生效日期',
+          },
+          { // 表格数据
+            id: 1,
+            category: '类型',
+            title: '标题',
+            status: 'published',
+            publishTime: '发布时间',
+            publisherName: '发布者姓名',
+            effectiveDate: '生效日期',
+          }
         ],
         valueLabelMap: { // 下拉类型的input的具体数据
 //          role: [{ // 用户类别映射表
@@ -191,10 +232,6 @@
             label: '发布者姓名',
             inputType: 0,
           },
-          remark: {
-            label: '备注',
-            inputType: 0,
-          },
           effectiveDate: {
             label: '生效日期',
             inputType: 0,
@@ -207,7 +244,6 @@
           publishTime: '', //发布时间
           publisherName: '', //发布者姓名
           effectiveDate: '', //生效日期
-
         },
         pageSize: 15, //每页大小
         currentPage: 1, //当前页
@@ -218,10 +254,13 @@
         showInfoAdd: false, // 是否显示信息添加框
       }
     },
-    mounted: function(){
+    mounted: function () {
       this.loadData(this.filter, this.currentName, this.pageSize);
     },
     methods: {
+      test(value, key, index) {
+        console.log(value, key, index)
+      },
       getRowKeys(row) {
         return row.id;
       },
@@ -239,8 +278,8 @@
       },
       unique(array) {
         var r = [];
-        for(var i = 0, l = array.length; i < l; i++) {
-          for(var j = i + 1; j < l; j++)
+        for (var i = 0, l = array.length; i < l; i++) {
+          for (var j = i + 1; j < l; j++)
             if (array[i] === array[j]) j = ++i;
           r.push(array[i]);
         }
@@ -260,7 +299,7 @@
       handleDelete(index, row) {
         var array = [];
         array.push(row.id);
-        axios.post('',{"array":array},{emulateJson: true})
+        axios.post('', {"array": array}, {emulateJson: true})
           .then(function (res) {
             this.loadData(this.filter, this.currentPage, this.pageSize);
           }, function () {
@@ -293,10 +332,10 @@
         this.loadData(this.filter, this.currentName, this.pageSize);
       },
 //        标签的key格式化器
-      keyFormater: function(value) {
+      keyFormater: function (value) {
         if (!value) return '';
         value = value.toString();
-        return Object.assign({},this.keyFormatMap,this.expandFormatMap)[value];
+        return Object.assign({}, this.keyFormatMap, this.expandFormatMap)[value];
       },
       resetObject: utils.resetObject,
       valueFormater: utils.valueFormater,
@@ -310,7 +349,7 @@
       },
       receiveInfo: function (data) {
         if (data) {
-          axios.post("",{'data':data}, {emulateJson: true})
+          axios.post("", {'data': data}, {emulateJson: true})
             .then(function (res) {
               this.loadData(this.filter, this.currentPage, this.pageSize);
             }, function () {
@@ -342,10 +381,12 @@
   .demo-table-expand {
     font-size: 0;
   }
+
   .demo-table-expand label {
     width: 90px;
     color: #99a9bf;
   }
+
   .demo-table-expand .el-form-item {
     margin-right: 0;
     margin-bottom: 0;
@@ -356,11 +397,13 @@
     position: relative;
     padding: 40px 50px;
   }
+
   .addInfo {
     float: right;
     margin-right: 40px;
     margin-bottom: 20px;
   }
+
   .filter {
     float: right;
     margin-right: 20px;
@@ -369,13 +412,16 @@
     outline: 0;
     border: 1px solid #9B59B6;
   }
+
   .filter:hover {
     opacity: .7;
   }
+
   .filter:active {
     opacity: 1;
     background-color: #71468B;
   }
+
   .exit-filter {
     float: right;
     margin-right: 20px;
@@ -384,26 +430,32 @@
     outline: 0;
     border: 1px solid #f19500;
   }
+
   .exit-filter:hover {
     opacity: .7;
   }
+
   .exit-filter:active {
     opacity: 1;
     background-color: #c77800;
   }
+
   .pagination {
     float: right;
     margin-top: 20px;
   }
+
   .edit-btn {
     background-color: #5CB85C;
     color: #ECF0F1;
     outline: 0;
     border: 1px solid #5CB85C;
   }
+
   .edit-btn:hover {
     opacity: .7;
   }
+
   .edit-btn:active {
     opacity: 1;
     background-color: #4E9B4E;
@@ -415,6 +467,7 @@
     margin-left: 20%;
 
   }
+
   .tag {
     margin: 5px;
   }
