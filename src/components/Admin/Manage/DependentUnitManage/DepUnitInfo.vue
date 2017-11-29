@@ -212,6 +212,7 @@
       },
 
       handleMore(index, row) {
+        this.$router.push({name: 'DependentUnitInfoCheck'});
       },
 //        删除按钮事件
       handleDelete(index, row) {
@@ -226,7 +227,7 @@
       },
 //        编辑按钮事件
       handleEdit(index, row) {
-        console.log(index, row)
+        this.$router.push({name: 'DependentUnitInfoEdit'});
       },
 //        单页大小改变回调事件
       handleSizeChange(val) {

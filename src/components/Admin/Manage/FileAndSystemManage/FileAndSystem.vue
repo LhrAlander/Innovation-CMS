@@ -287,6 +287,7 @@
       },
 
       handleMore(index, row) {
+        this.$router.push({name: 'FileInfoCheck'});
       },
       handlePublic(index, row) {
         if (row.status === 'published') {
@@ -308,7 +309,7 @@
       },
 //        编辑按钮事件
       handleEdit(index, row) {
-        console.log(index, row)
+        this.$router.push({name: 'FileInfoEdit'});
       },
 //        单页大小改变回调事件
       handleSizeChange(val) {
@@ -345,7 +346,7 @@
       },
       enterAdd: function () {
 //        this.showInfoAdd = true;
-        this.$router.push({name: 'FileInfo'});
+        this.$router.push({name: 'FileInfoAdd'});
       },
       receiveInfo: function (data) {
         if (data) {

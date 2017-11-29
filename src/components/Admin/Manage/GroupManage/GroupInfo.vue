@@ -271,6 +271,7 @@
       },
 
       handleMore(index, row) {
+        this.$router.push({name: 'TeamInfoCheck'});
       },
 //        删除按钮事件
       handleDelete(index, row) {

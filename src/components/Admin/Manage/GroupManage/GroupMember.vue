@@ -244,6 +244,7 @@
       },
 
       handleMore(index, row) {
+        this.$router.push('/check/studentInfo/1');
       },
 //        删除按钮事件
       handleDelete(index, row) {

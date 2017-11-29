@@ -207,6 +207,7 @@
       },
 
       handleMore(index, row) {
+        this.$router.push({name: 'PolicyInfoCheck'});
       },
       handlePublic(index, row) {
         if (row.status === 'published') {
@@ -229,6 +230,8 @@
 //        编辑按钮事件
       handleEdit(index, row) {
         console.log(index, row)
+        this.$router.push({name: 'PolicyInfoEdit'});
+
       },
 //        单页大小改变回调事件
       handleSizeChange(val) {
@@ -265,7 +268,7 @@
       },
       enterAdd: function () {
 //        this.showInfoAdd = true;
-        this.$router.push({name: 'PolicyInfo'});
+        this.$router.push({name: 'PolicyInfoAdd'});
       },
       receiveInfo: function (data) {
         if (data) {

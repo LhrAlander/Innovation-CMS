@@ -267,6 +267,7 @@
       },
 
       handleMore(index, row) {
+        this.$router.push('/check/companyInfo/1');
       },
 //        删除按钮事件
       handleDelete(index, row) {
@@ -281,7 +282,7 @@
       },
 //        编辑按钮事件
       handleEdit(index, row) {
-        console.log(index, row)
+        this.$router.push('/edit/companyInfo/1');
       },
 //        单页大小改变回调事件
       handleSizeChange(val) {

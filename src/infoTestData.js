@@ -515,6 +515,82 @@ export default {
               },
             ]
           }
+        },
+        {
+          attachInfo: {
+            infoTitle: "学生附加信息",
+            iconCode: "&#xe621;",
+            items: [
+              {
+                key: 'college',
+                name: '学院',
+                value: '杭州国际服务工程学院',
+                type: SELECT,
+                options: [
+                  {
+                    value: "杭州国际服务工程学院",
+                    label: "杭州国际服务工程学院"
+                  },
+                  {
+                    value: "沈钧儒法学院",
+                    label: "沈钧儒法学院"
+                  }
+                ],
+                span: 1
+              },
+              {
+                key: 'department',
+                name: '系部',
+                value: '计算机',
+                type: SELECT,
+                options: [
+                  {
+                    value: "计算机",
+                    label: "计算机"
+                  },
+                  {
+                    value: "物联网",
+                    label: "物联网"
+                  }
+                ],
+                span: 1
+              },
+              {
+                key: 'major',
+                name: '专业',
+                value: '软件工程',
+                type: SELECT,
+                options: [
+                  {
+                    value: "软件工程",
+                    label: "软件工程"
+                  },
+                  {
+                    value: "计算机",
+                    label: "计算机"
+                  }
+                ],
+                span: 1
+              },
+              {
+                key: 'class',
+                name: '班级',
+                value: '152',
+                type: SELECT,
+                options: [
+                  {
+                    value: "152",
+                    label: "152"
+                  },
+                  {
+                    value: "151",
+                    label: "151"
+                  }
+                ],
+                span: 1
+              },
+            ]
+          }
         }
       ]
     }

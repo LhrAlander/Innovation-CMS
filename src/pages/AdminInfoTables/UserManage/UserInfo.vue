@@ -63,7 +63,7 @@
       },
       // 前往修改模式
       goToEditMode () {
-        console.log("click Edit");
+        this.$router.push('/edit/userInfo/1');
       },
       // 删除该用户
       delUser () {
@@ -71,7 +71,7 @@
       },
       // 取消修改并进入查看模式
       goToCheckMode () {
-        console.log("click Check");
+        this.$router.push('/check/userInfo/1');
       },
       // 提交修改
       confirmModify () {

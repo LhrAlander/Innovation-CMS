@@ -7,10 +7,10 @@
     <div class="mode-crumb-box">
       <div class="breadcrumb">
         <i class="iconfont">&#xe618;</i>
-        政策信息管理&nbsp; >&nbsp;政策信息编辑
+        政策信息管理&nbsp; >&nbsp;政策信息查看
       </div>
       <div class="btn-wrapper">
-        <el-button type="warning" plain class="modify-mode-btn">确认修改</el-button>
+        <el-button type="warning" plain class="modify-mode-btn" @click="goForEdit">修改政策信息</el-button>
       </div>
     </div>
 
@@ -20,35 +20,34 @@
           政策基本信息
         </span>
       <el-row :gutter="200" class="info-content" v-for="rowIndex in getRowCount(baseInfo)">
-             <el-col :span="baseInfo[getItemIndex(rowIndex, colIndex)].span * 8" class="info-item" v-for="colIndex in 3" v-if="baseInfo[getItemIndex(rowIndex, colIndex)] != null">
-              <span class="item-name">{{ baseInfo[getItemIndex(rowIndex, colIndex)].name }}</span>
-              <div class="item-content">
-              <info-display-temp @clickBtn="btnFunc(baseInfo[getItemIndex(rowIndex, colIndex)])" :item="baseInfo[getItemIndex(rowIndex, colIndex)]"></info-display-temp>
-                <!--{{ block.items[getItemIndex(rowIndex, colIndex)].value }}-->
-              </div>
-            </el-col>
-          </el-row>
-          <span>发布内容简介</span>
-          <el-row :gutter="200" class="info-content">
-             <el-col :span="24" class="info-item">
-              <div class="item-content">
-                <el-input
-                type="textarea"
-                :rows="18"
-                v-model="policyInfo.info"></el-input>
-              </div>
-            </el-col>
-          </el-row>
+        <el-col :span="baseInfo[getItemIndex(rowIndex, colIndex)].span * 8" class="info-item" v-for="colIndex in 3" v-if="baseInfo[getItemIndex(rowIndex, colIndex)] != null">
+          <span class="item-name">{{ baseInfo[getItemIndex(rowIndex, colIndex)].name }}</span>
+          <div class="item-content">
+            <el-input disabled v-model="baseInfo[getItemIndex(rowIndex, colIndex)].value"></el-input>
+          </div>
+        </el-col>
+      </el-row>
+      <span>发布内容简介</span>
+      <el-row :gutter="200" class="info-content">
+        <el-col :span="24" class="info-item">
+          <div class="item-content">
+            <el-input
+              type="textarea"
+              :rows="18"
+              disabled="true"
+              v-model="policyInfo.info"></el-input>
+          </div>
+        </el-col>
+      </el-row>
 
-          <span>附件</span>
-          <el-row :gutter="200" class="info-content">
-             <el-col :span="24" class="info-item">
-              <div class="item-content">
-                <div class="attack-link"></div>
-              </div>
-            </el-col>
-          </el-row>
-          <el-button type="primary">添加附件</el-button>
+      <span>附件</span>
+      <el-row :gutter="200" class="info-content">
+        <el-col :span="24" class="info-item">
+          <div class="item-content">
+            <div class="attack-link"></div>
+          </div>
+        </el-col>
+      </el-row>
     </div>
 
   </div>
@@ -70,7 +69,7 @@
       value: '政策1',
       type: INPUT,
       span: 1,
-      disabled: false
+      disabled: true
     },
     {
       key: 'policyCategory',
@@ -98,7 +97,7 @@
           label: "院级政策"
         }
       ],
-      disabled: false
+      disabled: true
     },
     {
       key: 'policyStatus',
@@ -116,7 +115,7 @@
           label: "未发布"
         }
       ],
-      disabled: false
+      disabled: true
     },
     {
       key: 'publishTime',
@@ -154,6 +153,10 @@
       },
       getItemIndex (rowIndex, colIndex) {
         return (rowIndex - 1) * 3 + colIndex - 1
+      },
+      // 进入编辑模式
+      goForEdit () {
+        this.$router.push('/edit/policyInfo/1')
       }
     }
   }
