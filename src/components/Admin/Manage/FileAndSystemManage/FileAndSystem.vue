@@ -31,28 +31,26 @@
       :row-key="getRowKeys"
       style="width: 100%;">
       <el-table-column
-        type="index"
+        label="#"
         width="50"
         :resizable="false">
+        <template scope="scope">
+          {{scope.$index+1}}
+        </template>
       </el-table-column>
-      <div v-for="(value, key, index) in keyFormatMap">
 
         <el-table-column
           :label="value"
           :prop = "key"
           :resizable="false"
-          v-if="key !== 'status'"
+          v-for="(value, key, index) in keyFormatMap"
         >
-        </el-table-column>
-
-        <el-table-column  v-else-if="key === 'status'"
-                          :label="value"
-                          :resizable="false">
           <template scope="scope">
-            <el-button>sdfs</el-button>
+            <el-button  v-if="key === 'status'">sdfs</el-button>
+            <span v-else>{{scope.row[key]}}</span>
           </template>
         </el-table-column>
-      </div>
+
       <el-table-column
         label="操作"
         :resizable="false"
@@ -107,30 +105,30 @@
       return {
         tableData: [{ // 表格数据
           id: 1,
-          category: '类型',
-          title: '标题',
+          category: '类型1',
+          title: '标题1',
           status: 'published',
-          publishTime: '发布时间',
-          publisherName: '发布者姓名',
-          effectiveDate: '生效日期',
+          publishTime: '发布时间1',
+          publisherName: '发布者姓名1',
+          effectiveDate: '生效日期1',
         },
           { // 表格数据
-            id: 1,
-            category: '类型',
-            title: '标题',
+            id: 2,
+            category: '类型2',
+            title: '标题2',
             status: 'published',
-            publishTime: '发布时间',
-            publisherName: '发布者姓名',
-            effectiveDate: '生效日期',
+            publishTime: '发布时间2',
+            publisherName: '发布者姓名2',
+            effectiveDate: '生效日期2',
           },
           { // 表格数据
-            id: 1,
-            category: '类型',
-            title: '标题',
+            id: 3,
+            category: '类型3',
+            title: '标题3',
             status: 'published',
-            publishTime: '发布时间',
-            publisherName: '发布者姓名',
-            effectiveDate: '生效日期',
+            publishTime: '发布时间3',
+            publisherName: '发布者姓名3',
+            effectiveDate: '生效日期3',
           }
         ],
         valueLabelMap: { // 下拉类型的input的具体数据
