@@ -62,3 +62,10 @@ p {
 /*.el-menu {*/
   /*display: block !important;*/
 /*}*/
+
+.el-table__expanded-cell[class*=cell] {
+  background: #ffeeaa52;
+}
+.el-table__expanded-cell[class*=cell]:hover {
+  background: #ffeeaa52 !important;
+}

@@ -93,7 +93,8 @@
         tableData: [{ // 表格数据
           id: 1,
           awardName: '搞笑奖', //获奖名称
-          awardLevel: '宇宙级',//获奖等级
+          awardLevel: '国家级',//获奖等级
+          awardSecondLevel: '一等奖', // 一等奖
           awardTime: '2099-9-9',//获奖时间
         }
         ],
@@ -111,12 +112,26 @@
 //            value: 3,
 //            label: '企业'
 //          }],
-
+          awardLevel: [{
+            value: 0,
+            label: '级别0'
+          },{
+            value: 1,
+            label: '级别1'
+          }],
+          awardSecondLevel: [{
+            value: 0,
+            label: '级别0'
+          },{
+            value: 1,
+            label: '级别1'
+          }],
         },
 
         keyFormatMap: { // 格式化标签映射表
           awardName: '获奖名称',
           awardLevel: '获奖等级',
+          awardSecondLevel: '获奖级别',
           awardTime: '获奖时间',
 
         },
@@ -129,7 +144,11 @@
           },
           awardLevel: {
             label: '获奖等级',
-            inputType: 0, // 0 代表 input
+            inputType: 1, // 0 代表 input
+          },
+          awardSecondLevel: {
+            label: '获奖级别',
+            inputType: 1, // 0 代表 input
           },
           awardTime: {
             label: '获奖时间',
@@ -142,6 +161,9 @@
           ],
           awardLevel: [
             {required: true, message: '请输入获奖等级', trigger: 'blur'}
+          ],
+          awardSecondLevel: [
+            {required: true, message: '请输入获奖级别', trigger: 'blur'}
           ],
           awardTime: [
             {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
@@ -156,7 +178,11 @@
           },
           awardLevel: {
             label: '获奖等级',
-            inputType: 0, // 0 代表 input
+            inputType: 1, // 0 代表 input
+          },
+          awardSecondLevel: {
+            label: '获奖等级',
+            inputType: 1, // 0 代表 input
           },
           awardTime: {
             label: '获奖时间',
@@ -166,6 +192,7 @@
         filter: { //搜索条件
           awardName: '', //获奖名称
           awardLevel: '',//获奖等级
+          awardSecondLevel: '',//获奖级别
           awardTime: '',//获奖时间
         },
         pageSize: 15, //每页大小

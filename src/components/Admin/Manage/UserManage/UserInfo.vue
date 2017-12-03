@@ -114,7 +114,19 @@
 //            value: 3,
 //            label: '企业'
 //          }],
-
+          role: [{ // 用户类别映射表
+            value: 0,
+            label: '全部'
+          }, {
+            value: 1,
+            label: '学生'
+          }, {
+            value: 2,
+            label: '老师'
+          }, {
+            value: 3,
+            label: '企业'
+          }]
         },
 
         keyFormatMap: { // 格式化标签映射表
@@ -168,7 +180,7 @@
           },
           role: {
             label: '用户类别',
-            inputType: 0,
+            inputType: 1,
           }
         },
         filter: {//搜索条件

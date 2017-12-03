@@ -117,7 +117,13 @@
 //            value: 3,
 //            label: '企业'
 //          }],
-
+          status: [{
+            value: 1,
+            label: '可用',
+          }, {
+            value: 0,
+            label: '不可用'
+          }]
         },
 
         keyFormatMap: { // 格式化标签映射表
@@ -199,7 +205,7 @@
           },
           status: {
             label: '用户状态',
-            inputType: 0,
+            inputType: 1,
           },
           background: {
             label: '学历',

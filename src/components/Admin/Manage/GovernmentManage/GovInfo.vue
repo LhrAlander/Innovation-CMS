@@ -33,10 +33,25 @@
         width="50"
         :resizable="false">
       </el-table-column>
-      <el-table-column v-for="(value, key, index) in keyFormatMap"
-                       :label="value"
-                       :prop = "key"
-                       :resizable="false">
+      <el-table-column
+        :label="value"
+        :prop="key"
+        :resizable="false"
+        v-for="(value, key, index) in keyFormatMap"
+      >
+        <template scope="scope">
+          <el-select v-model="scope.row.status"
+                     v-if="key === 'status'"
+          >
+            <el-option
+              v-for="item in valueLabelMap.status"
+              :value="item.value"
+              :label="item.label"
+              :key="item.value">
+            </el-option>
+          </el-select>
+          <span v-else>{{scope.row[key]}}</span>
+        </template>
       </el-table-column>
       <el-table-column
         label="操作"
@@ -110,7 +125,13 @@
 //            value: 3,
 //            label: '企业'
 //          }],
-
+          status: [{
+            value: 'published',
+            label: '已发布'
+          }, {
+            value: 'unpublished',
+            label: '未发布'
+          }],
         },
 
         keyFormatMap: { // 格式化标签映射表
@@ -160,7 +181,7 @@
           },
           status: {
             label: '状态',
-            inputType: 0,
+            inputType: 1,
           },
         },
         filter: {//搜索条件

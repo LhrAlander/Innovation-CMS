@@ -108,7 +108,20 @@
 //            value: 3,
 //            label: '企业'
 //          }],
-
+          projectCategory: [{
+            value: 0,
+            label: '类别0'
+          }, {
+            value: 1,
+            label: '类别1'
+          }],
+          projectLevel: [{
+            value: 0,
+            label: '级别0'
+          }, {
+            value: 1,
+            label: '级别1'
+          }],
         },
 
         keyFormatMap: { // 格式化标签映射表
@@ -190,11 +203,11 @@
           },
           projectCategory: {
             label: '项目类别',
-            inputType: 0, // 0 代表 input
+            inputType: 1, // 0 代表 input
           },
           projectLevel: {
             label: '项目级别',
-            inputType: 0,
+            inputType: 1,
           },
           guideTeacher: {
             label: '指导老师',

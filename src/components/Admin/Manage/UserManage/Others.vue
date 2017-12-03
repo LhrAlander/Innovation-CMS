@@ -191,6 +191,13 @@
 //          teacherId: [
 //            {required: true, message: '请输入指导老师用户名', trigger: 'blur'}
 //          ],
+          status: [{
+            value: 1,
+            label: '可用',
+          }, {
+            value: 0,
+            label: '不可用'
+          }]
         },
 //        获取表格数据的地址
         url: '',
@@ -205,7 +212,7 @@
           },
           status: {
             label: '用户状态',
-            inputType: 0,
+            inputType: 1,
           },
           gender: {
             label: '性别',

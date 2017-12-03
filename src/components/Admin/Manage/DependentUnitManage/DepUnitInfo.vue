@@ -114,7 +114,20 @@
           }, {
             value: 3,
             label: '单位3'
-          }]
+          }],
+          unitCategory: [{ // 用户类别映射表
+            value: 0,
+            label: '类别0'
+          }, {
+            value: 1,
+            label: '类别1'
+          }, {
+            value: 2,
+            label: '类别2'
+          }, {
+            value: 3,
+            label: '类别3'
+          }],
         },
 
         keyFormatMap: { // 格式化标签映射表
@@ -155,7 +168,7 @@
           },
           unitCategory: {
             label: '单位类别',
-            inputType: 0, // 0 代表 input
+            inputType: 1, // 0 代表 input
           },
           leader: {
             label: '负责人',
