@@ -8,6 +8,7 @@ import SupportOrgCategory from 'pages/AdminInfoTables/CategoryManage/SupportOrgC
 import ProjectCategory from 'pages/AdminInfoTables/CategoryManage/ProjectCategory'
 import ProjectLevel from 'pages/AdminInfoTables/CategoryManage/ProjectLevel'
 import AwardLevel from 'pages/AdminInfoTables/CategoryManage/AwardLevel'
+import AwardCategory from 'pages/AdminInfoTables/CategoryManage/AwardCategory'
 import PolicyCategory from 'pages/AdminInfoTables/CategoryManage/PolicyCategory'
 import Academy from 'pages/AdminInfoTables/CategoryManage/Academy'
 
@@ -48,6 +49,15 @@ export default [
     path: '/awardLevel',
     component: AwardLevel
   },
+  // 获奖级别管理
+  {
+    name: 'AwardCategory',
+    path: '/awardCategory',
+    component: AwardCategory
+  },
+
+
+
   // 政策类别管理
   {
     name: 'GovCategory',

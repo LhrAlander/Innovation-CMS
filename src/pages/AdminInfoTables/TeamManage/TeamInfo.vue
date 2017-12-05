@@ -88,6 +88,23 @@
     </div>
 
 
+    <div class="info-wrapper">
+        <span class="info-title">
+          <i class="iconfont box">&#xe62c;</i>
+          团队下项目信息
+          <el-row :gutter="200" class="info-content" v-for="proRow in proInfo">
+             <el-col :span="12" class="info-item" v-for="pro in proRow">
+              <span class="item-name">项目名称</span>
+              <div class="item-content">
+                <el-input disabled v-model="pro.name"></el-input>
+              </div>
+               <el-button type="primary" class="teacher-info-check info-detail-check">详情查看</el-button>
+            </el-col>
+          </el-row>
+        </span>
+    </div>
+
+
   </div>
 </template>
 
@@ -186,7 +203,30 @@
           userId: 123456789,
           name: "石兴民",
           userPhone: 123456789
-        }
+        },
+        proInfo: [
+          [
+            {
+              name: "pro1"
+            },
+            {
+              name: "pro2"
+            }
+          ],
+          [
+            {
+              name: "pro3"
+            },
+            {
+              name: "pro4"
+            }
+          ],
+          [
+            {
+              name: "pro5"
+            }
+          ],
+        ]
       }
     },
     components: {
@@ -199,7 +239,7 @@
       getItemIndex (rowIndex, colIndex) {
         return (rowIndex - 1) * 3 + colIndex - 1
       }
-    }
+    },
   }
 </script>
 

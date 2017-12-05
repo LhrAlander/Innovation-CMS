@@ -1,15 +1,15 @@
-<!--政策类别管理-->
+<!--获奖级别管理-->
 <template>
   <categroy
-    title="状态管理"
+    title="获奖类别管理"
     :breadCrumbs="breadCrumbs"
     :exists="exists"
     :addInfo="addInfo"
     :toDelete="toDelete"
     :deleteInfo="deleteInfo"
     :toAdd="toAdd">
-    <el-button type="danger" plain class="delBtn" @click="del" slot="delBtn">删除状态</el-button>
-    <el-button type="primary" plain class="addOneBtn" @click="addOne" slot="addOneBtn">添加一个状态</el-button>
+    <el-button type="danger" plain class="delBtn" @click="del" slot="delBtn">删除分类</el-button>
+    <el-button type="primary" plain class="addOneBtn" @click="addOne" slot="addOneBtn">添加一个分类</el-button>
     <el-button type="primary" plain class="delBtn" @click="submitAdd" slot="addAllBtn">确定添加</el-button>
   </categroy>
 </template>
@@ -24,24 +24,28 @@
     data () {
       return {
         breadCrumbs: {
-          iconCode: "&#xe624;",
-          firstLevel: "基本信息管理",
-          otherLevels: ["状态管理"]
+          iconCode: "&#xe631;",
+          firstLevel: "获奖管理",
+          otherLevels: ["获奖类别管理"]
         },
         exists: {
-          iconCode: "&#xe624;",
-          title: "已有状态",
+          iconCode: "&#xe631;",
+          title: "已有获奖类别",
           categories: [
             {
-              label: "可用",
+              label: "国家级",
               status: TODLETE
             },
             {
-              label: "不可用",
+              label: "市级",
               status: TODLETE
             },
             {
-              label: "待审核",
+              label: "省级",
+              status: TODLETE
+            },
+            {
+              label: "校级",
               status: TODLETE
             }
           ],
@@ -52,7 +56,7 @@
         },
         addInfo: {
           iconCode: "&#xe607;",
-          title: "添加学院",
+          title: "添加团队类别",
         },
         addCategories: []
       }

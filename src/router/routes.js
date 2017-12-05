@@ -23,7 +23,6 @@ import DepUnitInfo from 'components/Admin/Manage/DependentUnitManage/DepUnitInfo
 
 import Class from 'components/Admin/Manage/BasicInfoManage/Class'
 import Department from 'components/Admin/Manage/BasicInfoManage/Department'
-import InstituteInfo from 'components/Admin/Manage/BasicInfoManage/InstituteInfo'
 import Specialty from 'components/Admin/Manage/BasicInfoManage/Specialty'
 import Status from 'components/Admin/Manage/BasicInfoManage/Status'
 
@@ -206,16 +205,6 @@ export default [
           iconCode: '&#xe8d0;',
           firstLevel: '基本信息管理',
           secondLevel: '状态管理'
-        },
-      },
-      {
-        name: 'AwardCategory',
-        path: 'AwardCategory',
-        component: AwardCategory,
-        meta: {
-          iconCode: '&#xe631;',
-          firstLevel: '获奖管理',
-          secondLevel: '获奖类别管理'
         },
       },
       {

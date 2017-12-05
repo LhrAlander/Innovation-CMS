@@ -14,6 +14,8 @@
       </div>
     </div>
 
+
+    <!--展示该团队的基本信息-->
     <div class="info-wrapper">
         <span class="info-title">
           <i class="iconfont box">&#xe62c;</i>
@@ -29,6 +31,7 @@
         </span>
     </div>
 
+    <!--展示该团队的负责人-->
     <div class="info-wrapper">
         <span class="info-title">
           <i class="iconfont box">&#xe621;</i>
@@ -57,7 +60,7 @@
         </span>
     </div>
 
-
+    <!--展示该团队的指导老师-->
     <div class="info-wrapper">
         <span class="info-title">
           <i class="iconfont box">&#xe64b;</i>
@@ -81,6 +84,24 @@
               <div class="item-content">
                  <el-input disabled v-model="teacher.userPhone"></el-input>
               </div>
+            </el-col>
+          </el-row>
+        </span>
+    </div>
+
+
+    <!--展示属于该团队的所有项目-->
+    <div class="info-wrapper">
+        <span class="info-title">
+          <i class="iconfont box">&#xe62c;</i>
+          团队下项目信息
+          <el-row :gutter="200" class="info-content" v-for="proRow in proInfo">
+             <el-col :span="12" class="info-item" v-for="pro in proRow">
+              <span class="item-name">项目名称</span>
+              <div class="item-content">
+                <el-input disabled v-model="pro.name"></el-input>
+              </div>
+               <el-button type="primary" class="teacher-info-check info-detail-check">详情查看</el-button>
             </el-col>
           </el-row>
         </span>
@@ -185,7 +206,30 @@
           userId: 123456789,
           name: "石兴民",
           userPhone: 123456789
-        }
+        },
+        proInfo: [
+          [
+            {
+              name: "pro1"
+            },
+            {
+              name: "pro2"
+            }
+          ],
+          [
+            {
+              name: "pro3"
+            },
+            {
+              name: "pro4"
+            }
+          ],
+          [
+            {
+              name: "pro5"
+            }
+          ],
+        ]
       }
     },
     components: {
@@ -289,7 +333,4 @@
     padding: .3rem;
     margin-left: 1rem;
   }
-
-
-
 </style>

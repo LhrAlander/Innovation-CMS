@@ -58,6 +58,25 @@
     </div>
 
 
+    <!--展示属于该依托单位的所有团队-->
+    <div class="info-wrapper">
+        <span class="info-title">
+          <i class="iconfont box">&#xe62c;</i>
+          依托单位下团队信息
+          <el-row :gutter="200" class="info-content" v-for="teamRow in teamInfo">
+             <el-col :span="12" class="info-item" v-for="team in teamRow">
+              <span class="item-name">团队名称</span>
+              <div class="item-content">
+                <el-input disabled v-model="team.name"></el-input>
+              </div>
+               <el-button type="primary" class="teacher-info-check info-detail-check">详情查看</el-button>
+            </el-col>
+          </el-row>
+        </span>
+    </div>
+
+
+
 
 
 
@@ -148,7 +167,30 @@
           userId: 123456789,
           name: "石兴民",
           userPhone: 123456789
-        }
+        },
+        teamInfo: [
+          [
+            {
+              name: "team1"
+            },
+            {
+              name: "team2"
+            }
+          ],
+          [
+            {
+              name: "team3"
+            },
+            {
+              name: "team4"
+            }
+          ],
+          [
+            {
+              name: "team5"
+            }
+          ],
+        ]
       }
     },
     components: {
