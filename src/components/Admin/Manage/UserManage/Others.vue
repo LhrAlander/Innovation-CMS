@@ -118,7 +118,20 @@
 //            value: 3,
 //            label: '企业'
 //          }],
-
+          status: [{
+            value: 0,
+            label: '可用'
+          }, {
+            value: 1,
+            label: '不可用'
+          }],
+          gender: [{
+            value: 0,
+            label: '男'
+          }, {
+            value: 1,
+            label: '女'
+          }],
         },
 
         keyFormatMap: { // 格式化标签映射表
@@ -150,7 +163,7 @@
           },
           status: {
             label: '用户状态',
-            inputType: 0,
+            inputType: 1,
           },
           principalPhone: {
             label: '负责人手机号',
@@ -158,7 +171,7 @@
           },
           gender: {
             label: '性别',
-            inputType: 0,
+            inputType: 1,
           },
           email: {
             label: '邮箱',
@@ -166,7 +179,7 @@
           },
           birth: {
             label: '出生年月',
-            inputType: 0,
+            inputType: 2,
           },
           specAddress: {
             label: '企业具体位置',
@@ -179,25 +192,36 @@
 
         },
         infoAddRules: {
-//          groupName: [
-//            {required: true, message: '请输入团队名称', trigger: 'blur'}
-//          ],
-//          leaderName: [
-//            {required: true, message: '请输入依托单位', trigger: 'blur'}
-//          ],
-//          leaderId: [
-//            {required: true, message: '请输入负责人用户名(学号)', trigger: 'blur'}
-//          ],
-//          teacherId: [
-//            {required: true, message: '请输入指导老师用户名', trigger: 'blur'}
-//          ],
-          status: [{
-            value: 1,
-            label: '可用',
-          }, {
-            value: 0,
-            label: '不可用'
-          }]
+          companyName: [
+            {required: true, message: '请输入企业名称', trigger: 'blur'}
+          ],
+          principalName: [
+            {required: true, message: '请输入负责人姓名', trigger: 'blur'}
+          ],
+          companyAccess: [
+            {required: true, message: '请输入企业联系方式', trigger: 'blur'}
+          ],
+          status: [
+            {required: true, message: '请输入用户状态', trigger: 'blur'}
+          ],
+          principalPhone: [
+            {required: true, message: '请输入负责人手机号', trigger: 'blur'}
+          ],
+          gender: [
+            {required: true, message: '请输入性别', trigger: 'blur'}
+          ],
+          email: [
+            {required: true, message: '请输入邮箱', trigger: 'blur'}
+          ],
+          birth: [
+            {required: true, message: '请输入出生年月', trigger: 'blur'}
+          ],
+          specAddress: [
+            {required: true, message: '请输入企业具体位置', trigger: 'blur'}
+          ],
+          fixedTel: [
+            {required: true, message: '请输入企业固定电话', trigger: 'blur'}
+          ],
         },
 //        获取表格数据的地址
         url: '',
@@ -216,11 +240,11 @@
           },
           gender: {
             label: '性别',
-            inputType: 0,
+            inputType: 1,
           },
           birth: {
             label: '出生年月',
-            inputType: 0,
+            inputType: 2,
           },
           specAddress: {
             label: '企业具体位置',

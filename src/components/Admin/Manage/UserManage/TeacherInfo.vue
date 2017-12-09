@@ -118,12 +118,40 @@
 //            label: '企业'
 //          }],
           status: [{
-            value: 1,
+            value: 0,
             label: '可用',
           }, {
-            value: 0,
+            value: 1,
             label: '不可用'
-          }]
+          }],
+          background: [{
+            value: 0,
+            label: '小学',
+          }, {
+            value: 1,
+            label: '博士'
+          }],
+          degree: [{
+            value: 0,
+            label: '小学',
+          }, {
+            value: 1,
+            label: '博士'
+          }],
+          specialty: [{
+            value: 0,
+            label: '专业一',
+          }, {
+            value: 1,
+            label: '专业二'
+          }],
+          gender: [{
+            value: 0,
+            label: '男',
+          }, {
+            value: 1,
+            label: '女'
+          }],
         },
 
         keyFormatMap: { // 格式化标签映射表
@@ -148,49 +176,14 @@
             label: '姓名',
             inputType: 0, // 0 代表 input
           },
-          phone: {
-            label: '手机号码',
-            inputType: 0,
-          },
-          status: {
-            label: '用户状态',
-            inputType: 0,
-          },
-          background: {
-            label: '学历',
-            inputType: 0,
-          },
-          degree: {
-            label: '学位',
-            inputType: 0,
-          },
-          specialty: {
-            label: '专业',
-            inputType: 0,
-          },
-          gender: {
-            label: '性别',
-            inputType: 0,
-          },
-          email: {
-            label: '邮箱',
-            inputType: 0,
-          },
-
         },
         infoAddRules: {
-//          groupName: [
-//            {required: true, message: '请输入团队名称', trigger: 'blur'}
-//          ],
-//          leaderName: [
-//            {required: true, message: '请输入依托单位', trigger: 'blur'}
-//          ],
-//          leaderId: [
-//            {required: true, message: '请输入负责人用户名(学号)', trigger: 'blur'}
-//          ],
-//          teacherId: [
-//            {required: true, message: '请输入指导老师用户名', trigger: 'blur'}
-//          ],
+          teacherId: [
+            {required: true, message: '请输入工号', trigger: 'blur'}
+          ],
+          name: [
+            {required: true, message: '请输入姓名', trigger: 'blur'}
+          ],
         },
 //        获取表格数据的地址
         url: '',
@@ -209,19 +202,19 @@
           },
           background: {
             label: '学历',
-            inputType: 0,
+            inputType: 1,
           },
           degree: {
             label: '学位',
-            inputType: 0,
+            inputType: 1,
           },
           specialty: {
             label: '专业',
-            inputType: 0,
+            inputType: 1,
           },
           gender: {
             label: '性别',
-            inputType: 0,
+            inputType: 1,
           }
         },
         filter: {//搜索条件

@@ -22,7 +22,9 @@
               :tmpl="infoAddTmpl"
               :valueLabelMap="valueLabelMap"
               :rules="infoAddRules"
+              :options="groupOptions"
               @sendInfo="receiveInfo"
+
     ></info-add>
     <!--表格-->
     <el-table
@@ -158,7 +160,7 @@
         infoAddTmpl: {
           groupName: {
             label: '团队名称',
-            inputType: 0, // 0 代表 input
+            inputType: 4, // 0 代表 input
           },
           userId: {
             label: '用户名',
@@ -166,7 +168,7 @@
           },
           joinTime: {
             label: '加入时间',
-            inputType: 0
+            inputType: 2
           }
 
         },

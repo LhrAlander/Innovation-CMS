@@ -35,26 +35,33 @@
               placeholder="选择年"
               clearable>
             </el-date-picker>
-            <el-input
-              v-else-if="value.inputType === 97"
-              type="textarea"
-              autosize
-              placeholder="请输入内容"
+            <el-cascader
+              v-else-if="value.inputType === 4"
+              expand-trigger="hover"
+              :options="options"
+              :show-all-levels="false"
               v-model="form[key]">
-            </el-input>
-            <el-upload
-              v-else-if="value.inputType === 98"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              multiple
-              :limit="3"
-              :on-exceed="handleExceed"
-              :file-list="fileList"
-              style="width: 12rem;">
-              <el-button size="small" type="primary">点击上传</el-button>
-              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-            </el-upload>
+            </el-cascader>
+            <!--<el-input-->
+              <!--v-else-if="value.inputType === 97"-->
+              <!--type="textarea"-->
+              <!--autosize-->
+              <!--placeholder="请输入内容"-->
+              <!--v-model="form[key]">-->
+            <!--</el-input>-->
+            <!--<el-upload-->
+              <!--v-else-if="value.inputType === 98"-->
+              <!--action="https://jsonplaceholder.typicode.com/posts/"-->
+              <!--:on-preview="handlePreview"-->
+              <!--:on-remove="handleRemove"-->
+              <!--multiple-->
+              <!--:limit="3"-->
+              <!--:on-exceed="handleExceed"-->
+              <!--:file-list="fileList"-->
+              <!--style="width: 12rem;">-->
+              <!--<el-button size="small" type="primary">点击上传</el-button>-->
+              <!--<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
+            <!--</el-upload>-->
             <el-input
               v-else-if="value.inputType === 99"
               type="textarea"
@@ -80,7 +87,7 @@
   import ElInput from "../../../../node_modules/element-ui/packages/input/src/input.vue";
 
   export default {
-    props: ["show","tmpl","valueLabelMap","rules"],
+    props: ["show","tmpl","valueLabelMap","rules","options"],
     data() {
       return {
         form: {},

@@ -49,22 +49,7 @@
         </template>
         <router-link :to="{name: 'InstituteInfo'}">
           <el-menu-item index="2-1" class="first">
-            <p class="item-text">学院管理</p>
-          </el-menu-item>
-        </router-link>
-        <router-link :to="{name: 'Department'}">
-          <el-menu-item index="2-2">
-            <p class="item-text">系部管理</p>
-          </el-menu-item>
-        </router-link>
-        <router-link :to="{name: 'Specialty'}">
-          <el-menu-item index="2-3">
-            <p class="item-text">专业管理</p>
-          </el-menu-item>
-        </router-link>
-        <router-link :to="{name: 'Class'}">
-          <el-menu-item index="2-4">
-            <p class="item-text">班级管理</p>
+            <p class="item-text">院系管理</p>
           </el-menu-item>
         </router-link>
         <router-link :to="{name: 'Status'}">

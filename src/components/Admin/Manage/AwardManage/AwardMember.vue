@@ -150,18 +150,21 @@
 
         },
         infoAddRules: {
-//          groupName: [
-//            {required: true, message: '请输入团队名称', trigger: 'blur'}
-//          ],
-//          leaderName: [
-//            {required: true, message: '请输入依托单位', trigger: 'blur'}
-//          ],
-//          leaderId: [
-//            {required: true, message: '请输入负责人用户名(学号)', trigger: 'blur'}
-//          ],
-//          teacherId: [
-//            {required: true, message: '请输入指导老师用户名', trigger: 'blur'}
-//          ],
+          awardName: [
+            {required: true, message: '请输入获奖名称', trigger: 'blur'}
+          ],
+          projectName: [
+            {required: true, message: '请输入项目名称', trigger: 'blur'}
+          ],
+          userId: [
+            {required: true, message: '请输入用户名', trigger: 'blur'}
+          ],
+          username: [
+            {required: true, message: '请输入用户姓名', trigger: 'blur'}
+          ],
+          contact: [
+            {required: true, message: '请输入联系方式', trigger: 'blur'}
+          ],
         },
 //        获取表格数据的地址
         url: '',

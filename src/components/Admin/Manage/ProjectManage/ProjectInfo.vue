@@ -3,7 +3,9 @@
     <!--筛选标签区域-->
     <div class="tagBlock">
       <span v-if="!tagEmpty" style="font-weight: bold; font-size: .9rem;">筛选条件</span>
-      <el-tag v-for="(value,key,index) in filter" v-if="value !== ''" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value,valueLabelMap)}})</el-tag>
+      <el-tag v-for="(value,key,index) in filter" v-if="value !== ''" class="tag">
+        {{keyFormater(key)}}({{valueFormater(key, value, valueLabelMap)}})
+      </el-tag>
     </div>
     <el-button class="addInfo" type="success" size="large" @click="enterAdd">添加信息</el-button>
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
@@ -11,15 +13,15 @@
     <!--筛选框-->
     <filter-box :dialogVisible="showFilterBox"
                 :filter="filter"
-                :tmpl = "filterTmpl"
-                :valueLabelMap = "valueLabelMap"
-                :keyFormatMap = "Object.assign({},keyFormatMap,expandFormatMap)"
+                :tmpl="filterTmpl"
+                :valueLabelMap="valueLabelMap"
+                :keyFormatMap="Object.assign({},keyFormatMap,expandFormatMap)"
                 @sendFilter="receiveFilter"></filter-box>
     <info-add :show="showInfoAdd"
-              :tmpl = "infoAddTmpl"
-              :valueLabelMap = "valueLabelMap"
-              :rules = "infoAddRules"
-              @sendInfo = "receiveInfo"
+              :tmpl="infoAddTmpl"
+              :valueLabelMap="valueLabelMap"
+              :rules="infoAddRules"
+              @sendInfo="receiveInfo"
     ></info-add>
     <!--表格-->
     <el-table
@@ -44,7 +46,7 @@
       </el-table-column>
       <el-table-column v-for="(value, key, index) in keyFormatMap"
                        :label="value"
-                       :prop = "key"
+                       :prop="key"
                        :resizable="false">
       </el-table-column>
       <el-table-column
@@ -55,15 +57,18 @@
           <el-button
             size="small"
             type="primary"
-            @click="handleMore(scope.$index, scope.row)">更多</el-button>
+            @click="handleMore(scope.$index, scope.row)">更多
+          </el-button>
           <el-button
             size="small"
             class="edit-btn"
-            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            @click="handleEdit(scope.$index, scope.row)">编辑
+          </el-button>
           <el-button
             size="small"
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            @click="handleDelete(scope.$index, scope.row)">删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -86,6 +91,7 @@
   import FilterBox from "components/Admin/Manage/FilterBox"
   import InfoAdd from "components/Admin/Manage/InfoAdd"
   import * as utils from 'utils/utils'
+
   export default {
     components: {ElButton, FilterBox, InfoAdd},
     data() {
@@ -147,19 +153,15 @@
           },
           projectCategory: {
             label: '项目类别',
-            inputType: 0, // 0 代表 input
+            inputType: 1, // 0 代表 input
           },
           projectLevel: {
             label: '项目级别',
-            inputType: 0,
-          },
-          guideTeacher: {
-            label: '指导老师',
-            inputType: 0,
+            inputType: 1,
           },
           applyYear: {
             label: '项目申请年份',
-            inputType: 0,
+            inputType: 3,
           },
           projectId: {
             label: '项目编号',
@@ -171,11 +173,11 @@
           },
           beginYear: {
             label: '项目开始年份',
-            inputType: 0,
+            inputType: 3,
           },
           deadlineYear: {
             label: '项目截至年份',
-            inputType: 0,
+            inputType: 3,
           },
           principalName: {
             label: '项目负责人用户名',
@@ -188,11 +190,35 @@
         },
         infoAddRules: {
           projectName: [
-            {required: true, message: '请输入类型', trigger: 'blur'}
+            {required: true, message: '请输入项目名称', trigger: 'blur'}
           ],
           projectCategory: [
-            {required: true, message: '请输入标题', trigger: 'blur'}
+            {required: true, message: '请输入项目类别', trigger: 'blur'}
           ],
+          projectLevel: [
+            {required: true, message: '请输入项目级别', trigger: 'blur'}
+          ],
+          applyYear: [
+            {required: true, message: '请输入项目申请年份', trigger: 'blur'}
+          ],
+          projectId: [
+            {required: true, message: '请输入项目编号', trigger: 'blur'}
+          ],
+          dependentUnit: [
+            {required: true, message: '请输入项目依托单位', trigger: 'blur'}
+          ],
+          beginYear: [
+            {required: true, message: '请输入项目开始年份', trigger: 'blur'}
+          ],
+          deadlineYear: [
+            {required: true, message: '请输入项目截至年份', trigger: 'blur'}
+          ],
+          principalName: [
+            {required: true, message: '请输入项目负责人用户名', trigger: 'blur'}
+          ],
+          guideTeacherName: [
+            {required: true, message: '请输入指导老师用户名', trigger: 'blur'}
+          ]
         },
 //        获取表格数据的地址
         url: '',
@@ -215,7 +241,7 @@
           },
           applyYear: {
             label: '项目申请年份',
-            inputType: 0,
+            inputType: 3,
           },
           projectId: {
             label: '项目编号',
@@ -227,11 +253,11 @@
           },
           beginYear: {
             label: '项目开始年份',
-            inputType: 0,
+            inputType: 3,
           },
           deadlineYear: {
             label: '项目截至年份',
-            inputType: 0,
+            inputType: 3,
           },
           principalName: {
             label: '项目负责人用户名',
@@ -265,7 +291,7 @@
         showInfoAdd: false, // 是否显示信息添加框
       }
     },
-    mounted: function(){
+    mounted: function () {
       this.loadData(this.filter, this.currentName, this.pageSize);
     },
     methods: {
@@ -286,8 +312,8 @@
       },
       unique(array) {
         var r = [];
-        for(var i = 0, l = array.length; i < l; i++) {
-          for(var j = i + 1; j < l; j++)
+        for (var i = 0, l = array.length; i < l; i++) {
+          for (var j = i + 1; j < l; j++)
             if (array[i] === array[j]) j = ++i;
           r.push(array[i]);
         }
@@ -301,7 +327,7 @@
       handleDelete(index, row) {
         var array = [];
         array.push(row.id);
-        axios.post('',{"array":array},{emulateJson: true})
+        axios.post('', {"array": array}, {emulateJson: true})
           .then(function (res) {
             this.loadData(this.filter, this.currentPage, this.pageSize);
           }, function () {
@@ -334,10 +360,10 @@
         this.loadData(this.filter, this.currentName, this.pageSize);
       },
 //        标签的key格式化器
-      keyFormater: function(value) {
+      keyFormater: function (value) {
         if (!value) return '';
         value = value.toString();
-        return Object.assign({},this.keyFormatMap,this.expandFormatMap)[value];
+        return Object.assign({}, this.keyFormatMap, this.expandFormatMap)[value];
       },
       resetObject: utils.resetObject,
       valueFormater: utils.valueFormater,
@@ -350,7 +376,7 @@
       },
       receiveInfo: function (data) {
         if (data) {
-          axios.post("",{'data':data}, {emulateJson: true})
+          axios.post("", {'data': data}, {emulateJson: true})
             .then(function (res) {
               this.loadData(this.filter, this.currentPage, this.pageSize);
             }, function () {
@@ -382,10 +408,12 @@
   .demo-table-expand {
     font-size: 0;
   }
+
   .demo-table-expand label {
     width: 90px;
     color: #99a9bf;
   }
+
   .demo-table-expand .el-form-item {
     margin-right: 0;
     margin-bottom: 0;
@@ -396,11 +424,13 @@
     position: relative;
     padding: 40px 50px;
   }
+
   .addInfo {
     float: right;
     margin-right: 40px;
     margin-bottom: 20px;
   }
+
   .filter {
     float: right;
     margin-right: 20px;
@@ -409,13 +439,16 @@
     outline: 0;
     border: 1px solid #9B59B6;
   }
+
   .filter:hover {
     opacity: .7;
   }
+
   .filter:active {
     opacity: 1;
     background-color: #71468B;
   }
+
   .exit-filter {
     float: right;
     margin-right: 20px;
@@ -424,26 +457,32 @@
     outline: 0;
     border: 1px solid #f19500;
   }
+
   .exit-filter:hover {
     opacity: .7;
   }
+
   .exit-filter:active {
     opacity: 1;
     background-color: #c77800;
   }
+
   .pagination {
     float: right;
     margin-top: 20px;
   }
+
   .edit-btn {
     background-color: #5CB85C;
     color: #ECF0F1;
     outline: 0;
     border: 1px solid #5CB85C;
   }
+
   .edit-btn:hover {
     opacity: .7;
   }
+
   .edit-btn:active {
     opacity: 1;
     background-color: #4E9B4E;
@@ -455,6 +494,7 @@
     margin-left: 20%;
 
   }
+
   .tag {
     margin: 5px;
   }

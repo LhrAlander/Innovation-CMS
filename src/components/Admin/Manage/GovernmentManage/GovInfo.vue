@@ -132,6 +132,17 @@
             value: 'unpublished',
             label: '未发布'
           }],
+          govCategory: [{
+            value: 0,
+            label: '类别一'
+          },{
+            value: 1,
+            label: '类别二'
+          },{
+            value: 2,
+            label: '类别三'
+          }
+          ]
         },
 
         keyFormatMap: { // 格式化标签映射表
@@ -145,7 +156,7 @@
         infoAddTmpl: {
           govCategory: {
             label: '政策类别',
-            inputType: 0, // 0 代表 input
+            inputType: 1, // 0 代表 input
           },
           title: {
             label: '标题',
@@ -153,7 +164,7 @@
           },
           status: {
             label: '状态',
-            inputType: 0,
+            inputType: 1,
           }
 
         },
@@ -173,7 +184,7 @@
         filterTmpl: {
           govCategory: {
             label: '政策类别',
-            inputType: 0, // 0 代表 input
+            inputType: 1,
           },
           title: {
             label: '标题',

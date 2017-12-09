@@ -158,6 +158,14 @@
             value: 'unpublished',
             label: '未发布'
           }],
+          category: [{
+            value: 0,
+            label: '类型一'
+          }, {
+            value: 1,
+            label: '类型二'
+          }],
+
         },
 
         keyFormatMap: { // 格式化标签映射表
@@ -185,7 +193,7 @@
           },
           publishTime: {
             label: '发布时间',
-            inputType: 0,
+            inputType: 2,
           },
           publisherName: {
             label: '发布者姓名',
@@ -193,7 +201,7 @@
           },
           effectiveDate: {
             label: '生效日期',
-            inputType: 0,
+            inputType: 2,
           }
         },
         infoAddRules: {
@@ -224,7 +232,7 @@
         filterTmpl: {
           category: {
             label: '类型',
-            inputType: 0, // 0 代表 input
+            inputType: 1, // 0 代表 input
           },
           title: {
             label: '标题',
@@ -232,11 +240,11 @@
           },
           status: {
             label: '状态',
-            inputType: 0,
+            inputType: 1,
           },
           publishTime: {
             label: '发布时间',
-            inputType: 0,
+            inputType: 2,
           },
           publisherName: {
             label: '发布者姓名',
@@ -244,7 +252,7 @@
           },
           effectiveDate: {
             label: '生效日期',
-            inputType: 0,
+            inputType: 2,
           }
         },
         filter: {//搜索条件

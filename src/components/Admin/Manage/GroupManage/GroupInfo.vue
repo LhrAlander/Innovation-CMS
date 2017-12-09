@@ -183,11 +183,11 @@
 
         },
         infoAddRules: {
+          dependentUnit: [
+            {required: true, message: '请输入依托单位', trigger: 'blur'}
+          ],
           groupName: [
             {required: true, message: '请输入团队名称', trigger: 'blur'}
-          ],
-          leaderName: [
-            {required: true, message: '请输入依托单位', trigger: 'blur'}
           ],
           leaderId: [
             {required: true, message: '请输入负责人用户名(学号)', trigger: 'blur'}

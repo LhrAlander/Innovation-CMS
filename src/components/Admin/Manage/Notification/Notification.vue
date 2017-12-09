@@ -150,11 +150,11 @@
           },
           status: {
             label: '状态',
-            inputType: 0,
+            inputType: 1,
           },
           publishTime: {
             label: '发布时间',
-            inputType: 0,
+            inputType: 2,
           },
           publisherName: {
             label: '发布者姓名',
@@ -197,11 +197,11 @@
           },
           status: {
             label: '状态',
-            inputType: 0,
+            inputType: 1,
           },
           publishTime: {
             label: '发布时间',
-            inputType: 0,
+            inputType: 2,
           },
           publisherName: {
             label: '发布者姓名',
