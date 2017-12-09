@@ -3,10 +3,11 @@ import Router from 'vue-router'
 import routes from './routes'
 import CategoryRoutes from './category'
 import InfoOperateRoutes from './infoOperate'
+import TeacherRoutes from './teacher'
 
 Vue.use(Router)
 
-const finalRoutes = routes.concat(CategoryRoutes, InfoOperateRoutes)
+const finalRoutes = routes.concat(CategoryRoutes, InfoOperateRoutes,TeacherRoutes);
 
 // 滚动条滚回顶部
 const scrollBehavior =(to, from, savedPosition)=> {
@@ -15,12 +16,12 @@ const scrollBehavior =(to, from, savedPosition)=> {
   } else {
     return { x: 0, y: 0 }
   }
-}
+};
 
 let router = new Router({
   // mode:'hash',
   scrollBehavior,
   routes: finalRoutes
-})
+});
 
 export default router
