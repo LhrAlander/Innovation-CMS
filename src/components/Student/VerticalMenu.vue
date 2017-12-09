@@ -8,7 +8,7 @@
       </div>
     </div>
     <el-menu default-active="1-4-1" class="el-menu-vertical" @open="handleOpen" @close="handleClose" :collapse="true">
-      <router-link :to="{name: 'MyTeacherInfo'}">
+      <router-link :to="{name: 'MyStudentInfo'}">
         <el-submenu index="1">
           <template slot="title" >
             <i class="iconfont">&#xe6a0;</i>
@@ -22,12 +22,12 @@
           <p class="text">项目管理</p>
           <p class="arrow-right"> > </p>
         </template>
-        <router-link :to="{name: 'TeacherProjectInfo'}">
+        <router-link :to="{name: 'StudentProjectInfo'}">
           <el-menu-item index="2-1" class="first">
             <p class="item-text">项目信息管理</p>
           </el-menu-item>
         </router-link>
-        <router-link :to="{name: 'TeacherProjectMember'}">
+        <router-link :to="{name: 'StudentProjectMember'}">
           <el-menu-item index="2-2" class="last">
             <p class="item-text">项目成员管理</p>
           </el-menu-item>
@@ -40,12 +40,12 @@
           <p class="text">团队管理</p>
           <p class="arrow-right"> > </p>
         </template>
-        <router-link :to="{name: 'TeacherGroupInfo'}">
+        <router-link :to="{name: 'StudentGroupInfo'}">
           <el-menu-item index="3-1" class="first">
             <p class="item-text">团队基本信息管理</p>
           </el-menu-item>
         </router-link>
-        <router-link :to="{name: 'TeacherGroupMember'}">
+        <router-link :to="{name: 'StudentGroupMember'}">
           <el-menu-item index="3-2" class="last">
             <p class="item-text">团队成员管理</p>
           </el-menu-item>
@@ -59,26 +59,17 @@
           <p class="arrow-right"> > </p>
         </template>
 
-        <router-link :to="{name: 'TeacherAwardInfo'}">
+        <router-link :to="{name: 'StudentAwardInfo'}">
           <el-menu-item index="4-1" class="first">
             <p class="item-text">获奖基本信息管理</p>
           </el-menu-item>
         </router-link>
-        <router-link :to="{name: 'TeacherAwardMember'}">
+        <router-link :to="{name: 'StudentAwardMember'}">
           <el-menu-item index="4-2" class="last">
             <p class="item-text">获奖成员管理</p>
           </el-menu-item>
         </router-link>
       </el-submenu>
-
-      <router-link :to="{name: 'TeacherDepUnitInfo'}">
-        <el-submenu index="5">
-          <template slot="title" >
-            <i class="iconfont">&#xe9e3;</i>
-            <p class="text">依托单位信息管理</p>
-          </template>
-        </el-submenu>
-      </router-link>
     </el-menu>
   </div>
 </template>

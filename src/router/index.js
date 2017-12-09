@@ -4,10 +4,11 @@ import routes from './routes'
 import CategoryRoutes from './category'
 import InfoOperateRoutes from './infoOperate'
 import TeacherRoutes from './teacher'
+import StudentRoutes from './student'
 
 Vue.use(Router)
 
-const finalRoutes = routes.concat(CategoryRoutes, InfoOperateRoutes,TeacherRoutes);
+const finalRoutes = routes.concat(CategoryRoutes, InfoOperateRoutes,TeacherRoutes,StudentRoutes);
 
 // 滚动条滚回顶部
 const scrollBehavior =(to, from, savedPosition)=> {
