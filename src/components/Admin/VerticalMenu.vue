@@ -47,12 +47,12 @@
           <p class="text">基本信息管理</p>
           <p class="arrow-right"> > </p>
         </template>
-        <router-link :to="{name: 'InstituteInfo'}">
+        <router-link :to="{name: 'Department'}">
           <el-menu-item index="2-1" class="first">
             <p class="item-text">院系管理</p>
           </el-menu-item>
         </router-link>
-        <router-link :to="{name: 'Status'}">
+        <router-link :to="{name: 'StatusCategory'}">
           <el-menu-item index="2-5" class="last">
             <p class="item-text">状态管理</p>
           </el-menu-item>

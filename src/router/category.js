@@ -10,7 +10,7 @@ import ProjectLevel from 'pages/AdminInfoTables/CategoryManage/ProjectLevel'
 import AwardLevel from 'pages/AdminInfoTables/CategoryManage/AwardLevel'
 import AwardCategory from 'pages/AdminInfoTables/CategoryManage/AwardCategory'
 import PolicyCategory from 'pages/AdminInfoTables/CategoryManage/PolicyCategory'
-import Academy from 'pages/AdminInfoTables/CategoryManage/Academy'
+import StatusCategory from 'pages/AdminInfoTables/CategoryManage/StatusCategory'
 
 export default [
   // 用户类别管理
@@ -56,18 +56,18 @@ export default [
     component: AwardCategory
   },
 
-
-
   // 政策类别管理
   {
     name: 'GovCategory',
     path: '/policyCategory',
     component: PolicyCategory
   },
-  // 学院管理
+
+
+  // 状态类别管理
   {
-    name: 'InstituteInfo',
-    path: '/academy',
-    component: Academy
+    name: 'StatusCategory',
+    path: '/statusCategory',
+    component: StatusCategory
   },
 ]

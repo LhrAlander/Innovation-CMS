@@ -2,6 +2,11 @@
  * Created by Alander on 2017/11/21.
  */
 
+import UserInfoAdmin from 'pages/AdminInfoTables/UserManage/UserInfo'
+import StudentInfoAdmin from 'pages/AdminInfoTables/UserManage/StudentInfo'
+import TeacherInfoAdmin from 'pages/AdminInfoTables/UserManage/TeacherInfo'
+import CompanyInfoAdmin from 'pages/AdminInfoTables/UserManage/CompanyInfo'
+
 import DependentUnitInfo from 'pages/AdminInfoTables/DependentUnitManage/DependentUnitInfo'
 import TeamInfoAdmin from 'pages/AdminInfoTables/TeamManage/TeamInfo'
 import ProjectInfoAdmin from 'pages/AdminInfoTables/ProjectManage/ProjectInfo'
@@ -23,6 +28,57 @@ import TeamInfoCheck from 'pages/AdminInfoTables/TeamManage/TeamInfoCheck'
 import ProjectInfoCheck from 'pages/AdminInfoTables/ProjectManage/ProjectInfoCheck'
 
 export default [
+  // 基本用户信息查看
+  // 用户基本信息查看
+  {
+    'path': '/check/userInfo/:userId',
+    component: UserInfoAdmin,
+    meta: {checkMode: true}
+  },
+  // 学生信息查看
+  {
+    'path': '/check/studentInfo/:userId',
+    component: StudentInfoAdmin,
+    meta: {checkMode: true}
+  },
+  // 教师信息查看
+  {
+    'path': '/check/teacherInfo/:userId',
+    component: TeacherInfoAdmin,
+    meta: {checkMode: true}
+  },
+  // 企业信息查看
+  {
+    'path': '/check/companyInfo/:userId',
+    component: CompanyInfoAdmin,
+    meta: {checkMode: true}
+  },
+
+  // 基本用户信息编辑
+  // 用户基本信息编辑
+  {
+    'path': '/edit/userInfo/:userId',
+    component: UserInfoAdmin,
+    meta: {checkMode: false}
+  },
+  // 学生信息编辑
+  {
+    'path': '/edit/studentInfo/:userId',
+    component: StudentInfoAdmin,
+    meta: {checkMode: false}
+  },
+  // 教师信息编辑
+  {
+    'path': '/edit/teacherInfo/:userId',
+    component: TeacherInfoAdmin,
+    meta: {checkMode: false}
+  },
+  // 企业信息编辑
+  {
+    'path': '/edit/companyInfo/:userId',
+    component: CompanyInfoAdmin,
+    meta: {checkMode: false}
+  },
   // 团队基本信息编辑
   {
     name: "TeamInfoEdit",

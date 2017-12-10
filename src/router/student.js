@@ -1,6 +1,7 @@
 import Student from 'pages/Student'
 
 import MyStudentInfo from 'components/Student/MyInfo'
+import EditInfo from 'components/Student/ChangeInfo'
 
 import StudentProjectInfo from 'components/Student/Manage/ProjectManage/ProjectInfo'
 import StudentProjectMember from 'components/Student/Manage/ProjectManage/ProjectMember'
@@ -21,6 +22,11 @@ export default [
         name: 'MyStudentInfo',
         path: 'MyInfo',
         component: MyStudentInfo,
+      },
+      {
+        name: 'EditStudentInfo',
+        path: 'editInfo',
+        component: EditInfo,
       },
       {
         name: 'StudentProjectInfo',

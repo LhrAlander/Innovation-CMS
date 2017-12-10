@@ -32,10 +32,7 @@
       <el-row :gutter="200" class="info-content">
         <el-col :span="24" class="info-item">
           <div class="item-content">
-            <el-input
-              type="textarea"
-              :rows="18"
-              v-model="policyInfo.info"></el-input>
+            <div id="editor-ele"></div>
           </div>
         </el-col>
       </el-row>
@@ -43,12 +40,24 @@
       <span>附件</span>
       <el-row :gutter="200" class="info-content">
         <el-col :span="24" class="info-item">
-          <div class="item-content">
-            <div class="attack-link"></div>
-          </div>
+          <!--<div class="item-content">-->
+            <!--<div class="attack-link"></div>-->
+          <!--</div>-->
+          <el-upload
+            class="upload"
+            ref="upload"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :file-list="fileList"
+            :auto-upload="false">
+            <el-button slot="trigger" size="small" type="primary">选取附件</el-button>
+            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+            <div slot="tip" class="el-upload__tip">选择完文件后请手动点击按钮上传</div>
+          </el-upload>
         </el-col>
       </el-row>
-      <el-button type="primary">添加附件</el-button>
+      <!--<el-button type="primary">添加附件</el-button>-->
     </div>
 
   </div>
@@ -56,6 +65,7 @@
 
 <script>
   import InfoDisplayTemp from 'components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp'
+  import E from 'wangeditor'
 
   const INPUT = 1
   const SELECT = 2
@@ -142,7 +152,8 @@
         baseInfo: DISPLAY_INFO,
         policyInfo: {
             info: ""
-        }
+        },
+        fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
       }
     },
     components: {
@@ -154,7 +165,24 @@
       },
       getItemIndex (rowIndex, colIndex) {
         return (rowIndex - 1) * 3 + colIndex - 1
+      },
+      submitUpload() {
+        this.$refs.upload.submit();
+      },
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
       }
+    },
+    mounted () {
+      let editor = new E('#editor-ele')
+      editor.customConfig.onchange = html => {
+          this.policyInfo.info = html
+      }
+
+      editor.create()
     }
   }
 </script>

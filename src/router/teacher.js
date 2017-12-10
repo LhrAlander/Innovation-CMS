@@ -1,6 +1,7 @@
 import Teacher from 'pages/Teacher'
 
 import MyTeacherInfo from 'components/Teacher/MyInfo'
+import EditInfo from 'components/Teacher/ChangeInfo'
 
 import TeacherProjectInfo from 'components/Teacher/Manage/ProjectManage/ProjectInfo'
 import TeacherProjectMember from 'components/Teacher/Manage/ProjectManage/ProjectMember'
@@ -23,6 +24,11 @@ export default [
         name: 'MyTeacherInfo',
         path: 'MyInfo',
         component: MyTeacherInfo,
+      },
+      {
+        name: 'EditTeacherInfo',
+        path: 'editInfo',
+        component: EditInfo,
       },
       {
         name: 'TeacherProjectInfo',
