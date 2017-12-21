@@ -5,7 +5,6 @@
       <span v-if="!tagEmpty" style="font-weight: bold; font-size: .9rem;">筛选条件</span>
       <el-tag v-for="(value,key,index) in filter" v-if="value !== ''" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value,valueLabelMap)}})</el-tag>
     </div>
-    <el-button class="addInfo" type="success" size="large" @click="enterAdd">添加信息</el-button>
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
     <el-button class="exit-filter" size="large" @click="quitFilter">退出筛选</el-button>
     <!--筛选框-->
@@ -16,19 +15,13 @@
                 :keyFormatMap = "Object.assign({},keyFormatMap,expandFormatMap)"
                 :options = "projectOptions"
                 @sendFilter="receiveFilter"></filter-box>
-    <info-add :show="showInfoAdd"
-              :tmpl = "infoAddTmpl"
-              :valueLabelMap = "valueLabelMap"
-              :rules = "infoAddRules"
-              @sendInfo = "receiveInfo"
-    ></info-add>
     <!--表格-->
     <el-table
       :data="tableData"
       stripe
       border
       :row-key="getRowKeys"
-      style="width: 100%;">
+      style="width: 100%; margin-top: 40px;">
       <el-table-column
         type="index"
         width="50"
@@ -243,7 +236,6 @@
         totalCount: 30, //返回的记录总数
         showFilterBox: false, // 是否显示筛选框
         tagEmpty: true, //标签是否为空
-        showInfoAdd: false, // 是否显示信息添加框
       }
     },
     mounted: function(){
@@ -341,9 +333,6 @@
       quitFilter: function () {
         this.filter = this.resetObject(this.filter);
         this.loadData(this.filter, this.currentName, this.pageSize);
-      },
-      enterAdd: function () {
-        this.showInfoAdd = true;
       },
       receiveInfo: function (data) {
         if (data) {

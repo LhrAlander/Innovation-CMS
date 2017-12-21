@@ -59,13 +59,8 @@
           <p class="arrow-right"> > </p>
         </template>
 
-        <router-link :to="{name: 'StudentAwardInfo'}">
-          <el-menu-item index="4-1" class="first">
-            <p class="item-text">获奖基本信息管理</p>
-          </el-menu-item>
-        </router-link>
         <router-link :to="{name: 'StudentAwardMember'}">
-          <el-menu-item index="4-2" class="last">
+          <el-menu-item index="4-1" class="first last">
             <p class="item-text">获奖成员管理</p>
           </el-menu-item>
         </router-link>

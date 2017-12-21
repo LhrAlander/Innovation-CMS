@@ -9,8 +9,7 @@ import StudentProjectMember from 'components/Student/Manage/ProjectManage/Projec
 import StudentGroupInfo from 'components/Student/Manage/GroupManage/GroupInfo'
 import StudentGroupMember from 'components/Student/Manage/GroupManage/GroupMember'
 
-import StudentAwardInfo from 'components/Admin/Manage/AwardManage/AwardInfo'
-import StudentAwardMember from 'components/Admin/Manage/AwardManage/AwardMember'
+import StudentAwardMember from 'components/Student/Manage/AwardManage/AwardMember'
 
 export default [
   {
@@ -66,16 +65,6 @@ export default [
           iconCode: '&#xe61e;',
           firstLevel: '团队管理',
           secondLevel: '团队成员管理'
-        },
-      },
-      {
-        name: 'StudentAwardInfo',
-        path: 'StudentAwardInfo',
-        component: StudentAwardInfo,
-        meta: {
-          iconCode: '&#xe631;',
-          firstLevel: '获奖管理',
-          secondLevel: '获奖基本信息管理'
         },
       },
       {

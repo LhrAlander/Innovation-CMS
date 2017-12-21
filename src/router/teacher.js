@@ -11,8 +11,7 @@ import TeacherGroupMember from 'components/Teacher/Manage/GroupManage/GroupMembe
 
 import TeacherDepUnitInfo from 'components/Teacher/Manage/DependentUnitManage/DepUnitInfo'
 
-import TeacherAwardInfo from 'components/Admin/Manage/AwardManage/AwardInfo'
-import TeacherAwardMember from 'components/Admin/Manage/AwardManage/AwardMember'
+import TeacherAwardMember from 'components/Teacher/Manage/AwardManage/AwardMember'
 
 export default [
   {
@@ -78,16 +77,6 @@ export default [
           iconCode: '&#xe9e3;',
           firstLevel: '依托单位信息管理',
           secondLevel: '信息管理'
-        },
-      },
-      {
-        name: 'TeacherAwardInfo',
-        path: 'TeacherAwardInfo',
-        component: TeacherAwardInfo,
-        meta: {
-          iconCode: '&#xe631;',
-          firstLevel: '获奖管理',
-          secondLevel: '获奖基本信息管理'
         },
       },
       {

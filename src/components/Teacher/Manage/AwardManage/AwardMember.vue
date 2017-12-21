@@ -5,7 +5,6 @@
       <span v-if="!tagEmpty" style="font-weight: bold; font-size: .9rem;">筛选条件</span>
       <el-tag v-for="(value,key,index) in filter" v-if="value !== ''" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value,valueLabelMap)}})</el-tag>
     </div>
-    <el-button class="addInfo" type="success" size="large" @click="enterAdd">添加信息</el-button>
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
     <el-button class="exit-filter" size="large" @click="quitFilter">退出筛选</el-button>
     <!--筛选框-->
@@ -15,19 +14,13 @@
                 :valueLabelMap = "valueLabelMap"
                 :keyFormatMap = "Object.assign({},keyFormatMap,expandFormatMap)"
                 @sendFilter="receiveFilter"></filter-box>
-    <info-add :show="showInfoAdd"
-              :tmpl = "infoAddTmpl"
-              :valueLabelMap = "valueLabelMap"
-              :rules = "infoAddRules"
-              @sendInfo = "receiveInfo"
-    ></info-add>
     <!--表格-->
     <el-table
       :data="tableData"
       stripe
       border
       :row-key="getRowKeys"
-      style="width: 100%;">
+      style="width: 100%; margin-top: 40px;">
       <el-table-column type="expand">
         <template scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
@@ -113,84 +106,68 @@
 //            value: 3,
 //            label: '企业'
 //          }],
-
+          awardLevel: [{
+            value: 0,
+            label: '级别0'
+          },{
+            value: 1,
+            label: '级别1'
+          }],
+          awardCategory: [{
+            value: 0,
+            label: '类别0'
+          },{
+            value: 1,
+            label: '类别1'
+          }],
         },
 
         keyFormatMap: { // 格式化标签映射表
-          awardName: '获奖名称',
-          projectName: '项目名称',
-          userId: '用户名',
           username: '用户姓名',
-          contact: '联系方式',
-
+          awardName: '获奖名称',
+          awardCategory: '获奖类别',
+          awardLevel: '获奖级别',
         },
         expandFormatMap: { // 格式化额外信息映射表
-        },
-        infoAddTmpl: {
-          awardName: {
-            label: '获奖名称',
-            inputType: 0, // 0 代表 input
-          },
-          projectName: {
-            label: '项目名称',
-            inputType: 0, // 0 代表 input
-          },
-          userId: {
-            label: '用户名',
-            inputType: 0, // 0 代表 input
-          },
-          username: {
-            label: '用户姓名',
-            inputType: 0,
-          },
-          contact: {
-            label: '联系方式',
-            inputType: 0,
-          },
-
-        },
-        infoAddRules: {
-          awardName: [
-            {required: true, message: '请输入获奖名称', trigger: 'blur'}
-          ],
-          projectName: [
-            {required: true, message: '请输入项目名称', trigger: 'blur'}
-          ],
-          userId: [
-            {required: true, message: '请输入用户名', trigger: 'blur'}
-          ],
-          username: [
-            {required: true, message: '请输入用户姓名', trigger: 'blur'}
-          ],
-          contact: [
-            {required: true, message: '请输入联系方式', trigger: 'blur'}
-          ],
+          projectName: '项目名称',
+          userId: '用户名',
+          contact: '联系方式',
         },
 //        获取表格数据的地址
         url: '',
         filterTmpl: {
+          username: {
+            label: '用户姓名',
+            inputType: 0,
+          },
           awardName: {
             label: '获奖名称',
             inputType: 0, // 0 代表 input
           },
+          awardCategory: {
+            label: '获奖类别',
+            inputType: 1,
+          },
+          awardLevel: {
+            label: '获奖级别',
+            inputType: 1, // 0 代表 input
+          },
           projectName: {
             label: '项目名称',
-            inputType: 0, // 0 代表 input
+            inputType: 0,
           },
           userId: {
             label: '用户名',
             inputType: 0, // 0 代表 input
-          },
-          username: {
-            label: '用户姓名',
-            inputType: 0,
           }
         },
         filter: {//搜索条件
+          username: '', //用户姓名
           awardName: '', //获奖名称
+          awardCategory: '', // 获奖类别
+          awardLevel: '', // 获奖级别
           projectName: '', //项目名称
           userId: '', //用户名
-          username: '', //用户姓名
         },
         pageSize: 15, //每页大小
         currentPage: 1, //当前页
@@ -198,7 +175,6 @@
         totalCount: 30, //返回的记录总数
         showFilterBox: false, // 是否显示筛选框
         tagEmpty: true, //标签是否为空
-        showInfoAdd: false, // 是否显示信息添加框
       }
     },
     mounted: function(){
@@ -279,9 +255,6 @@
       quitFilter: function () {
         this.filter = this.resetObject(this.filter);
         this.loadData(this.filter, this.currentName, this.pageSize);
-      },
-      enterAdd: function () {
-        this.showInfoAdd = true;
       },
       receiveInfo: function (data) {
         if (data) {
