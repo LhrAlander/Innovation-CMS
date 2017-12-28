@@ -1,5 +1,4 @@
 <template>
-
   <div class="info-wrapper">
     <div class="avatar-wrapper">
       <img src="../../../src/assets/img/invoker.jpg" alt="用户头像" class="avatar">
