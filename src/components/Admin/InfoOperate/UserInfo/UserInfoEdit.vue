@@ -62,7 +62,7 @@
       btnFunc (item) {
         switch (item.clickFunName) {
           case 'resetPWD':
-            this.resetPWD()
+            this.$emit("resetPWD")
             break
         }
       },
@@ -70,36 +70,7 @@
         this.$emit("confirmClick")
       },
       resetPWD () {
-        this.$confirm('是否重置该用户密码?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          closeOnClickModal: false,
-          closeOnPressEscape: false,
-          type: 'warning',
-          beforeClose: (action, instance, done) => {
-            if (action === 'confirm') {
-              instance.confirmButtonLoading = true;
-              instance.confirmButtonText = '执行中...';
-              this.submitModify().then(function () {
-                instance.confirmButtonLoading = false
-                done()
-              })
-            } else {
-              console.log("else")
-              done();
-            }
-          }
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '重置密码成功!'
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消重置密码'
-          })
-        })
+        
       },
       goModifyMode () {
         this.$emit("goModifyMode")
