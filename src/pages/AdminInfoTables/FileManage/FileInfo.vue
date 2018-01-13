@@ -44,7 +44,7 @@
             <el-upload
               class="upload"
               ref="upload"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              action="/api/upload/file"
               :on-preview="handlePreview"
               :on-remove="handleRemove"
               :file-list="fileList"
