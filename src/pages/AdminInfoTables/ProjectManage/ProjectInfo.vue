@@ -33,10 +33,24 @@
              <el-col :span="12" class="info-item file-item">
               <span class="item-name">项目申请材料</span>
               <div class="item-content">
-                <el-input
-                  type="textarea"
-                  :rows="4"></el-input>
-                <el-button class="reg-file-btn">上传材料</el-button>
+                <el-upload
+                  class="upload-demo"
+                  ref="upload"
+                  action="/api/upload/project"
+                  :on-preview="handlePreview"
+                  :on-remove="handleRemove"
+                  :on-change="handleChange"
+                  :on-success="handleSuccess"
+                  :file-list="fileList"
+                  :auto-upload="false"
+                  name="uploadFile"
+                  :data='leader'
+                  :on-progress='fileOnProgress'
+                  >
+                  <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                  <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+                  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                </el-upload>
 
               </div>
             </el-col>
@@ -124,296 +138,306 @@
 </template>
 
 <script>
-  import InfoDisplayTemp from 'components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp'
+import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp";
 
-  const INPUT = 1
-  const SELECT = 2
-  const RADIO = 3
-  const SWITCH = 4
-  const BUTTON = 5
-  const INPUT_AREA = 6
-  const DISPLAY_INFO = [
-    {
-      key: 'projectName',
-      name: '项目名称',
-      value: '呀呀呀',
-      type: INPUT,
-      span: 1,
-      disabled: true
-    },
-    {
-      key: 'projectType',
-      name: '项目类别',
-      value: '实验室',
-      type: SELECT,
-      options: [
-        {
-          value: "实验室",
-          label: "实验室"
-        },
-        {
-          value: "企业1",
-          label: "企业1"
-        }
-      ],
-      span: 1
-    },
-    {
-      key: 'projectLevel',
-      name: '项目级别',
-      value: '国家级',
-      type: SELECT,
-      span: 1,
-      options: [
-        {
-          value: "国家级",
-          label: "国家级"
-        },
-        {
-          value: "省部级",
-          label: "省部级"
-        }
-        ,
-        {
-          value: "校级",
-          label: "校级"
-        }
-        ,
-        {
-          value: "院级",
-          label: "院级"
-        }
-      ],
-      disabled: false
-    },
-    {
-      key: 'projectId',
-      name: '项目编号',
-      value: '123',
-      type: INPUT,
-      span: 1,
-      disabled: true
-    },
-    {
-      key: 'projectTeacher',
-      name: '指导老师',
-      value: '石兴民',
-      type: SELECT,
-      span: 1,
-      disabled: false,
-      options: [
-        {
-          value: "石兴民",
-          label: "石兴民"
-        },
-        {
-          value: "某某某",
-          label: "某某某"
-        }
-      ],
-    },
-    {
-      key: 'projectDep',
-      name: '项目依托单位',
-      value: '实验室1',
-      type: SELECT,
-      span: 1,
-      disabled: false,
-      options: [
-        {
-          value: "实验室1",
-          label: "实验室1"
-        },
-        {
-          value: "众创空间",
-          label: "众创空间"
-        }
-      ],
-    },
-    {
-      key: 'regYear',
-      name: '项目申请年份',
-      value: '2015',
-      type: INPUT,
-      span: 1,
-      disabled: true
-    },
-    {
-      key: 'startYear',
-      name: '项目开始年份',
-      value: '2016',
-      type: INPUT,
-      span: 1,
-      disabled: true
-    },
-    {
-      key: 'stopYear',
-      name: '项目截止时间',
-      value: '',
-      type: INPUT,
-      span: 1,
-      disabled: true
-    },
-    {
-      key: 'projectPerson',
-      name: '项目负责人',
-      value: '林海瑞',
-      type: SELECT,
-      span: 1,
-      disabled: false,
-      options: [
-        {
-          value: "滕飞",
-          label: "滕飞"
-        },
-        {
-          value: "杨贺",
-          label: "杨贺"
-        }
-      ],
-    },
-    {
-      key: 'personMajor',
-      name: '负责人专业',
-      value: '软件工程',
-      type: INPUT,
-      span: 1,
-      disabled: true
-    },
-    {
-      key: 'personClass',
-      name: '负责人班级',
-      value: '152',
-      type: INPUT,
-      span: 1,
-      disabled: true
-    },
-  ]
-
-  export default {
-    data () {
-      return {
-        baseInfo: DISPLAY_INFO,
-        leader: {
-          userId: 2015210405043,
-          name: "林海瑞",
-          userPhone: 123456789
-        },
-        teacher: {
-          userId: 123456789,
-          name: "石兴民",
-          userPhone: 123456789
-        }
-      }
-    },
-    components: {
-      InfoDisplayTemp
-    },
-    methods: {
-      getRowCount (arr) {
-        return Math.ceil(arr.length / 3)
+const INPUT = 1;
+const SELECT = 2;
+const RADIO = 3;
+const SWITCH = 4;
+const BUTTON = 5;
+const INPUT_AREA = 6;
+const DISPLAY_INFO = [
+  {
+    key: "projectName",
+    name: "项目名称",
+    value: "呀呀呀",
+    type: INPUT,
+    span: 1,
+    disabled: true
+  },
+  {
+    key: "projectType",
+    name: "项目类别",
+    value: "实验室",
+    type: SELECT,
+    options: [
+      {
+        value: "实验室",
+        label: "实验室"
       },
-      getItemIndex (rowIndex, colIndex) {
-        return (rowIndex - 1) * 3 + colIndex - 1
+      {
+        value: "企业1",
+        label: "企业1"
       }
+    ],
+    span: 1
+  },
+  {
+    key: "projectLevel",
+    name: "项目级别",
+    value: "国家级",
+    type: SELECT,
+    span: 1,
+    options: [
+      {
+        value: "国家级",
+        label: "国家级"
+      },
+      {
+        value: "省部级",
+        label: "省部级"
+      },
+      {
+        value: "校级",
+        label: "校级"
+      },
+      {
+        value: "院级",
+        label: "院级"
+      }
+    ],
+    disabled: false
+  },
+  {
+    key: "projectId",
+    name: "项目编号",
+    value: "123",
+    type: INPUT,
+    span: 1,
+    disabled: true
+  },
+  {
+    key: "projectTeacher",
+    name: "指导老师",
+    value: "石兴民",
+    type: SELECT,
+    span: 1,
+    disabled: false,
+    options: [
+      {
+        value: "石兴民",
+        label: "石兴民"
+      },
+      {
+        value: "某某某",
+        label: "某某某"
+      }
+    ]
+  },
+  {
+    key: "projectDep",
+    name: "项目依托单位",
+    value: "实验室1",
+    type: SELECT,
+    span: 1,
+    disabled: false,
+    options: [
+      {
+        value: "实验室1",
+        label: "实验室1"
+      },
+      {
+        value: "众创空间",
+        label: "众创空间"
+      }
+    ]
+  },
+  {
+    key: "regYear",
+    name: "项目申请年份",
+    value: "2015",
+    type: INPUT,
+    span: 1,
+    disabled: true
+  },
+  {
+    key: "startYear",
+    name: "项目开始年份",
+    value: "2016",
+    type: INPUT,
+    span: 1,
+    disabled: true
+  },
+  {
+    key: "stopYear",
+    name: "项目截止时间",
+    value: "",
+    type: INPUT,
+    span: 1,
+    disabled: true
+  },
+  {
+    key: "projectPerson",
+    name: "项目负责人",
+    value: "林海瑞",
+    type: SELECT,
+    span: 1,
+    disabled: false,
+    options: [
+      {
+        value: "滕飞",
+        label: "滕飞"
+      },
+      {
+        value: "杨贺",
+        label: "杨贺"
+      }
+    ]
+  },
+  {
+    key: "personMajor",
+    name: "负责人专业",
+    value: "软件工程",
+    type: INPUT,
+    span: 1,
+    disabled: true
+  },
+  {
+    key: "personClass",
+    name: "负责人班级",
+    value: "152",
+    type: INPUT,
+    span: 1,
+    disabled: true
+  }
+];
+
+export default {
+  data() {
+    return {
+      fileList: [],
+      baseInfo: DISPLAY_INFO,
+      leader: {
+        userId: 2015210405043,
+        name: "林海瑞",
+        userPhone: 123456789
+      },
+      teacher: {
+        userId: 123456789,
+        name: "石兴民",
+        userPhone: 123456789
+      }
+    };
+  },
+  components: {
+    InfoDisplayTemp
+  },
+  methods: {
+    submitUpload() {
+      this.$refs.upload.submit();
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handleChange(file, fileList) {
+      console.log('change', file, fileList)
+    },
+    handleSuccess(file) {
+      console.log('success', file)
+    },
+    handlePreview(file) {
+      console.log(file);
+    },
+    fileOnProgress(event, file, fileList) {
+      console.log(event)
+    },
+    getRowCount(arr) {
+      return Math.ceil(arr.length / 3);
+    },
+    getItemIndex(rowIndex, colIndex) {
+      return (rowIndex - 1) * 3 + colIndex - 1;
     }
   }
+};
 </script>
 
 <style scoped>
+.admin-check-info-wrapper {
+  /*background-color: #ECF0F1;*/
+  background-color: #fff;
+  height: 100%;
+  padding: 1.4rem 5rem;
+}
 
-  .admin-check-info-wrapper {
-    /*background-color: #ECF0F1;*/
-    background-color: #fff;
-    height: 100%;
-    padding: 1.4rem 5rem;
-  }
+.mode-crumb-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-  .mode-crumb-box {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+h1 {
+  display: block;
+  text-align: center;
+  font-size: 1.7rem;
+  padding-bottom: 1.4rem;
+  border-bottom: 0.3rem solid #cbcbcb;
+}
 
+.breadcrumb {
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #2a3f54;
+  display: inline-block;
+}
 
-  h1 {
-    display: block;
-    text-align: center;
-    font-size: 1.7rem;
-    padding-bottom: 1.4rem;
-    border-bottom: .3rem solid #cbcbcb;
+.breadcrumb .iconfont {
+  font-size: 1.5rem;
+  margin-right: 0.3rem;
+}
 
-  }
+.info-wrapper {
+  padding: 2rem 3rem;
+}
 
-  .breadcrumb {
-    padding: 1rem;
-    font-size: 1rem;
-    font-weight: bold;
-    color: #2A3F54;
-    display: inline-block;
-  }
+.info-title {
+  font-size: 1rem;
+  color: #2a3f54;
+  font-weight: bold;
+}
 
+.iconfont.box {
+  font-weight: normal;
+  margin-right: 0.3rem;
+}
 
-  .breadcrumb .iconfont {
-    font-size: 1.5rem;
-    margin-right: .3rem;
-  }
+.el-row.info-content {
+  margin: 1.5rem 0;
+}
 
-  .info-wrapper {
-    padding: 2rem 3rem;
-  }
+.el-input {
+  background-color: #ffff00;
+  font-size: 0.9rem;
+}
 
-  .info-title {
-    font-size: 1rem;
-    color: #2A3F54;
-    font-weight: bold;
-  }
+.info-item {
+  display: flex;
+  align-items: center;
+}
 
-  .iconfont.box {
-    font-weight: normal;
-    margin-right: .3rem;
-  }
+.item-name {
+  font-size: 1rem;
+  width: 6rem;
+  margin-right: 1rem;
+}
 
-  .el-row.info-content {
-    margin: 1.5rem 0;
-  }
+.item-content {
+  flex: 1;
+}
 
-  .el-input {
-    background-color: #ffff00;
-    font-size: .9rem;
-  }
+.info-detail-check {
+  height: 1.8rem;
+  padding: 0.3rem;
+  margin-left: 1rem;
+}
 
-  .info-item {
-    display: flex;
-    align-items: center;
-  }
+.file-item {
+  position: relative;
+}
 
-  .item-name {
-    font-size: 1rem;
-    width: 6rem;
-    margin-right: 1rem;
-  }
-
-  .item-content {
-    flex: 1;
-  }
-
-  .info-detail-check {
-    height: 1.8rem;
-    padding: .3rem;
-    margin-left: 1rem;
-  }
-
-  .file-item {
-    position: relative;
-  }
-
-  .end-file-btn,
-  .reg-file-btn {
-    margin-top: 1rem;
-    float: right;
-  }
-
-
-
+.end-file-btn,
+.reg-file-btn {
+  margin-top: 1rem;
+  float: right;
+}
 </style>
