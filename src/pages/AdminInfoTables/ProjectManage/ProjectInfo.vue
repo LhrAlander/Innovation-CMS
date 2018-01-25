@@ -42,14 +42,14 @@
                   :on-change="handleChange"
                   :on-success="handleSuccess"
                   :file-list="fileList"
+                  disabled='true'
                   :auto-upload="false"
                   name="uploadFile"
                   :data='leader'
                   :on-progress='fileOnProgress'
                   >
-                  <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                  <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-                  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                  <el-button style="margin-left: 10px;" size="small" type="success" @click="downloadRegFiles">下载材料</el-button>
+                  <!-- <div slot="tip" class="el-upload__tip">只能上传zip/rar文件，且不超过10MB</div> -->
                 </el-upload>
 
               </div>
@@ -139,6 +139,8 @@
 
 <script>
 import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp";
+import projectApi from '@/api/projectApi'
+import axios from 'axios'
 
 const INPUT = 1;
 const SELECT = 2;
@@ -305,7 +307,7 @@ const DISPLAY_INFO = [
 export default {
   data() {
     return {
-      fileList: [],
+      fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
       baseInfo: DISPLAY_INFO,
       leader: {
         userId: 2015210405043,
@@ -322,9 +324,22 @@ export default {
   components: {
     InfoDisplayTemp
   },
+  created () {
+    // projectApi.testFiles('123')
+    //   .then(values => {
+    //     console.log(values)
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //   })
+  },
   methods: {
     submitUpload() {
       this.$refs.upload.submit();
+    },
+    downloadRegFiles() {
+      // window.open('localhost:3000/api/download')
+      window.open("http://localhost:3000/api/download")
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);

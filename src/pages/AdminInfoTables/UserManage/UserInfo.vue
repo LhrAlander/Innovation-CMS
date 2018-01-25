@@ -145,6 +145,7 @@ export default {
       let userId = this.$route.params.userId;
       this.displayInfo = INFO.adminCheckInfo.users[0].userBaseInfo;
       API.searchUser(userId).then(res => {
+        console.log(res)
         let user = res.data.data[0];
         this.userInfoTransform(user);
       });
