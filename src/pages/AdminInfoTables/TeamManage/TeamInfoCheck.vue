@@ -113,6 +113,7 @@
 
 <script>
   import InfoDisplayTemp from 'components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp'
+  import axios from 'axios'
 
   const INPUT = 1
   const SELECT = 2
@@ -231,6 +232,17 @@
           ],
         ]
       }
+    },
+    mounted () {
+      axios.post('/api/team/team', {
+        teamId: 123
+      })
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     components: {
       InfoDisplayTemp

@@ -110,6 +110,7 @@
 
 <script>
   import InfoDisplayTemp from 'components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp'
+  import api from '@/api/teamApi'
 
   const INPUT = 1
   const SELECT = 2
@@ -231,6 +232,15 @@
     },
     components: {
       InfoDisplayTemp
+    },
+    mounted () {
+      api.getAllTeams()
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log('获取团队失败', err)
+        })
     },
     methods: {
       getRowCount (arr) {
