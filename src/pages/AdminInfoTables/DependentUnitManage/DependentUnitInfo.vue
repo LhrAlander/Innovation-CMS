@@ -84,6 +84,7 @@
 
 <script>
   import InfoDisplayTemp from 'components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp'
+  import axios from 'axios'
 
   const INPUT = 1
   const SELECT = 2
@@ -194,6 +195,15 @@
     },
     components: {
       InfoDisplayTemp
+    },
+    mounted () {
+      axios.post('/api/dependent/dependent', {unitId: '123'})
+        .then(res => {
+          console.log('success', res)
+        }) 
+        .catch(err => {
+          console.log('err', err)
+        })
     },
     methods: {
       getRowCount (arr) {
