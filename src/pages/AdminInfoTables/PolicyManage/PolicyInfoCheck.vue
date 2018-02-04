@@ -31,20 +31,25 @@
       <el-row :gutter="200" class="info-content">
         <el-col :span="24" class="info-item">
           <div class="item-content">
-            <el-input
+            <!-- <el-input
               type="textarea"
               :rows="18"
               disabled="true"
-              v-model="policyInfo.info"></el-input>
+              v-model="policyInfo.info"></el-input> -->
+              <div id="policy-info" v-html="policyInfo.info"></div>
           </div>
         </el-col>
       </el-row>
 
-      <span>附件</span>
+      <el-button type="success" size="mini" @click='downloadFile'>下载附件</el-button>
       <el-row :gutter="200" class="info-content">
         <el-col :span="24" class="info-item">
           <div class="item-content">
-            <div class="attack-link"></div>
+            <div class="attack-link">
+              <ul>
+                <li>{{ file.fileName }}</li>
+              </ul>
+            </div>
           </div>
         </el-col>
       </el-row>
@@ -54,205 +59,245 @@
 </template>
 
 <script>
-  import InfoDisplayTemp from 'components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp'
+import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp";
+import axios from "axios";
 
-  const INPUT = 1
-  const SELECT = 2
-  const RADIO = 3
-  const SWITCH = 4
-  const BUTTON = 5
-  const INPUT_AREA = 6
-  const DISPLAY_INFO = [
-    {
-      key: 'policyTitle',
-      name: '政策标题',
-      value: '政策1',
-      type: INPUT,
-      span: 1,
-      disabled: true
-    },
-    {
-      key: 'policyCategory',
-      name: '政策类别',
-      value: '国家政策',
-      type: SELECT,
-      span: 1,
-      options: [
-        {
-          value: "国家政策",
-          label: "国家政策"
-        },
-        {
-          value: "浙江省政策",
-          label: "浙江省政策"
-        }
-        ,
-        {
-          value: "校级政策",
-          label: "校级政策"
-        }
-        ,
-        {
-          value: "院级政策",
-          label: "院级政策"
-        }
-      ],
-      disabled: true
-    },
-    {
-      key: 'policyStatus',
-      name: '政策状态',
-      value: '已发布',
-      type: SELECT,
-      span: 1,
-      options: [
-        {
-          value: "已发布",
-          label: "已发布"
-        },
-        {
-          value: "未发布",
-          label: "未发布"
-        }
-      ],
-      disabled: true
-    },
-    {
-      key: 'publishTime',
-      name: '发布时间',
-      value: '2015-10-1',
-      type: INPUT,
-      span: 1,
-      disabled: true
-    },
-    {
-      key: 'publishPerson',
-      name: '发布者',
-      value: '教务处',
-      type: INPUT,
-      span: 1,
-      disabled: true
-    },
-  ]
+const INPUT = 1;
+const SELECT = 2;
+const RADIO = 3;
+const SWITCH = 4;
+const BUTTON = 5;
+const INPUT_AREA = 6;
+const DISPLAY_INFO = [
+  {
+    key: "policyIdentity",
+    name: "政策类别",
+    value: "不存在政策！",
+    type: SELECT,
+    span: 1,
+    options: [
+      {
+        value: "国家政策",
+        label: "国家政策"
+      },
+      {
+        value: "浙江省政策",
+        label: "浙江省政策"
+      },
+      {
+        value: "校级政策",
+        label: "校级政策"
+      },
+      {
+        value: "院级政策",
+        label: "院级政策"
+      }
+    ],
+    disabled: true
+  },
+  {
+    key: "state",
+    name: "政策状态",
+    value: "不存在政策！",
+    type: SELECT,
+    span: 1,
+    options: [
+      {
+        value: "已发布",
+        label: "已发布"
+      },
+      {
+        value: "未发布",
+        label: "未发布"
+      }
+    ],
+    disabled: true
+  },
+  {
+    key: "publishTime",
+    name: "发布时间",
+    value: "1900-01-01",
+    type: INPUT,
+    span: 1,
+    disabled: true
+  },
+  {
+    key: "publishUser",
+    name: "发布者",
+    value: "教务处",
+    type: INPUT,
+    span: 1,
+    disabled: true
+  },
+  {
+    key: "policyTitle",
+    name: "政策标题",
+    value: "不存在政策！",
+    type: INPUT,
+    span: 2,
+    disabled: true
+  }
+];
 
-  export default {
-    data () {
-      return {
-        baseInfo: DISPLAY_INFO,
-        policyInfo: {
-          info: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget."
-        }
-      }
-    },
-    components: {
-      InfoDisplayTemp
-    },
-    methods: {
-      getRowCount (arr) {
-        return Math.ceil(arr.length / 3)
+export default {
+  data() {
+    return {
+      baseInfo: DISPLAY_INFO,
+      policyInfo: {
+        info: '不存在政策！'
       },
-      getItemIndex (rowIndex, colIndex) {
-        return (rowIndex - 1) * 3 + colIndex - 1
-      },
-      // 进入编辑模式
-      goForEdit () {
-        this.$router.push('/edit/policyInfo/1')
+      file: {
+        fileName: '不存在政策'
       }
+    };
+  },
+  components: {
+    InfoDisplayTemp
+  },
+  mounted() {
+    this.initData()
+  },
+  watch: {
+    $route() {
+      this.initData();
+    }
+  },
+  methods: {
+    initData() {
+      const policyId = this.$route.params.id;
+      axios
+        .post("/api/policy/policy", {
+          policyId: policyId
+        })
+        .then(res => {
+          console.log(res);
+          res = res.data;
+          if (res.code == 200) {
+            this.file = res.file;
+            console.log(this.file);
+            let policy = res.policy;
+            this.baseInfo.forEach(item => {
+              item.value = policy[item.key];
+            });
+            console.log(policy);
+            this.policyInfo.info = policy.policyIntroduction;
+          } else {
+            this.$message.error("不存在该政策！");
+          }
+        })
+        .catch(err => {
+          console.log("err", err);
+        });
+    },
+    // 下载附件
+    downloadFile() {
+      window.open(
+        "/api/download?filePath=" +
+          this.file.filePath +
+          "&fileName=" +
+          this.file.fileName
+      );
+    },
+    getRowCount(arr) {
+      return Math.ceil(arr.length / 3);
+    },
+    getItemIndex(rowIndex, colIndex) {
+      return (rowIndex - 1) * 3 + colIndex - 1;
+    },
+    // 进入编辑模式
+    goForEdit() {
+      this.$router.push("/edit/policyInfo/" + this.$route.params.id);
     }
   }
+};
 </script>
 
 <style scoped>
+#policy-info {
+  padding: 1rem;
+}
 
-  .admin-check-info-wrapper {
-    /*background-color: #ECF0F1;*/
-    background-color: #fff;
-    height: 100%;
-    padding: 1.4rem 5rem;
-  }
+.admin-check-info-wrapper {
+  /*background-color: #ECF0F1;*/
+  background-color: #fff;
+  height: 100%;
+  padding: 1.4rem 5rem;
+}
 
-  .mode-crumb-box {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+.mode-crumb-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
+h1 {
+  display: block;
+  text-align: center;
+  font-size: 1.7rem;
+  padding-bottom: 1.4rem;
+  border-bottom: 0.3rem solid #cbcbcb;
+}
 
-  h1 {
-    display: block;
-    text-align: center;
-    font-size: 1.7rem;
-    padding-bottom: 1.4rem;
-    border-bottom: .3rem solid #cbcbcb;
+.breadcrumb {
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #2a3f54;
+  display: inline-block;
+}
 
-  }
+.breadcrumb .iconfont {
+  font-size: 1.5rem;
+  margin-right: 0.3rem;
+}
 
-  .breadcrumb {
-    padding: 1rem;
-    font-size: 1rem;
-    font-weight: bold;
-    color: #2A3F54;
-    display: inline-block;
-  }
+.info-wrapper {
+  padding: 2rem 3rem;
+}
 
+.info-title {
+  font-size: 1rem;
+  color: #2a3f54;
+  font-weight: bold;
+}
 
-  .breadcrumb .iconfont {
-    font-size: 1.5rem;
-    margin-right: .3rem;
-  }
+.iconfont.box {
+  font-weight: normal;
+  margin-right: 0.3rem;
+}
 
-  .info-wrapper {
-    padding: 2rem 3rem;
-  }
+.el-row.info-content {
+  margin: 1.5rem 0;
+}
 
-  .info-title {
-    font-size: 1rem;
-    color: #2A3F54;
-    font-weight: bold;
-  }
+.el-input {
+  background-color: #ffff00;
+  font-size: 0.9rem;
+}
 
-  .iconfont.box {
-    font-weight: normal;
-    margin-right: .3rem;
-  }
+.info-item {
+  display: flex;
+  align-items: center;
+}
 
-  .el-row.info-content {
-    margin: 1.5rem 0;
-  }
+.item-name {
+  font-size: 1rem;
+  width: 6rem;
+  margin-right: 1rem;
+}
 
-  .el-input {
-    background-color: #ffff00;
-    font-size: .9rem;
-  }
+.item-content {
+  flex: 1;
+}
 
-  .info-item {
-    display: flex;
-    align-items: center;
-  }
+.info-detail-check {
+  height: 1.8rem;
+  padding: 0.3rem;
+  margin-left: 1rem;
+}
 
-  .item-name {
-    font-size: 1rem;
-    width: 6rem;
-    margin-right: 1rem;
-  }
-
-  .item-content {
-    flex: 1;
-  }
-
-  .info-detail-check {
-    height: 1.8rem;
-    padding: .3rem;
-    margin-left: 1rem;
-  }
-
-
-  .attack-link {
-    width: 100%;
-    height: 5rem;
-    border: 1px solid #ddd;
-  }
-
-
-
+.attack-link {
+  width: 100%;
+  border: 1px solid #ddd;
+}
 </style>
