@@ -108,7 +108,8 @@ export default {
           govCategory: "政策类别",
           title: "标题",
           status: "published",
-          intro: "政策简介"
+          intro: "政策简介",
+          policyId: "1"
         }
       ],
       valueLabelMap: {
@@ -214,7 +215,6 @@ export default {
     };
   },
   mounted: function() {
-    // axios.get('/api/policy/policys')
     this.loadData(this.filter, this.currentPage, this.pageSize);
   },
   methods: {
@@ -226,9 +226,7 @@ export default {
       axios
         .get(this.url, { param: filter, pageNum: pageNum, pageSize: pageSize })
         .then(res => {
-          console.log(res);
           this.tableData = res.data.data;
-          console.log(this.tableData);
           this.totalCount = res.data.number;
         })
         .catch(err => {
@@ -245,7 +243,9 @@ export default {
     },
 
     handleMore(index, row) {
-      this.$router.push({ name: "PolicyInfoCheck" });
+      console.log(index, row)
+      const policyId = row.policyId
+      this.$router.push(`/check/policyinfo/${policyId}`);
     },
     handlePublic(index, row) {
       if (row.status === "published") {

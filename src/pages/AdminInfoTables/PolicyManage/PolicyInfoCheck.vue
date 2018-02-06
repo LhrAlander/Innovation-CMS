@@ -147,7 +147,7 @@ export default {
         info: '不存在政策！'
       },
       file: {
-        fileName: '不存在政策'
+        fileName: '无附件信息'
       }
     };
   },
@@ -164,23 +164,27 @@ export default {
   },
   methods: {
     initData() {
-      const policyId = this.$route.params.id;
+      const policyId = this.$route.params.id
       axios
         .post("/api/policy/policy", {
           policyId: policyId
         })
         .then(res => {
-          console.log(res);
+          console.log('res', res);
           res = res.data;
           if (res.code == 200) {
-            this.file = res.file;
-            console.log(this.file);
-            let policy = res.policy;
+            this.file.fileName = '无附件信息'
+            if (res.file != undefined) {
+              this.file = res.file
+            }
+            let policy = res.policy
             this.baseInfo.forEach(item => {
               item.value = policy[item.key];
-            });
-            console.log(policy);
-            this.policyInfo.info = policy.policyIntroduction;
+            })
+            console.log('policy', policy)
+            console.log('info', this.baseInfo)
+            this.policyInfo.info = policy.policyIntroduction
+            console.log('policy info', this.policyInfo)
           } else {
             this.$message.error("不存在该政策！");
           }

@@ -249,7 +249,8 @@ export default {
     },
 
     handleMore(index, row) {
-      this.$router.push("/check/userInfo/1");
+      console.log(row)
+      this.$router.push(`/check/userInfo/${row.username}`);
     },
     //        删除按钮事件
     handleDelete(index, row) {
