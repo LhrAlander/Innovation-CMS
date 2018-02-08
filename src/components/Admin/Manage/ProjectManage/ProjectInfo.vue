@@ -87,13 +87,12 @@
 </template>
 <script>
 import axios from "axios";
-import ElButton from "../../../../../node_modules/element-ui/packages/button/src/button.vue";
 import FilterBox from "components/Admin/Manage/FilterBox";
 import InfoAdd from "components/Admin/Manage/InfoAdd";
 import * as utils from "utils/utils";
 
 export default {
-  components: { ElButton, FilterBox, InfoAdd },
+  components: { FilterBox, InfoAdd },
   data() {
     return {
       tableData: [
@@ -339,7 +338,7 @@ export default {
     },
 
     handleMore(index, row) {
-      console.log(row)
+      console.log(row);
       this.$router.push(`/check/projectinfo/${row.projectId}`);
     },
     //        删除按钮事件
