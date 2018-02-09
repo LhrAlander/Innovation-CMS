@@ -112,7 +112,7 @@ export default {
         //            label: '学生'
         //          }, {
         //            value: 2,
-        //            label: '老师'
+        //            label: '教师'
         //          }, {
         //            value: 3,
         //            label: '企业'
@@ -129,7 +129,7 @@ export default {
           },
           {
             value: 2,
-            label: "老师"
+            label: "教师"
           },
           {
             value: 3,
@@ -179,7 +179,7 @@ export default {
           }
         ],
         teacherId: [
-          { required: true, message: "请输入指导老师用户名", trigger: "blur" }
+          { required: true, message: "请输入指导教师用户名", trigger: "blur" }
         ]
       },
       //        获取表格数据的地址
@@ -215,6 +215,7 @@ export default {
     };
   },
   mounted: function() {
+    utils.filter2Mysql(utils.filterName.USER, this.filter);
     this.loadData(this.filter, this.currentPage, this.pageSize);
   },
   methods: {
@@ -249,7 +250,7 @@ export default {
     },
 
     handleMore(index, row) {
-      console.log(row)
+      console.log(row);
       this.$router.push(`/check/userInfo/${row.username}`);
     },
     //        删除按钮事件
@@ -287,8 +288,23 @@ export default {
     receiveFilter(filter) {
       if (filter !== undefined) this.filter = filter;
       this.showFilterBox = false;
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      // this.loadData(this.filter, this.currentName, this.pageSize);
+      utils.filter2Mysql(utils.filterName.USER, this.filter);
+      if ("user_identity" in this.filter) {
+        this.filter.user_identity = this.valueLabelMap.role[
+          parseInt(this.filter.user_identity)
+        ].label;
+      }
+      this.currentPage = 1
+      this.loadData(this.filter, this.currentPage, this.pageSize)
     },
+
+    // 获取符合筛选条件的数据
+    getDataByFilter() {
+
+    },
+
+
     //        标签的key格式化器
     keyFormater: function(value) {
       if (!value) return "";
@@ -299,7 +315,7 @@ export default {
     valueFormater: utils.valueFormater,
     quitFilter: function() {
       this.filter = this.resetObject(this.filter);
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     enterAdd: function() {
       this.$router.push("/edit/userInfo/1");

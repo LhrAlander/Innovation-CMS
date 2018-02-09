@@ -75,7 +75,7 @@
     },
     methods: {
       handleCancel() {
-        this.$emit("sendFilter");
+        // this.$emit("sendFilter");
         this.visible = false;
       },
       handleDetermine() {
