@@ -35,131 +35,122 @@
 </template>
 
 <script>
-  import InfoDisplayTemp from '../BaseCompent/InfoDisplayTemp'
+import InfoDisplayTemp from "../BaseCompent/InfoDisplayTemp";
 
-  const INPUT = 1
-  const SELECT = 2
-  const RADIO = 3
-  const SWITCH = 4
-  const BUTTON = 5
+const INPUT = 1;
+const SELECT = 2;
+const RADIO = 3;
+const SWITCH = 4;
+const BUTTON = 5;
 
-  export default {
-    props: {
-      title: String,
-      breadCrumbs: Object,
-      displayInfo: Array,
+export default {
+  props: {
+    title: String,
+    breadCrumbs: Object,
+    displayInfo: Array
+  },
+  components: {
+    InfoDisplayTemp
+  },
+  methods: {
+    getRowCount(arr) {
+      return Math.ceil(arr.length / 3);
     },
-    components: {
-      InfoDisplayTemp
+    getItemIndex(rowIndex, colIndex) {
+      return (rowIndex - 1) * 3 + colIndex - 1;
     },
-    methods: {
-      getRowCount (arr) {
-        return Math.ceil(arr.length / 3)
-      },
-      getItemIndex (rowIndex, colIndex) {
-        return (rowIndex - 1) * 3 + colIndex - 1
-      },
-      btnFunc (item) {
-        switch (item.clickFunName) {
-          case 'resetPWD':
-            this.$emit("resetPWD")
-            break
-        }
-      },
-      confirmClick () {
-        this.$emit("confirmClick")
-      },
-      resetPWD () {
-        
-      },
-      goModifyMode () {
-        this.$emit("goModifyMode")
-      },
-      goCheckMode () {
-        this.$emit("goCheckMode")
+    btnFunc(item) {
+      switch (item.clickFunName) {
+        case "resetPWD":
+          this.$emit("resetPWD");
+          break;
       }
+    },
+    confirmClick() {
+      this.$emit("confirmClick");
+    },
+    resetPWD() {},
+    goModifyMode() {
+      this.$emit("goModifyMode");
+    },
+    goCheckMode() {
+      this.$emit("goCheckMode");
     }
   }
+};
 </script>
 
 <style scoped>
+.admin-check-info-wrapper {
+  /*background-color: #ECF0F1;*/
+  background-color: #fff;
+  height: 100%;
+  padding: 1.4rem 5rem;
+}
 
-  .admin-check-info-wrapper {
-    /*background-color: #ECF0F1;*/
-    background-color: #fff;
-    height: 100%;
-    padding: 1.4rem 5rem;
-  }
+.mode-crumb-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-  .mode-crumb-box {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+h1 {
+  display: block;
+  text-align: center;
+  font-size: 1.7rem;
+  padding-bottom: 1.4rem;
+  border-bottom: 0.3rem solid #cbcbcb;
+}
 
+.breadcrumb {
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #2a3f54;
+  display: inline-block;
+}
 
-  h1 {
-    display: block;
-    text-align: center;
-    font-size: 1.7rem;
-    padding-bottom: 1.4rem;
-    border-bottom: .3rem solid #cbcbcb;
+.breadcrumb .iconfont {
+  font-size: 1.5rem;
+  margin-right: 0.3rem;
+}
 
-  }
+.info-wrapper {
+  padding: 2rem 3rem;
+}
 
-  .breadcrumb {
-    padding: 1rem;
-    font-size: 1rem;
-    font-weight: bold;
-    color: #2A3F54;
-    display: inline-block;
-  }
+.info-title {
+  font-size: 1rem;
+  color: #2a3f54;
+  font-weight: bold;
+}
 
+.iconfont.box {
+  font-weight: normal;
+  margin-right: 0.3rem;
+}
 
-  .breadcrumb .iconfont {
-    font-size: 1.5rem;
-    margin-right: .3rem;
-  }
+.el-row.info-content {
+  margin: 1.5rem 0;
+}
 
-  .info-wrapper {
-    padding: 2rem 3rem;
-  }
+.el-input {
+  background-color: #ffff00;
+  font-size: 0.9rem;
+}
 
-  .info-title {
-    font-size: 1rem;
-    color: #2A3F54;
-    font-weight: bold;
-  }
+.info-item {
+  display: flex;
+  align-items: center;
+}
 
-  .iconfont.box {
-    font-weight: normal;
-    margin-right: .3rem;
-  }
+.item-name {
+  font-size: 1rem;
+  width: 5rem;
+  margin-right: 1rem;
+}
 
-  .el-row.info-content {
-    margin: 1.5rem 0;
-  }
-
-  .el-input {
-    background-color: #ffff00;
-    font-size: .9rem;
-  }
-
-  .info-item {
-    display: flex;
-    align-items: center;
-  }
-
-  .item-name {
-    font-size: 1rem;
-    width: 5rem;
-    margin-right: 1rem;
-  }
-
-  .item-content {
-    flex: 1;
-  }
-
-
-
+.item-content {
+  flex: 1;
+}
 </style>

@@ -268,7 +268,7 @@ export default {
     },
     //        编辑按钮事件
     handleEdit(index, row) {
-      this.$router.push("/edit/userInfo/1");
+      this.$router.push(`/edit/userInfo/${row.username}`);
     },
     //        单页大小改变回调事件
     handleSizeChange(val) {
@@ -299,11 +299,6 @@ export default {
       this.loadData(this.filter, this.currentPage, this.pageSize)
     },
 
-    // 获取符合筛选条件的数据
-    getDataByFilter() {
-
-    },
-
 
     //        标签的key格式化器
     keyFormater: function(value) {
@@ -318,9 +313,11 @@ export default {
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     enterAdd: function() {
-      this.$router.push("/edit/userInfo/1");
+      this.showInfoAdd = true;
     },
     receiveInfo: function(data) {
+      utils.filter2Mysql(utils.filterName.USER, data)
+      console.log(data)
       if (data) {
         axios.post("", { data: data }, { emulateJson: true }).then(
           function(res) {

@@ -20,7 +20,8 @@ export default {
                 name: '用户ID',
                 value: '12345',
                 type: INPUT,
-                span: 1
+                span: 1,
+                disabled: true
               }, {
                 key: 'userName',
                 name: '姓名',

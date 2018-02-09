@@ -31,6 +31,9 @@ import INFO from "@/infoTestData.js";
 import CheckUserInfo from "@/components/Admin/InfoOperate/UserInfo/UserInfoCheck";
 import EditUserInfo from "@/components/Admin/InfoOperate/UserInfo/UserInfoEdit";
 import API from "@/api/userApi";
+import * as utils from "@/utils/utils";
+import axios from "axios";
+
 export default {
   components: {
     CheckUserInfo,
@@ -129,7 +132,24 @@ export default {
     },
     // 删除该用户
     delUser() {
-      console.log("click Delete");
+      axios
+        .post("/api/user/delUser", {
+          userId: this.$route.params.userId,
+          state: "已删除"
+        })
+        .then(res => {
+          if (res.status == 200 && res.data.code == 200) {
+            this.$message({
+              type: `success`,
+              message: "删除用户信息成功"
+            });
+          } else {
+            this.$message.error("删除用户信息失败");
+          }
+        })
+        .catch(err => {
+          this.$message.error("删除用户信息失败");
+        });
     },
     // 取消修改并进入查看模式
     goToCheckMode() {
@@ -138,16 +158,43 @@ export default {
     },
     // 提交修改
     confirmModify() {
-      console.log("click Confirm");
+      console.log(utils);
+      let info = utils.displayInfo2MySql(
+        utils.filterName.USER,
+        this.displayInfo
+      );
+      delete info.userPWD;
+      axios
+        .post("/api/user/changeUser", {
+          user: info
+        })
+        .then(res => {
+          if (res.status == 200 && res.data.code == 200) {
+            console.log("success");
+            this.$message({
+              type: `success`,
+              message: "修改用户信息成功"
+            });
+          }
+        })
+        .catch(err => {
+          this.$message.error("修改用户信息失败");
+        });
     },
     // 获取用户信息
     getUserInfo() {
       let userId = this.$route.params.userId;
       this.displayInfo = INFO.adminCheckInfo.users[0].userBaseInfo;
       API.searchUser(userId).then(res => {
-        console.log(res)
-        let user = res.data.data[0];
-        this.userInfoTransform(user);
+        console.log(res);
+        if (res.data.code == 200) {
+          let user = res.data.data[0];
+          this.userInfoTransform(user);
+        }
+        else {
+          this.$message.error(res.data.msg)
+          this.$router.push('/admin')
+        }
       });
     },
     // 后台传回的信息的转换

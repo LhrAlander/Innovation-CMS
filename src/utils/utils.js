@@ -5,7 +5,7 @@ const filterName = {
     name: 'user_name',
     role: 'user_identity',
     status: 'account_state',
-    username: 'user_id'
+    username: 'user_id',
   }
 }
 //        标签的value格式化器根据 映射的字段类型，value的值，映射表来确定value值对应的label
@@ -30,12 +30,14 @@ function resetObject(object) {
 
 // 筛选字段映射成数据库字段名
 function filter2Mysql(type, filter) {
-  console.log('进入映射')
   // 映射过程
   const transform = item => {
+  console.log('进入映射', filter)
+    
     for (let key in filter) {
+      console.log(key)
       let value = String.trim(filter[key])
-      if (value && value != null && value != '') {
+      if (value && value != null && value != '' && value != undefined) {
         filter[item[key]] = value
       }
       delete filter[key]
@@ -48,10 +50,30 @@ function filter2Mysql(type, filter) {
   }
 }
 
+// 将用户信息字段映射成数据库字段名
+function displayInfo2MySql(type, displayInfo) {
+  let res = {}
+  const transform = item => {
+    displayInfo.forEach(info => {
+      info.items.forEach(item => {
+        let key = filterName.user[item.key] || item.key
+        let value = item.value
+        res[key] = value
+      })
+    })
+    return res
+  }
+  switch(type) {
+    case filterName.USER:
+      return transform(filterName.user)
+  }
+}
+
 export {
   valueFormater,
   resetObject,
   filter2Mysql,
-  filterName
+  filterName,
+  displayInfo2MySql
 }
 

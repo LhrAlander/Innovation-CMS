@@ -109,7 +109,7 @@
     },
     methods: {
       handleCancel() {
-        this.$emit("sendInfo");
+        // this.$emit("sendInfo");
         this.visible = false;
         this.$refs.form.resetFields();
       },
