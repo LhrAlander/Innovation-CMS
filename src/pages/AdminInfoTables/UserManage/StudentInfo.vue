@@ -25,64 +25,89 @@
 </template>
 
 <script>
-  import INFO from '@/infoTestData.js'
-  import CheckUserInfo from '@/components/Admin/InfoOperate/UserInfo/UserInfoCheck'
-  import EditUserInfo from '@/components/Admin/InfoOperate/UserInfo/UserInfoEdit'
-  export default {
-    components: {
-      CheckUserInfo,
-      EditUserInfo
+import INFO from "@/infoTestData.js";
+import CheckUserInfo from "@/components/Admin/InfoOperate/UserInfo/UserInfoCheck";
+import EditUserInfo from "@/components/Admin/InfoOperate/UserInfo/UserInfoEdit";
+import axios from 'axios'
+
+export default {
+  components: {
+    CheckUserInfo,
+    EditUserInfo
+  },
+  data() {
+    return {
+      title: "学生信息查看",
+      breadCrumbs: {
+        iconCode: "&#xe6a0;",
+        firstLevel: "用户管理",
+        otherLevels: ["学生信息查看"]
+      },
+      displayInfo: [],
+      checkMode: true,
+      userId: null
+    };
+  },
+  mounted() {
+    this.flushRoute();
+  },
+  watch: {
+    $route() {
+      this.flushRoute();
+    }
+  },
+  methods: {
+    flushRoute() {
+      this.userId = this.$route.params.userId;
+      let meta = this.$route.meta;
+      this.checkMode = meta.checkMode;
+      this.displayInfo = [];
+      this.getStudentInfo();
     },
-    data () {
-      return {
-        title: "学生信息查看",
-        breadCrumbs: {
-          iconCode: "&#xe6a0;",
-          firstLevel: "用户管理",
-          otherLevels: ["学生信息查看"]
-        },
-        displayInfo: [],
-        checkMode: true
-      }
+    getStudentInfo() {
+      this.displayInfo = JSON.parse(
+        JSON.stringify(INFO.adminCheckInfo.users[0].userBaseInfo)
+      );
+      this.displayInfo.push(
+        INFO.adminCheckInfo.studentAttachInfo.users[0].attachInfo
+      );
+      console.log(this.displayInfo)
+      axios.post('/api/student/student', {
+        userId: this.userId
+      })
+      .then(res => {
+        console.log(res)
+        let student = res.data.data[0]
+        this.displayInfo.forEach(infoArray => {
+          infoArray.items.forEach(item => {
+            item.value = student[item.key] || item.value
+          })
+        })
+      })
+      .catch(err => {
+        console.log(err)
+      })
     },
-    mounted () {
-      this.flushRoute()
+    // 前往修改模式
+    goToEditMode() {
+      this.$router.push(`/edit/studentInfo/${this.userId}`);
     },
-    watch: {
-      $route() {
-        this.flushRoute()
-      }
+    // 删除该用户
+    delUser() {
+      console.log("click Delete");
     },
-    methods: {
-      flushRoute () {
-        let meta = this.$route.meta
-        this.checkMode = meta.checkMode
-        this.displayInfo = []
-        this.getStudentInfo()
-      },
-      getStudentInfo () {
-        this.displayInfo = JSON.parse(JSON.stringify(INFO.adminCheckInfo.users[this.$route.params.userId].userBaseInfo))
-        this.displayInfo.push(INFO.adminCheckInfo.studentAttachInfo.users[this.$route.params.userId].attachInfo)
-      },
-      // 前往修改模式
-      goToEditMode () {
-        this.$router.push('/edit/studentInfo/1');
-      },
-      // 删除该用户
-      delUser () {
-        console.log("click Delete")
-      },
-      // 取消修改并进入查看模式
-      goToCheckMode () {
-        this.$router.push('/check/studentInfo/1');
-      },
-      // 提交修改
-      confirmModify () {
-        console.log("click Confirm")
-      },
+    // 取消修改并进入查看模式
+    goToCheckMode() {
+      this.$router.push(`/check/studentInfo/${this.userId}`);
+    },
+    // 提交修改
+    confirmModify() {
+      console.log("click Confirm");
     }
   }
+};
 </script>
 
 <style scoped>
+
 </style>

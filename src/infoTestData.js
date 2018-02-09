@@ -21,13 +21,13 @@ export default {
                 value: '12345',
                 type: INPUT,
                 span: 1
-              },{
+              }, {
                 key: 'userName',
                 name: '姓名',
                 value: 'UserName',
                 type: INPUT,
                 span: 1
-              },{
+              }, {
                 key: 'userSex',
                 name: '性别',
                 value: '男',
@@ -43,20 +43,20 @@ export default {
                   }
                 ],
                 span: 1
-              },{
-                key: 'userEmail',
+              }, {
+                key: 'userMail',
                 name: '邮箱',
                 value: '123456789@some.com',
                 type: INPUT,
                 span: 1
-              },{
+              }, {
                 key: 'userPhone',
                 name: '手机号',
                 value: '12345678909',
                 type: INPUT,
                 span: 1
-              },{
-                key: 'accountStatus',
+              }, {
+                key: 'accountState',
                 name: '用户状态',
                 value: '可用',
                 type: SELECT,
@@ -71,7 +71,7 @@ export default {
                   }
                 ],
                 span: 1
-              },{
+              }, {
                 key: 'userIdentity',
                 name: '用户类别',
                 value: '学生',
@@ -91,7 +91,7 @@ export default {
                   }
                 ],
                 span: 1
-              },{
+              }, {
                 key: 'userPWD',
                 name: '用户密码',
                 value: '******',
@@ -99,13 +99,6 @@ export default {
                 buttonText: "重置密码",
                 clickFunName: "resetPWD",
                 span: 1
-              },{
-                key: 'userStatus',
-                name: '登录状态',
-                value: '在线',
-                type: SWITCH,
-                activeValue: '在线',
-                inactiveValue: '离线',
               },
             ],
             span: 1
@@ -121,7 +114,7 @@ export default {
             iconCode: '&#xe64b;',
             items: [
               {
-                key: 'education',
+                key: 'teacherBachelor',
                 name: '学历',
                 value: '本科',
                 type: SELECT,
@@ -142,7 +135,7 @@ export default {
                 span: 1
               },
               {
-                key: 'bachelor',
+                key: 'teacherDegree',
                 name: '学位',
                 value: 'A',
                 type: SELECT,
@@ -163,7 +156,7 @@ export default {
                 span: 1
               },
               {
-                key: 'major',
+                key: 'teacherMajor',
                 name: '专业',
                 value: '专业1',
                 type: SELECT,
@@ -192,7 +185,7 @@ export default {
             iconCode: '&#xe64b;',
             items: [
               {
-                key: 'education',
+                key: 'teacherBachelor',
                 name: '学历',
                 value: '博士',
                 type: SELECT,
@@ -213,7 +206,7 @@ export default {
                 span: 1
               },
               {
-                key: 'bachelor',
+                key: 'teacherDegree',
                 name: '学位',
                 value: 'B',
                 type: SELECT,
@@ -234,7 +227,7 @@ export default {
                 span: 1
               },
               {
-                key: 'major',
+                key: 'teacherMajor',
                 name: '专业',
                 value: '专业3',
                 type: SELECT,
@@ -342,7 +335,7 @@ export default {
             iconCode: "&#xe621;",
             items: [
               {
-                key: 'college',
+                key: 'studentAcademy',
                 name: '学院',
                 value: '杭州国际服务工程学院',
                 type: SELECT,
@@ -359,24 +352,7 @@ export default {
                 span: 1
               },
               {
-                key: 'department',
-                name: '系部',
-                value: '计算机',
-                type: SELECT,
-                options: [
-                  {
-                    value: "计算机",
-                    label: "计算机"
-                  },
-                  {
-                    value: "物联网",
-                    label: "物联网"
-                  }
-                ],
-                span: 1
-              },
-              {
-                key: 'major',
+                key: 'studentMajor',
                 name: '专业',
                 value: '软件工程',
                 type: SELECT,
@@ -393,7 +369,7 @@ export default {
                 span: 1
               },
               {
-                key: 'class',
+                key: 'studentClass',
                 name: '班级',
                 value: '152',
                 type: SELECT,

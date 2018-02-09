@@ -25,68 +25,91 @@
 </template>
 
 <script>
-  import INFO from '@/infoTestData.js'
-  import CheckUserInfo from '@/components/Admin/InfoOperate/UserInfo/UserInfoCheck'
-  import EditUserInfo from '@/components/Admin/InfoOperate/UserInfo/UserInfoEdit'
-  export default {
-    components: {
-      CheckUserInfo,
-      EditUserInfo
-    },
-    data () {
-      return {
-        title: "企业信息查看",
-        breadCrumbs: {
-          iconCode: "&#xe6a0;",
-          firstLevel: "用户管理",
-          otherLevels: ["企业信息查看"]
-        },
-        displayInfo: [],
-        checkMode: true
-      }
-    },
-    mounted () {
-      this.flushRoute()
-    },
-    watch: {
-      $route() {
-        this.flushRoute()
-      }
-    },
-    methods: {
-      flushRoute () {
-        let meta = this.$route.meta
-        this.checkMode = meta.checkMode
-        this.displayInfo = []
-        this.getCompanyInfo()
+import INFO from "@/infoTestData.js";
+import CheckUserInfo from "@/components/Admin/InfoOperate/UserInfo/UserInfoCheck";
+import EditUserInfo from "@/components/Admin/InfoOperate/UserInfo/UserInfoEdit";
+import axios from "axios";
+export default {
+  components: {
+    CheckUserInfo,
+    EditUserInfo
+  },
+  data() {
+    return {
+      title: "企业信息查看",
+      breadCrumbs: {
+        iconCode: "&#xe6a0;",
+        firstLevel: "用户管理",
+        otherLevels: ["企业信息查看"]
       },
+      displayInfo: [],
+      checkMode: true,
+      userId: null
+    };
+  },
+  mounted() {
+    this.flushRoute();
+  },
+  watch: {
+    $route() {
+      this.flushRoute();
+    }
+  },
+  methods: {
+    flushRoute() {
+      this.userId = this.$route.params.userId;
+      let meta = this.$route.meta;
+      this.checkMode = meta.checkMode;
+      this.displayInfo = [];
+      this.getCompanyInfo();
+    },
 
-      getCompanyInfo () {
-        this.displayInfo = []
-        this.title = "企业信息查看"
-        this.breadCrumbs.otherLevels = ["企业信息查看"]
-        this.displayInfo = JSON.parse(JSON.stringify(INFO.adminCheckInfo.users[this.$route.params.userId].userBaseInfo))
-        this.displayInfo.push(INFO.adminCheckInfo.companyAttachInfo.users[this.$route.params.userId].attachInfo)
-      },
-      // 前往修改模式
-      goToEditMode () {
-        this.$router.push('/edit/companyInfo/1');
-      },
-      // 删除该用户
-      delUser () {
-        console.log("click Delete")
-      },
-      // 取消修改并进入查看模式
-      goToCheckMode () {
-        this.$router.push('/check/companyInfo/1');
-      },
-      // 提交修改
-      confirmModify () {
-        console.log("click Confirm")
-      },
+    getCompanyInfo() {
+      this.displayInfo = [];
+      this.title = "企业信息查看";
+      this.breadCrumbs.otherLevels = ["企业信息查看"];
+      this.displayInfo = JSON.parse(
+        JSON.stringify(INFO.adminCheckInfo.users[0].userBaseInfo)
+      );
+      this.displayInfo.push(
+        INFO.adminCheckInfo.companyAttachInfo.users[0].attachInfo
+      );
+      axios.post('/api/company/company', {
+        userId: this.userId
+      })
+      .then(res => {
+        let student = res.data.data[0]
+        console.log(res)
+        this.displayInfo.forEach(infoArray => {
+          infoArray.items.forEach(item => {
+            item.value = student[item.key] || item.value
+          })
+        })
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
+    // 前往修改模式
+    goToEditMode() {
+      this.$router.push(`/edit/companyInfo/${this.userId}`);
+    },
+    // 删除该用户
+    delUser() {
+      console.log("click Delete");
+    },
+    // 取消修改并进入查看模式
+    goToCheckMode() {
+      this.$router.push(`/check/companyInfo/${this.userId}`);
+    },
+    // 提交修改
+    confirmModify() {
+      console.log("click Confirm");
     }
   }
+};
 </script>
 
 <style scoped>
+
 </style>

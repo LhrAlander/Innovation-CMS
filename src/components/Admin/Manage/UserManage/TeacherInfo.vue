@@ -186,7 +186,7 @@
           ],
         },
 //        获取表格数据的地址
-        url: '',
+        url: '/api/teacher/teachers',
         filterTmpl: {
           teacherId: {
             label: '工号',
@@ -236,7 +236,7 @@
       }
     },
     mounted: function(){
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     methods: {
       getRowKeys(row) {
@@ -244,15 +244,23 @@
       },
 //        异步加载数据
       loadData(filter, pageNum, pageSize) {
-        axios.get(this.url, {param: filter, pageNum: pageNum, pageSize: pageSize})
-          .then(function (res) {
-            this.tableData = res.data.pagesTableData;
-            this.totalCount = res.data.number;
-          }, function () {
-            console.log('failed')
-          }).catch(function (err) {
-          console.log(err)
+        axios
+        .get(this.url, {
+          params: {
+            param: filter,
+            pageNum: pageNum,
+            pageSize: pageSize
+          }
         })
+        .then(res => {
+          console.log(res);
+          this.tableData = [];
+          this.tableData = res.data.data;
+          this.totalCount = res.data.count;
+        })
+        .catch(err => {
+          console.log(err);
+        });
       },
       unique(array) {
         var r = [];
@@ -265,7 +273,8 @@
       },
 
       handleMore(index, row) {
-        this.$router.push('/check/teacherInfo/1');
+        console.log(row)
+        this.$router.push(`/check/teacherInfo/${row.teacherId}`);
       },
 //        删除按钮事件
       handleDelete(index, row) {
@@ -285,12 +294,12 @@
 //        单页大小改变回调事件
       handleSizeChange(val) {
         this.pageSize = val;
-        this.loadData(this.filter, this.currentName, this.pageSize);
+        this.loadData(this.filter, this.currentPage, this.pageSize);
       },
 //        当前页改变回调事件
       handleCurrentChange(val) {
         this.currentPage = val;
-        this.loadData(this.filter, this.currentName, this.pageSize);
+        this.loadData(this.filter, this.currentPage, this.pageSize);
       },
 //        点击筛选触发的事件
       enterFilter() {
@@ -301,7 +310,7 @@
         if (filter !== undefined)
           this.filter = filter;
         this.showFilterBox = false;
-        this.loadData(this.filter, this.currentName, this.pageSize);
+        this.loadData(this.filter, this.currentPage, this.pageSize);
       },
 //        标签的key格式化器
       keyFormater: function(value) {
@@ -313,7 +322,7 @@
       valueFormater: utils.valueFormater,
       quitFilter: function () {
         this.filter = this.resetObject(this.filter);
-        this.loadData(this.filter, this.currentName, this.pageSize);
+        this.loadData(this.filter, this.currentPage, this.pageSize);
       },
       enterAdd: function () {
         this.showInfoAdd = true;
