@@ -15,7 +15,8 @@
       v-if="!checkMode"
       :title="title"
       :breadCrumbs="breadCrumbs"
-      :displayInfo="displayInfo">
+      :displayInfo="displayInfo"
+      @resetPWD = "resetPwd">
       <template slot="header-btn-wrapper">
         <el-button type="primary" plain class="modify-mode-btn" @click="goToCheckMode">取消修改</el-button>
         <el-button type="warning" plain class="modify-mode-btn" @click="confirmModify">确认修改</el-button>
@@ -29,6 +30,7 @@ import INFO from "@/infoTestData.js";
 import CheckUserInfo from "@/components/Admin/InfoOperate/UserInfo/UserInfoCheck";
 import EditUserInfo from "@/components/Admin/InfoOperate/UserInfo/UserInfoEdit";
 import axios from 'axios'
+import * as utils from "@/utils/utils";
 
 export default {
   components: {
@@ -64,6 +66,11 @@ export default {
       this.displayInfo = [];
       this.getStudentInfo();
     },
+     // 重置密码
+    resetPwd() {
+      let userId = this.$route.params.userId;
+      this.$store.dispatch('resetPwd', {userId: this.userId, that: this})
+    },
     getStudentInfo() {
       this.displayInfo = JSON.parse(
         JSON.stringify(INFO.adminCheckInfo.users[0].userBaseInfo)
@@ -94,7 +101,10 @@ export default {
     },
     // 删除该用户
     delUser() {
-      console.log("click Delete");
+      this.$store.dispatch("delUser", {
+        userId: this.userId,
+        that: this
+      });
     },
     // 取消修改并进入查看模式
     goToCheckMode() {
@@ -102,7 +112,10 @@ export default {
     },
     // 提交修改
     confirmModify() {
-      console.log("click Confirm");
+      this.$store.dispatch('changeStudentInfo', {
+        displayInfo: this.displayInfo,
+        that: this
+      })
     }
   }
 };

@@ -236,6 +236,8 @@ export default {
     };
   },
   mounted: function() {
+    utils.filter2Mysql(utils.filterName.STUDENT, this.filter);
+    console.log(this.filter);
     this.loadData(this.filter, this.currentPage, this.pageSize);
   },
   methods: {
@@ -307,8 +309,11 @@ export default {
     },
     //        接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {
-      if (filter !== undefined) this.filter = filter;
+      if (filter !== undefined) {
+        this.filter = filter;
+      }
       this.showFilterBox = false;
+      utils.filter2Mysql(utils.filterName.STUDENT, this.filter);
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        标签的key格式化器
@@ -321,6 +326,7 @@ export default {
     valueFormater: utils.valueFormater,
     quitFilter: function() {
       this.filter = this.resetObject(this.filter);
+      utils.filter2Mysql(utils.filterName.STUDENT, this.filter);
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     enterAdd: function() {

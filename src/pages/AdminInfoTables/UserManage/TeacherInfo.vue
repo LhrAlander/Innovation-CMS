@@ -15,7 +15,8 @@
       v-if="!checkMode"
       :title="title"
       :breadCrumbs="breadCrumbs"
-      :displayInfo="displayInfo">
+      :displayInfo="displayInfo"
+      @resetPWD = "resetPwd">
       <template slot="header-btn-wrapper">
         <el-button type="primary" plain class="modify-mode-btn" @click="goToCheckMode">取消修改</el-button>
         <el-button type="warning" plain class="modify-mode-btn" @click="confirmModify">确认修改</el-button>
@@ -64,6 +65,11 @@ export default {
       this.displayInfo = [];
       this.getTeacherInfo();
     },
+    // 重置密码
+    resetPwd() {
+      let userId = this.$route.params.userId;
+      this.$store.dispatch('resetPwd', {userId: this.userId, that: this})
+    },
     getTeacherInfo() {
       this.displayInfo = [];
       this.displayInfo = JSON.parse(
@@ -95,7 +101,10 @@ export default {
     },
     // 删除该用户
     delUser() {
-      console.log("click Delete");
+      this.$store.dispatch("delUser", {
+        userId: this.userId,
+        that: this
+      });
     },
     // 取消修改并进入查看模式
     goToCheckMode() {
@@ -103,7 +112,10 @@ export default {
     },
     // 提交修改
     confirmModify() {
-      console.log("click Confirm");
+      this.$store.dispatch('changeTeacherInfo', {
+        displayInfo: this.displayInfo,
+        that: this
+      })
     }
   }
 };

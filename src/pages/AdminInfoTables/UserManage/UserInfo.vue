@@ -33,6 +33,7 @@ import EditUserInfo from "@/components/Admin/InfoOperate/UserInfo/UserInfoEdit";
 import API from "@/api/userApi";
 import * as utils from "@/utils/utils";
 import axios from "axios";
+// import { mapActions } from vuex
 
 export default {
   components: {
@@ -48,7 +49,8 @@ export default {
         otherLevels: ["用户基本信息查看"]
       },
       displayInfo: [],
-      checkMode: true
+      checkMode: true,
+      userId: ''
     };
   },
   mounted() {
@@ -62,6 +64,7 @@ export default {
   methods: {
     flushRoute() {
       let meta = this.$route.meta;
+      this.userId = this.$route.params.userId
       this.checkMode = meta.checkMode;
       this.displayInfo = [];
       this.getUserInfo();
@@ -69,61 +72,7 @@ export default {
     // 重置密码
     resetPwd() {
       let userId = this.$route.params.userId;
-      let user = {
-        user: {
-          user_id: userId,
-          user_pwd: 12345
-          // d: 1
-        }
-      };
-      let resetPWDRes = {};
-      this.$confirm("是否重置该用户密码?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        closeOnClickModal: false,
-        closeOnPressEscape: false,
-        showClose: false,
-        closeOnPressEscape: false,
-        type: "warning",
-        beforeClose: (action, instance, done) => {
-          if (action === "confirm") {
-            instance.confirmButtonLoading = true;
-            instance.confirmButtonText = "重置密码中...";
-            API.resetPWD(user)
-              .then(function(res) {
-                instance.confirmButtonLoading = false;
-                resetPWDRes = res.data;
-                done();
-              })
-              .catch(err => {
-                done();
-              });
-          } else {
-            console.log("else");
-            done();
-          }
-        }
-      })
-        .then(() => {
-          let message = "重置密码失败";
-          let type = "error";
-          console.log(resetPWDRes);
-          if (resetPWDRes.code == 200) {
-            message = "重置密码成功！";
-            type = "success";
-          }
-          this.$message({
-            type: type,
-            message: message
-          });
-        })
-        .catch(err => {
-          console.log(err);
-          this.$message({
-            type: "info",
-            message: "未能重置密码"
-          });
-        });
+      this.$store.dispatch('resetPwd', {userId: this.userId, that: this})
     },
     // 前往修改模式
     goToEditMode() {
@@ -132,24 +81,10 @@ export default {
     },
     // 删除该用户
     delUser() {
-      axios
-        .post("/api/user/delUser", {
-          userId: this.$route.params.userId,
-          state: "已删除"
-        })
-        .then(res => {
-          if (res.status == 200 && res.data.code == 200) {
-            this.$message({
-              type: `success`,
-              message: "删除用户信息成功"
-            });
-          } else {
-            this.$message.error("删除用户信息失败");
-          }
-        })
-        .catch(err => {
-          this.$message.error("删除用户信息失败");
-        });
+      this.$store.dispatch("delUser", {
+        userId: this.$route.params.userId,
+        that: this
+      });
     },
     // 取消修改并进入查看模式
     goToCheckMode() {
@@ -158,28 +93,10 @@ export default {
     },
     // 提交修改
     confirmModify() {
-      console.log(utils);
-      let info = utils.displayInfo2MySql(
-        utils.filterName.USER,
-        this.displayInfo
-      );
-      delete info.userPWD;
-      axios
-        .post("/api/user/changeUser", {
-          user: info
-        })
-        .then(res => {
-          if (res.status == 200 && res.data.code == 200) {
-            console.log("success");
-            this.$message({
-              type: `success`,
-              message: "修改用户信息成功"
-            });
-          }
-        })
-        .catch(err => {
-          this.$message.error("修改用户信息失败");
-        });
+      this.$store.dispatch('changeUserBaseInfo', {
+        displayInfo: this.displayInfo,
+        that: this
+      })
     },
     // 获取用户信息
     getUserInfo() {
@@ -190,10 +107,9 @@ export default {
         if (res.data.code == 200) {
           let user = res.data.data[0];
           this.userInfoTransform(user);
-        }
-        else {
-          this.$message.error(res.data.msg)
-          this.$router.push('/admin')
+        } else {
+          this.$message.error(res.data.msg);
+          this.$router.push("/admin");
         }
       });
     },

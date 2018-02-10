@@ -1,6 +1,21 @@
 // 不同表的名称常量
 const filterName = {
   USER: 'user',
+  STUDENT: 'student',
+  TEACHER: 'TEACHER',
+  COMPANY: 'COMPANY',
+  student: {
+    studentId: 'user_id',
+    name: 'user.user_name',
+    status: 'account_state',
+    institute: 'student_academy',
+    specialty: 'student_major',
+    class: 'student_class',
+    gender: 'user_sex',
+    username: 'user.user_id',
+  },
+  teacher: {},
+  company: {},
   user: {
     name: 'user_name',
     role: 'user_identity',
@@ -9,7 +24,7 @@ const filterName = {
   }
 }
 //        标签的value格式化器根据 映射的字段类型，value的值，映射表来确定value值对应的label
-function valueFormater(type, value, map){
+function valueFormater(type, value, map) {
   if (map[type] === undefined) {
     return value;
   }
@@ -32,8 +47,8 @@ function resetObject(object) {
 function filter2Mysql(type, filter) {
   // 映射过程
   const transform = item => {
-  console.log('进入映射', filter)
-    
+    console.log('进入映射', filter)
+
     for (let key in filter) {
       console.log(key)
       let value = String.trim(filter[key])
@@ -43,10 +58,13 @@ function filter2Mysql(type, filter) {
       delete filter[key]
     }
   }
-  switch(type) {
+  switch (type) {
     case filterName.USER:
       return transform(filterName.user)
       break;
+    case filterName.STUDENT:
+      return transform(filterName.student)
+      break
   }
 }
 
@@ -57,15 +75,27 @@ function displayInfo2MySql(type, displayInfo) {
     displayInfo.forEach(info => {
       info.items.forEach(item => {
         let key = filterName.user[item.key] || item.key
+        console.log(key)
         let value = item.value
         res[key] = value
       })
     })
     return res
   }
-  switch(type) {
+  console.log(type)
+  switch (type) {
     case filterName.USER:
       return transform(filterName.user)
+      break
+    case filterName.STUDENT:
+      return transform(filterName.student)
+      break
+    case filterName.TEACHER:
+      return transform(filterName.teacher)
+      break
+    case filterName.COMPANY:
+      return transform(filterName.company)
+      break
   }
 }
 
