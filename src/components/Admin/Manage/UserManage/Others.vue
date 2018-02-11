@@ -101,7 +101,7 @@ export default {
           principalPhone: "1", //负责人手机号
           gender: "1", //性别
           email: "1", //邮箱
-          specAddress: "浙江省杭州市海曙路58号杭州师范大学仓前校区博文苑8号楼", //企业具体位置
+          specAddress: "浙江省杭州市海曙路58号杭州师范大学仓前校区博文苑8号楼" //企业具体位置
         }
       ],
       valueLabelMap: {
@@ -209,7 +209,7 @@ export default {
         email: [{ required: true, message: "请输入邮箱", trigger: "blur" }],
         specAddress: [
           { required: true, message: "请输入企业具体位置", trigger: "blur" }
-        ],
+        ]
       },
       //        获取表格数据的地址
       url: "/api/company/companies",
@@ -253,6 +253,7 @@ export default {
     };
   },
   mounted: function() {
+    utils.filter2Mysql(utils.filterName.COMPANY, this.filter);
     this.loadData(this.filter, this.currentPage, this.pageSize);
   },
   methods: {
@@ -261,6 +262,7 @@ export default {
     },
     //        异步加载数据
     loadData(filter, pageNum, pageSize) {
+      console.log(this.filter);
       axios
         .get(this.url, {
           params: {
@@ -289,7 +291,7 @@ export default {
     },
 
     handleMore(index, row) {
-      this.$router.push(`/check/companyInfo/${row.companyId}`);
+      this.$router.push(`/check/companyInfo/${row.userId}`);
     },
     //        删除按钮事件
     handleDelete(index, row) {
@@ -324,7 +326,10 @@ export default {
     },
     //        接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {
-      if (filter !== undefined) this.filter = filter;
+      if (filter !== undefined) {
+        this.filter = filter;
+      }
+      utils.filter2Mysql(utils.filterName.COMPANY, this.filter);
       this.showFilterBox = false;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },

@@ -84,8 +84,9 @@ export default {
         userId: this.userId
       })
       .then(res => {
-        let student = res.data.data[0]
         console.log(res)
+        
+        let student = res.data.data[0]
         this.displayInfo.forEach(infoArray => {
           infoArray.items.forEach(item => {
             item.value = student[item.key] || item.value

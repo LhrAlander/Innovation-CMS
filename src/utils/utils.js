@@ -14,8 +14,22 @@ const filterName = {
     gender: 'user_sex',
     username: 'user.user_id',
   },
-  teacher: {},
-  company: {},
+  teacher: {
+    teacherId: 'user.user_id',
+    name: 'user.user_name',
+    status: 'account_state',
+    background: 'teacher_bachelor',
+    degree: 'teacher_degree',
+    specialty: 'teacher_major',
+    gender: 'user_sex'
+  },
+  company: {
+    companyName: 'company_name',
+    principalName: 'company_principal',
+    status: 'account_state',
+    gender: 'user_sex',
+    specAddress: 'company_address'
+  },
   user: {
     name: 'user_name',
     role: 'user_identity',
@@ -53,7 +67,8 @@ function filter2Mysql(type, filter) {
       console.log(key)
       let value = String.trim(filter[key])
       if (value && value != null && value != '' && value != undefined) {
-        filter[item[key]] = value
+        let _key = item[key] || key
+        filter[_key] = value
       }
       delete filter[key]
     }
@@ -64,6 +79,12 @@ function filter2Mysql(type, filter) {
       break;
     case filterName.STUDENT:
       return transform(filterName.student)
+      break
+    case filterName.TEACHER:
+      return transform(filterName.teacher)
+      break
+    case filterName.COMPANY:
+      return transform(filterName.company)
       break
   }
 }
