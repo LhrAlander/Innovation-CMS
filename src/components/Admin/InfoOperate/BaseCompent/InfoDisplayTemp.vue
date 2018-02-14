@@ -30,34 +30,55 @@
       v-model="item.value">
     </el-input>
 
+    <el-date-picker
+      v-if="item.type == DATE_PICKER"
+      align="right"
+      type="date"
+      placeholder="选择日期"
+      :rows="3"
+      v-model="item.value">
+    </el-date-picker>
+
+
+    <el-cascader
+      v-if="item.type == MULTI_SELECT"
+      type="textarea"
+      :rows="3"
+      :options="item.options"
+      :show-all-levels = 'false'
+      v-bind="item.value">
+    </el-cascader>
+
   </div>
 </template>
 
 <script>
-  export default {
-    props: {
-      item: Object
-    },
-    data () {
-      return {
-        INPUT : 1,
-        SELECT : 2,
-        RADIO : 3,
-        SWITCH : 4,
-        BUTTON : 5,
-        INPUT_AREA : 6,
-      }
-    },
-    methods: {
-      clickBtn (item) {
-        this.$emit("clickBtn")
-      }
-    },
+export default {
+  props: {
+    item: Object
+  },
+  data() {
+    return {
+      INPUT: 1,
+      SELECT: 2,
+      RADIO: 3,
+      SWITCH: 4,
+      BUTTON: 5,
+      INPUT_AREA: 6,
+      DATE_PICKER: 7,
+      MULTI_SELECT: 8
+    };
+  },
+  methods: {
+    clickBtn(item) {
+      this.$emit("clickBtn");
+    }
   }
+};
 </script>
 
 <style scoped>
-  .el-radio {
-    font-size: 1.8rem;
-  }
+.el-radio {
+  font-size: 1.8rem;
+}
 </style>

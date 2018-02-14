@@ -4,6 +4,10 @@ const filterName = {
   STUDENT: 'student',
   TEACHER: 'TEACHER',
   COMPANY: 'COMPANY',
+  PROJECT: 'PROJECT',
+  project: {
+    projectType: 'project_identity', 
+  },
   student: {
     studentId: 'user_id',
     name: 'user.user_name',
@@ -89,17 +93,23 @@ function filter2Mysql(type, filter) {
   }
 }
 
-// 将用户信息字段映射成数据库字段名
+// 将修改信息字段映射成数据库字段名
 function displayInfo2MySql(type, displayInfo) {
   let res = {}
+  console.log(displayInfo)
   const transform = item => {
     displayInfo.forEach(info => {
-      info.items.forEach(item => {
-        let key = filterName.user[item.key] || item.key
-        console.log(key)
-        let value = item.value
-        res[key] = value
-      })
+      if ('items' in info) {
+        info.items.forEach(item => {
+          let key = type[item.key] || item.key
+          console.log(key)
+          let value = item.value
+          res[key] = value
+        })
+      }
+      else {
+        console.log(info.key + ': ' + info.value)
+      }
     })
     return res
   }
@@ -116,6 +126,9 @@ function displayInfo2MySql(type, displayInfo) {
       break
     case filterName.COMPANY:
       return transform(filterName.company)
+      break
+    case filterName.PROJECT:
+      return transform(filterName.project)
       break
   }
 }

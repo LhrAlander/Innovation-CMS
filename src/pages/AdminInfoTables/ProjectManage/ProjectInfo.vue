@@ -10,7 +10,7 @@
         项目管理&nbsp; >&nbsp;项目基本信息修改
       </div>
       <div class="btn-wrapper">
-        <el-button type="warning" plain class="modify-mode-btn">确认修改</el-button>
+        <el-button type="warning" plain class="modify-mode-btn" @click='confirmChange'>确认修改</el-button>
       </div>
     </div>
 
@@ -41,7 +41,7 @@
                   :on-remove="handleRemove"
                   :on-change="handleChange"
                   :on-success="handleSuccess"
-                  :file-list="fileList"
+                  :file-list="regFile"
                   disabled='true'
                   :auto-upload="false"
                   name="uploadFile"
@@ -139,8 +139,9 @@
 
 <script>
 import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp";
-import projectApi from '@/api/projectApi'
-import axios from 'axios'
+import projectApi from "@/api/projectApi";
+import axios from "axios";
+import * as utils from "@/utils/utils";
 
 const INPUT = 1;
 const SELECT = 2;
@@ -148,6 +149,8 @@ const RADIO = 3;
 const SWITCH = 4;
 const BUTTON = 5;
 const INPUT_AREA = 6;
+const DATE_PICKER = 7;
+const MULTI_SELECT = 8;
 const DISPLAY_INFO = [
   {
     key: "projectName",
@@ -155,7 +158,7 @@ const DISPLAY_INFO = [
     value: "呀呀呀",
     type: INPUT,
     span: 1,
-    disabled: true
+    disabled: false
   },
   {
     key: "projectType",
@@ -230,7 +233,7 @@ const DISPLAY_INFO = [
     key: "projectDep",
     name: "项目依托单位",
     value: "实验室1",
-    type: SELECT,
+    type: MULTI_SELECT,
     span: 1,
     disabled: false,
     options: [
@@ -248,25 +251,25 @@ const DISPLAY_INFO = [
     key: "regYear",
     name: "项目申请年份",
     value: "2015",
-    type: INPUT,
+    type: DATE_PICKER,
     span: 1,
-    disabled: true
+    disabled: false
   },
   {
     key: "startYear",
     name: "项目开始年份",
     value: "2016",
-    type: INPUT,
+    type: DATE_PICKER,
     span: 1,
-    disabled: true
+    disabled: false
   },
   {
     key: "stopYear",
     name: "项目截止时间",
     value: "",
-    type: INPUT,
+    type: DATE_PICKER,
     span: 1,
-    disabled: true
+    disabled: false
   },
   {
     key: "projectPerson",
@@ -307,16 +310,45 @@ const DISPLAY_INFO = [
 export default {
   data() {
     return {
-      fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
+      fileList: [
+        {
+          name: "food.jpeg",
+          url:
+            "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
+        }
+      ],
       baseInfo: DISPLAY_INFO,
       leader: {
         userId: 2015210405043,
         name: "林海瑞",
         userPhone: 123456789
       },
+      regFile: [
+        {
+          fileName: "无材料",
+          filePath: null,
+          fileType: 1,
+          projectId: "1231",
+          state: false
+        }
+      ],
+      finishFile: [
+        {
+          fileName: "无材料",
+          filePath: null,
+          fileType: 2,
+          projectId: "1231",
+          state: false
+        }
+      ],
       teacher: {
         userId: 123456789,
         name: "石兴民",
+        userPhone: 123456789
+      },
+      leader: {
+        userId: 2015210405043,
+        name: "林海瑞",
         userPhone: 123456789
       }
     };
@@ -324,43 +356,103 @@ export default {
   components: {
     InfoDisplayTemp
   },
-  created () {
-    // projectApi.testFiles('123')
-    //   .then(values => {
-    //     console.log(values)
-    //   })
-    //   .catch(err => {
-    //     console.log(err)
-    //   })
+  created() {
+    this.initData();
   },
   methods: {
+    initData() {
+      const projectId = this.$route.params.id;
+      Promise.all([
+        axios.post("/api/project/project", {
+          projectId: projectId
+        }),
+        axios.get("/api/category/project/levels"),
+        axios.get("/api/category/project/categories"),
+        axios.get('api/dependent/choices')
+      ])
+        .then(res => {
+          // 项目基本信息
+          this.baseInfo.forEach(item => {
+            item.value = res[0].data.project[item.key];
+          });
+          if (res[0].data.regFile != undefined) {
+            this.regFile = []
+            this.regFile.push(res[0].data.regFile)
+            this.regFile[0].name = this.regFile[0].fileName
+            this.regFile.state = true;
+          }
+          if (res[0].data.finishFile != undefined) {
+            this.finishFile = []
+            this.finishFile.push(res[0].data.finishFile)
+            this.finishFile[0].name = this.finishFile[0].fileName
+            this.regFile.state = true;
+          }
+          this.teacher = res[0].data.teacher;
+          this.leader = res[0].data.leader;
+
+          // 项目级别
+          const levels = res[1].data.data.map(item => {
+            return {
+              label: item.level_name,
+              value: item.level_name
+            }
+          });
+          // 项目类别
+          const categories = res[2].data.data.map(item => {
+            return {
+              label: item.identity_name,
+              value: item.identity_name
+            }
+          })
+
+          this.baseInfo.forEach(item => {
+            if (item.key == 'projectType') {
+              item.options = categories
+            }
+            if (item.key == 'projectLevel') {
+              item.options = levels
+            }
+          })
+          console.log(res[3].data.data)
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     submitUpload() {
       this.$refs.upload.submit();
     },
     downloadRegFiles() {
       // window.open('localhost:3000/api/download')
-      window.open("http://localhost:3000/api/download")
+      window.open("http://localhost:3000/api/download");
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
     handleChange(file, fileList) {
-      console.log('change', file, fileList)
+      console.log("change", file, fileList);
     },
     handleSuccess(file) {
-      console.log('success', file)
+      console.log("success", file);
     },
     handlePreview(file) {
       console.log(file);
     },
     fileOnProgress(event, file, fileList) {
-      console.log(event)
+      console.log(event);
     },
     getRowCount(arr) {
       return Math.ceil(arr.length / 3);
     },
     getItemIndex(rowIndex, colIndex) {
       return (rowIndex - 1) * 3 + colIndex - 1;
+    },
+    confirmChange() {
+      let info = utils.displayInfo2MySql(
+        utils.filterName.PROJECT,
+        this.baseInfo
+      )
+      console.log(new Date(this.baseInfo[8].value).toLocaleDateString())
     }
   }
 };
