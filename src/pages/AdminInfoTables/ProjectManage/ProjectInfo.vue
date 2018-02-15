@@ -413,7 +413,7 @@ export default {
               item.options = levels
             }
           })
-          console.log(res[3].data.data)
+          console.log('selectors', res[3].data.data)
         })
         .catch(err => {
           console.log(err);
