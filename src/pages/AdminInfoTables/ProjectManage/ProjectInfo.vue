@@ -161,7 +161,7 @@ const DISPLAY_INFO = [
     disabled: false
   },
   {
-    key: "projectType",
+    key: "projectIdentity",
     name: "项目类别",
     value: "实验室",
     type: SELECT,
@@ -215,7 +215,7 @@ const DISPLAY_INFO = [
     key: "projectTeacher",
     name: "指导老师",
     value: "石兴民",
-    type: SELECT,
+    type: INPUT,
     span: 1,
     disabled: false,
     options: [
@@ -232,23 +232,44 @@ const DISPLAY_INFO = [
   {
     key: "projectDep",
     name: "项目依托单位",
-    value: "实验室1",
+    // value: ["123", "123"],
+    value: [],
     type: MULTI_SELECT,
     span: 1,
     disabled: false,
     options: [
       {
         value: "实验室1",
-        label: "实验室1"
+        label: "实验室1",
+        children: [
+          {
+            value: "123",
+            label: "团队1"
+          },
+          {
+            value: "团队2",
+            label: "团队2"
+          }
+        ]
       },
       {
-        value: "众创空间",
-        label: "众创空间"
+        value: "企业1",
+        label: "企业1",
+        children: [
+          {
+            value: "团队1",
+            label: "团队1"
+          },
+          {
+            value: "团队2",
+            label: "团队2"
+          }
+        ]
       }
     ]
   },
   {
-    key: "regYear",
+    key: "registerYear",
     name: "项目申请年份",
     value: "2015",
     type: DATE_PICKER,
@@ -264,7 +285,7 @@ const DISPLAY_INFO = [
     disabled: false
   },
   {
-    key: "stopYear",
+    key: "finishYear",
     name: "项目截止时间",
     value: "",
     type: DATE_PICKER,
@@ -275,7 +296,7 @@ const DISPLAY_INFO = [
     key: "projectPerson",
     name: "项目负责人",
     value: "林海瑞",
-    type: SELECT,
+    type: INPUT,
     span: 1,
     disabled: false,
     options: [
@@ -361,6 +382,7 @@ export default {
   },
   methods: {
     initData() {
+      
       const projectId = this.$route.params.id;
       Promise.all([
         axios.post("/api/project/project", {
@@ -368,23 +390,25 @@ export default {
         }),
         axios.get("/api/category/project/levels"),
         axios.get("/api/category/project/categories"),
-        axios.get('api/dependent/choices')
+        axios.get("api/dependent/choices")
       ])
         .then(res => {
+          
           // 项目基本信息
           this.baseInfo.forEach(item => {
+            console.log(item.key, item.key in res[0].data.project)
             item.value = res[0].data.project[item.key];
           });
           if (res[0].data.regFile != undefined) {
-            this.regFile = []
-            this.regFile.push(res[0].data.regFile)
-            this.regFile[0].name = this.regFile[0].fileName
+            this.regFile = [];
+            this.regFile.push(res[0].data.regFile);
+            this.regFile[0].name = this.regFile[0].fileName;
             this.regFile.state = true;
           }
           if (res[0].data.finishFile != undefined) {
-            this.finishFile = []
-            this.finishFile.push(res[0].data.finishFile)
-            this.finishFile[0].name = this.finishFile[0].fileName
+            this.finishFile = [];
+            this.finishFile.push(res[0].data.finishFile);
+            this.finishFile[0].name = this.finishFile[0].fileName;
             this.regFile.state = true;
           }
           this.teacher = res[0].data.teacher;
@@ -395,25 +419,72 @@ export default {
             return {
               label: item.level_name,
               value: item.level_name
-            }
+            };
           });
           // 项目类别
           const categories = res[2].data.data.map(item => {
             return {
               label: item.identity_name,
               value: item.identity_name
+            };
+          });
+
+          this.baseInfo.forEach(item => {
+            if (item.key == "projectType") {
+              item.options = categories;
+            }
+            if (item.key == "projectLevel") {
+              item.options = levels;
+            }
+          });
+          // 构建级联选择器
+          let options = [];
+          let selectors = res[3].data.data;
+          for (let i = 0; i < selectors.length; i++) {
+            let selector = selectors[i];
+            let option = {
+              label: selector.unitName,
+              value: selector.unitId
+            };
+            let teams = [];
+            for (let i = 0; i < selector.teams.length; i++) {
+              let team = selector.teams[i];
+              let _team = {
+                label: team.teamName,
+                value: team.teamId
+              };
+              teams.push(_team);
+            }
+            if (teams.length > 0) {
+              option.children = teams
+            }
+            options.push(option);
+          }
+          console.log(options)
+          this.baseInfo.forEach(item => {
+            if (item.key == 'projectDep') {
+              // 构造当前值
+              let teamName = item.value
+              for (let i = 0; i < options.length; i++) {
+                let unit = options[i]
+                for (let i = 0; i < unit.children.length; i++) {
+                  let team = unit.children[i]
+                  if (team.label == item.value) {
+                    item.value = [unit.value, team.value]
+                  }
+                }
+                if (item.value instanceof Array > 0) {
+                  break
+                }
+              }
+              item.value = item.value instanceof Array
+                           ? item.value
+                           : []
+              console.log('value', item.value)
+              item.options = options
             }
           })
 
-          this.baseInfo.forEach(item => {
-            if (item.key == 'projectType') {
-              item.options = categories
-            }
-            if (item.key == 'projectLevel') {
-              item.options = levels
-            }
-          })
-          console.log('selectors', res[3].data.data)
         })
         .catch(err => {
           console.log(err);
@@ -451,8 +522,34 @@ export default {
       let info = utils.displayInfo2MySql(
         utils.filterName.PROJECT,
         this.baseInfo
-      )
-      console.log(new Date(this.baseInfo[8].value).toLocaleDateString())
+      );
+      info.team_id = info.team_id.pop()
+      // 判断指导老师
+      if (info.project_teacher === this.teacher.name) {
+        delete info.project_teacher
+      }
+      // 判断负责人
+      if (info.project_principal === this.leader.name) {
+        delete info.project_principal
+      }
+      // 判断申请时间
+      let time = ['finish_year', 'register_year', 'start_year']
+      time.forEach(key => {
+        if (key in info) {
+          info[key] = new Date(info[key]).toLocaleDateString()
+        }
+      })
+      console.log('confirm', info)
+      axios.post('/api/project/change/project', {
+        project: info
+      })
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      // console.log(new Date(this.baseInfo[8].value).toLocaleDateString());
     }
   }
 };

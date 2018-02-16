@@ -7,6 +7,15 @@ const filterName = {
   PROJECT: 'PROJECT',
   project: {
     projectType: 'project_identity', 
+    projectId: 'project_id',
+    projectName: 'project_name',
+    projectLevel: 'project_level',
+    projectDep: 'team_id',
+    projectTeacher: 'project_teacher',
+    projectPerson: 'project_principal',
+    regYear: 'register_year',
+    startYear: 'start_year',
+    stopYear: 'finish_year'
   },
   student: {
     studentId: 'user_id',
@@ -100,15 +109,18 @@ function displayInfo2MySql(type, displayInfo) {
   const transform = item => {
     displayInfo.forEach(info => {
       if ('items' in info) {
-        info.items.forEach(item => {
-          let key = type[item.key] || item.key
+        info.items.forEach(_item => {
+          let key = item[item.key] || _item.key
           console.log(key)
-          let value = item.value
+          let value = _item.value
           res[key] = value
         })
       }
       else {
-        console.log(info.key + ': ' + info.value)
+        if (info.value !== undefined && info.key in item) {
+          console.log(info.key + ': ' + info.value)
+          res[item[info.key]] = info.value
+        }
       }
     })
     return res

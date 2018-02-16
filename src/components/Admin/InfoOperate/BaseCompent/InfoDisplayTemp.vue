@@ -42,11 +42,10 @@
 
     <el-cascader
       v-if="item.type == MULTI_SELECT"
-      type="textarea"
-      :rows="3"
       :options="item.options"
       :show-all-levels = 'false'
-      v-bind="item.value">
+      v-model="item.value"
+      >
     </el-cascader>
 
   </div>
@@ -66,12 +65,16 @@ export default {
       BUTTON: 5,
       INPUT_AREA: 6,
       DATE_PICKER: 7,
-      MULTI_SELECT: 8
+      MULTI_SELECT: 8,
+      value: []
     };
   },
   methods: {
     clickBtn(item) {
       this.$emit("clickBtn");
+    },
+    handleCascaderChange(value) {
+      console.log('handleCascaderChange', value)
     }
   }
 };
