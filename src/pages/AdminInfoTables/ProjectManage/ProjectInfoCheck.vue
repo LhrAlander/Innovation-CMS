@@ -41,7 +41,7 @@
           <el-row :gutter="200" class="info-content">
              <el-col :span="24" class="info-item file-item">
               <ul>
-                <li>{{ regFile.fileName }}</li>
+                <li v-for="file in regFile">{{ file.fileName }}</li>
               </ul>
             </el-col>
           </el-row>
@@ -352,20 +352,20 @@ export default {
           projectId: projectId
         })
         .then(res => {
-          console.log(res.data)
+          console.log(res.data);
           this.baseInfo.forEach(item => {
             item.value = res.data.project[item.key];
           });
           if (res.data.regFile != undefined) {
             this.regFile = res.data.regFile;
-            this.regFile.state = true
+            this.regFile.state = true;
           }
           if (res.data.finishFile != undefined) {
             this.finishFile = res.data.finishFile;
-            this.regFile.state = true
+            this.regFile.state = true;
           }
-          this.teacher = res.data.teacher
-          this.leader = res.data.leader
+          this.teacher = res.data.teacher;
+          this.leader = res.data.leader;
         })
         .catch(err => {
           console.log(err);
@@ -383,29 +383,42 @@ export default {
     },
     // 下载申请材料
     downloadRegFile() {
-      window.open(
-        "/api/download?filePath=" +
-          this.regFile.filePath +
+      for (let i = 0; i < this.regFile.length; i++) {
+        console.log(this.regFile[i]);
+        let iframe = document.createElement("iframe");
+        iframe.style.display = "none";
+        iframe.src =
+          "/api/download?filePath=" +
+          this.regFile[i].filePath +
           "&fileName=" +
-          this.regFile.fileName
-      );
+          this.regFile[i].fileName;
+        iframe.onload = function() {
+          document.body.removeChild(iframe);
+        };
+        document.body.appendChild(iframe);
+      }
     },
     // 下载结题材料
     downloadFinishFile() {
-      window.open(
+      window.location.href =
         "/api/download?filePath=" +
-          this.finishFile.filePath +
-          "&fileName=" +
-          this.finishFile.fileName
-      );
+        this.finishFile.filePath +
+        "&fileName=" +
+        this.finishFile.fileName;
+      // window.open(
+      //   "/api/download?filePath=" +
+      //     this.finishFile.filePath +
+      //     "&fileName=" +
+      //     this.finishFile.fileName
+      // );
     }
   },
   computed: {
-    leaderLink () {
-      return `/check/studentInfo/${this.leader.userId}`
+    leaderLink() {
+      return `/check/studentInfo/${this.leader.userId}`;
     },
-    teacherLink () {
-      return `/check/teacherInfo/${this.teacher.userId}`
+    teacherLink() {
+      return `/check/teacherInfo/${this.teacher.userId}`;
     }
   }
 };

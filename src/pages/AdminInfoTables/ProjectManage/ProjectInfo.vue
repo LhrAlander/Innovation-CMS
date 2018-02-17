@@ -42,13 +42,14 @@
                   :on-change="handleChange"
                   :on-success="handleSuccess"
                   :file-list="regFile"
-                  disabled='true'
                   :auto-upload="false"
                   name="uploadFile"
-                  :data='leader'
+                  :data='fileData'
                   :on-progress='fileOnProgress'
                   >
-                  <el-button style="margin-left: 10px;" size="small" type="success" @click="downloadRegFiles">下载材料</el-button>
+                  <el-button slot="trigger" size="mini" type="primary">选取文件</el-button>
+                  <el-button style="margin-left: 10px;" size="mini" type="success" @click="uploadRegFile">上传到服务器</el-button>
+                  <el-button style="margin-left: 10px;"   size="mini" type="danger" @click='deleteAllRegFiles'>删除全部</el-button>
                   <!-- <div slot="tip" class="el-upload__tip">只能上传zip/rar文件，且不超过10MB</div> -->
                 </el-upload>
 
@@ -331,19 +332,7 @@ const DISPLAY_INFO = [
 export default {
   data() {
     return {
-      fileList: [
-        {
-          name: "food.jpeg",
-          url:
-            "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-        }
-      ],
       baseInfo: DISPLAY_INFO,
-      leader: {
-        userId: 2015210405043,
-        name: "林海瑞",
-        userPhone: 123456789
-      },
       regFile: [
         {
           fileName: "无材料",
@@ -371,6 +360,10 @@ export default {
         userId: 2015210405043,
         name: "林海瑞",
         userPhone: 123456789
+      },
+      fileData: {
+        projectId: "",
+        type: ""
       }
     };
   },
@@ -382,7 +375,6 @@ export default {
   },
   methods: {
     initData() {
-      
       const projectId = this.$route.params.id;
       Promise.all([
         axios.post("/api/project/project", {
@@ -393,17 +385,20 @@ export default {
         axios.get("api/dependent/choices")
       ])
         .then(res => {
-          
           // 项目基本信息
           this.baseInfo.forEach(item => {
-            console.log(item.key, item.key in res[0].data.project)
+            console.log(item.key, item.key in res[0].data.project);
             item.value = res[0].data.project[item.key];
           });
           if (res[0].data.regFile != undefined) {
             this.regFile = [];
-            this.regFile.push(res[0].data.regFile);
-            this.regFile[0].name = this.regFile[0].fileName;
-            this.regFile.state = true;
+            for (let i = 0; i < res[0].data.regFile.length; i++) {
+              this.regFile.push({
+                state: true,
+                name: res[0].data.regFile[i].fileName,
+                filePath: res[0].data.regFile[i].filePath
+              });
+            }
           }
           if (res[0].data.finishFile != undefined) {
             this.finishFile = [];
@@ -456,42 +451,47 @@ export default {
               teams.push(_team);
             }
             if (teams.length > 0) {
-              option.children = teams
+              option.children = teams;
             }
             options.push(option);
           }
-          console.log(options)
+          console.log(options);
           this.baseInfo.forEach(item => {
-            if (item.key == 'projectDep') {
+            if (item.key == "projectDep") {
               // 构造当前值
-              let teamName = item.value
+              let teamName = item.value;
               for (let i = 0; i < options.length; i++) {
-                let unit = options[i]
+                let unit = options[i];
                 for (let i = 0; i < unit.children.length; i++) {
-                  let team = unit.children[i]
+                  let team = unit.children[i];
                   if (team.label == item.value) {
-                    item.value = [unit.value, team.value]
+                    item.value = [unit.value, team.value];
                   }
                 }
                 if (item.value instanceof Array > 0) {
-                  break
+                  break;
                 }
               }
-              item.value = item.value instanceof Array
-                           ? item.value
-                           : []
-              console.log('value', item.value)
-              item.options = options
+              item.value = item.value instanceof Array ? item.value : [];
+              console.log("value", item.value);
+              item.options = options;
             }
-          })
-
+          });
         })
         .catch(err => {
           console.log(err);
         });
     },
-    submitUpload() {
+    uploadRegFile() {
+      this.fileData.projectId = this.$route.params.id;
+      this.fileData.type = 1;
       this.$refs.upload.submit();
+    },
+    deleteAllRegFiles() {
+      console.log(this.regFile);
+      axios.post("/api/project/delete/files", {
+        files: this.regFile
+      });
     },
     downloadRegFiles() {
       // window.open('localhost:3000/api/download')
@@ -505,6 +505,11 @@ export default {
     },
     handleSuccess(file) {
       console.log("success", file);
+      this.regFile.push({
+        state: true,
+        name: file.fileName,
+        filePath: file.filePath
+      });
     },
     handlePreview(file) {
       console.log(file);
@@ -523,32 +528,33 @@ export default {
         utils.filterName.PROJECT,
         this.baseInfo
       );
-      info.team_id = info.team_id.pop()
+      info.team_id = info.team_id.pop();
       // 判断指导老师
       if (info.project_teacher === this.teacher.name) {
-        delete info.project_teacher
+        delete info.project_teacher;
       }
       // 判断负责人
       if (info.project_principal === this.leader.name) {
-        delete info.project_principal
+        delete info.project_principal;
       }
       // 判断申请时间
-      let time = ['finish_year', 'register_year', 'start_year']
+      let time = ["finish_year", "register_year", "start_year"];
       time.forEach(key => {
         if (key in info) {
-          info[key] = new Date(info[key]).toLocaleDateString()
+          info[key] = new Date(info[key]).toLocaleDateString();
         }
-      })
-      console.log('confirm', info)
-      axios.post('/api/project/change/project', {
-        project: info
-      })
+      });
+      console.log("confirm", info);
+      axios
+        .post("/api/project/change/project", {
+          project: info
+        })
         .then(res => {
-          console.log(res)
+          console.log(res);
         })
         .catch(err => {
-          console.log(err)
-        })
+          console.log(err);
+        });
       // console.log(new Date(this.baseInfo[8].value).toLocaleDateString());
     }
   }
