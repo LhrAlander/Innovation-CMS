@@ -33,7 +33,7 @@
               <span class="item-name">项目申请材料</span>
               
               <div class="item-content file-item-content">
-                <el-button @click='downloadRegFile' type='success' size='mini' v-if="regFile.state">下载</el-button>
+                <el-button @click='downloadRegFile' type='success' size='mini' v-if="regFile.length > 0">下载</el-button>
               </div>
             </el-col>
           </el-row>
@@ -52,7 +52,7 @@
               <span class="item-name">项目结题材料</span>
               
               <div class="item-content file-item-content">
-                <el-button @click='downloadFinishFile' type='success' size='mini' v-if="finishFile.state">下载</el-button>
+                <el-button @click='downloadFinishFile' type='success' size='mini' v-if="finishFile.length">下载</el-button>
               </div>
             </el-col>
           </el-row>
@@ -60,7 +60,7 @@
           <el-row :gutter="200" class="info-content">
              <el-col :span="24" class="info-item file-item">
               <ul>
-                <li>{{ finishFile.fileName }}</li>
+                <li v-for="file in finishFile">{{ file.fileName }}</li>
               </ul>
             </el-col>
           </el-row>
@@ -400,17 +400,20 @@ export default {
     },
     // 下载结题材料
     downloadFinishFile() {
-      window.location.href =
-        "/api/download?filePath=" +
-        this.finishFile.filePath +
-        "&fileName=" +
-        this.finishFile.fileName;
-      // window.open(
-      //   "/api/download?filePath=" +
-      //     this.finishFile.filePath +
-      //     "&fileName=" +
-      //     this.finishFile.fileName
-      // );
+      for (let i = 0; i < this.finishFile.length; i++) {
+        console.log(this.finishFile[i]);
+        let iframe = document.createElement("iframe");
+        iframe.style.display = "none";
+        iframe.src =
+          "/api/download?filePath=" +
+          this.finishFile[i].filePath +
+          "&fileName=" +
+          this.finishFile[i].fileName;
+        iframe.onload = function() {
+          document.body.removeChild(iframe);
+        };
+        document.body.appendChild(iframe);
+      }
     }
   },
   computed: {

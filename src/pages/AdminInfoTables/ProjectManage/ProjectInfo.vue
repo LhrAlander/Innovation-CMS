@@ -35,12 +35,12 @@
               <div class="item-content">
                 <el-upload
                   class="upload-demo"
-                  ref="upload"
+                  ref="regUpload"
                   action="/api/upload/project"
                   :on-preview="handlePreview"
                   :on-remove="handleRemove"
                   :on-change="handleChange"
-                  :on-success="handleSuccess"
+                  :on-success="regUploadSuccess"
                   :file-list="regFile"
                   :auto-upload="false"
                   name="uploadFile"
@@ -58,10 +58,25 @@
             <el-col :span="12" class="info-item file-item">
               <span class="item-name">项目结题材料</span>
               <div class="item-content">
-                <el-input
-                  type="textarea"
-                  :rows="4"></el-input>
-                <el-button class="end-file-btn">上传材料</el-button>
+                <el-upload
+                  class="upload-demo"
+                  ref="finishUpload"
+                  action="/api/upload/project"
+                  :on-preview="handlePreview"
+                  :on-remove="handleRemove"
+                  :on-change="handleChange"
+                  :on-success="finishUploadSuccess"
+                  :file-list="finishFile"
+                  :auto-upload="false"
+                  name="uploadFile"
+                  :data='fileData'
+                  :on-progress='fileOnProgress'
+                  >
+                  <el-button slot="trigger" size="mini" type="primary">选取文件</el-button>
+                  <el-button style="margin-left: 10px;" size="mini" type="success" @click="uploadFinishFile">上传到服务器</el-button>
+                  <el-button style="margin-left: 10px;"   size="mini" type="danger" @click='deleteAllFinishFiles'>删除全部</el-button>
+                  <!-- <div slot="tip" class="el-upload__tip">只能上传zip/rar文件，且不超过10MB</div> -->
+                </el-upload>
 
               </div>
             </el-col>
@@ -402,9 +417,13 @@ export default {
           }
           if (res[0].data.finishFile != undefined) {
             this.finishFile = [];
-            this.finishFile.push(res[0].data.finishFile);
-            this.finishFile[0].name = this.finishFile[0].fileName;
-            this.regFile.state = true;
+            for (let i = 0; i < res[0].data.finishFile.length; i++) {
+              this.finishFile.push({
+                state: true,
+                name: res[0].data.finishFile[i].fileName,
+                filePath: res[0].data.finishFile[i].filePath
+              });
+            }
           }
           this.teacher = res[0].data.teacher;
           this.leader = res[0].data.leader;
@@ -485,13 +504,39 @@ export default {
     uploadRegFile() {
       this.fileData.projectId = this.$route.params.id;
       this.fileData.type = 1;
-      this.$refs.upload.submit();
+      console.log(this.fileData);
+      this.$refs.regUpload.submit();
+    },
+    uploadFinishFile() {
+      this.fileData.projectId = this.$route.params.id;
+      this.fileData.type = 2;
+      console.log(this.fileData);
+      this.$refs.finishUpload.submit();
     },
     deleteAllRegFiles() {
       console.log(this.regFile);
-      axios.post("/api/project/delete/files", {
-        files: this.regFile
-      });
+      axios
+        .post("/api/project/delete/files", {
+          files: this.regFile
+        })
+        .then(res => {
+          console.log("del", res);
+          if (res.status == 200 && res.data.code == 200) {
+            this.regFile = [];
+          }
+        });
+    },
+    deleteAllFinishFiles() {
+      axios
+        .post("/api/project/delete/files", {
+          files: this.finishFile
+        })
+        .then(res => {
+          console.log("del", res);
+          if (res.status == 200 && res.data.code == 200) {
+            this.finishFile = [];
+          }
+        });
     },
     downloadRegFiles() {
       // window.open('localhost:3000/api/download')
@@ -503,19 +548,50 @@ export default {
     handleChange(file, fileList) {
       console.log("change", file, fileList);
     },
-    handleSuccess(file) {
-      console.log("success", file);
-      this.regFile.push({
-        state: true,
-        name: file.fileName,
-        filePath: file.filePath
-      });
+    regUploadSuccess(file) {
+      axios
+        .post("/api/project/project", {
+          projectId: projectId
+        })
+        .then(res => {
+          console.log(res);
+          if (res.data.regFile != undefined) {
+            this.regFile = [];
+            for (let i = 0; i < res.data.regFile.length; i++) {
+              this.regFile.push({
+                state: true,
+                name: res.data.regFile[i].fileName,
+                filePath: res.data.regFile[i].filePath
+              });
+            }
+          }
+        });
+    },
+    finishUploadSuccess(response, file, fileList) {
+      const projectId = this.$route.params.id;
+      axios
+        .post("/api/project/project", {
+          projectId: projectId
+        })
+        .then(res => {
+          console.log(res);
+          if (res.data.finishFile != undefined) {
+            this.finishFile = [];
+            for (let i = 0; i < res.data.finishFile.length; i++) {
+              this.finishFile.push({
+                state: true,
+                name: res.data.finishFile[i].fileName,
+                filePath: res.data.finishFile[i].filePath
+              });
+            }
+          }
+        });
     },
     handlePreview(file) {
       console.log(file);
     },
     fileOnProgress(event, file, fileList) {
-      console.log(event);
+      // console.log(event);
     },
     getRowCount(arr) {
       return Math.ceil(arr.length / 3);
