@@ -5,8 +5,9 @@ const filterName = {
   TEACHER: 'TEACHER',
   COMPANY: 'COMPANY',
   PROJECT: 'PROJECT',
+  TEAM: 'TEAM',
   project: {
-    projectType: 'project_identity', 
+    projectType: 'project_identity',
     projectId: 'project_id',
     projectName: 'project_name',
     projectLevel: 'project_level',
@@ -16,6 +17,12 @@ const filterName = {
     regYear: 'register_year',
     startYear: 'start_year',
     stopYear: 'finish_year'
+  },
+  team: {
+    teamName: 'team_name',
+    teamLeader: 'team_principal',
+    teamTeacher: 'team_teacher',
+    supportOrg: 'team_dependent_unit',
   },
   student: {
     studentId: 'user_id',
@@ -141,6 +148,9 @@ function displayInfo2MySql(type, displayInfo) {
       break
     case filterName.PROJECT:
       return transform(filterName.project)
+      break
+    case filterName.TEAM:
+      return transform(filterName.team)
       break
   }
 }
