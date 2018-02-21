@@ -6,6 +6,14 @@ const filterName = {
   COMPANY: 'COMPANY',
   PROJECT: 'PROJECT',
   TEAM: 'TEAM',
+  POLICY: 'POLICY',
+  policy: {
+    policyTitle: 'policy_title',
+    policyCategory: 'policy_identity',
+    policyStates: 'state',
+    publishTime: 'publish_time',
+    publishPerson: 'publish_user'
+  },
   project: {
     projectType: 'project_identity',
     projectId: 'project_id',
@@ -151,6 +159,9 @@ function displayInfo2MySql(type, displayInfo) {
       break
     case filterName.TEAM:
       return transform(filterName.team)
+      break
+    case filterName.POLICY:
+      return transform(filterName.policy)
       break
   }
 }

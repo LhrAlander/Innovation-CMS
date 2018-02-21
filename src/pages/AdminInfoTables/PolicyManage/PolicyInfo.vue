@@ -10,7 +10,7 @@
         政策信息管理&nbsp; >&nbsp;政策信息编辑
       </div>
       <div class="btn-wrapper">
-        <el-button type="warning" plain class="modify-mode-btn">确认修改</el-button>
+        <el-button type="warning" plain class="modify-mode-btn" @click="confirmChange">确认修改</el-button>
       </div>
     </div>
 
@@ -26,16 +26,12 @@
               <info-display-temp @clickBtn="btnFunc(baseInfo[getItemIndex(rowIndex, colIndex)])" :item="baseInfo[getItemIndex(rowIndex, colIndex)]"></info-display-temp>
                 <!--{{ block.items[getItemIndex(rowIndex, colIndex)].value }}-->
               </div>
-            </el-col>
+      </el-col>
           </el-row>
           <span>发布内容简介</span>
-          <el-row :gutter="200" class="info-content">
+          <el-row :gutter="200" class="info-content less-z-index">
              <el-col :span="24" class="info-item">
               <div class="item-content">
-                <!--<el-input-->
-                <!--type="textarea"-->
-                <!--:rows="18"-->
-                <!--v-model="policyInfo.info"></el-input>-->
                 <div id="editor-ele"></div>
               </div>
             </el-col>
@@ -47,13 +43,17 @@
                <el-upload
                  class="upload"
                  ref="upload"
-                 action="https://jsonplaceholder.typicode.com/posts/"
+                 name="uploadFile"
+                 action="/api/upload/policy"
                  :on-preview="handlePreview"
                  :on-remove="handleRemove"
+                 :on-success="handleSuccess"
                  :file-list="fileList"
+                 :data='uploadData'
                  :auto-upload="false">
                  <el-button slot="trigger" size="small" type="primary">选取附件</el-button>
                  <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+                 <el-button style="margin-left: 10px;" size="small" type="danger" @click="deleteAll">删除全部</el-button>
                  <div slot="tip" class="el-upload__tip">选择完文件后请手动点击按钮上传</div>
                </el-upload>
             </el-col>
@@ -66,7 +66,8 @@
 <script>
 import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp";
 import E from "wangeditor";
-import axios from 'axios'
+import axios from "axios";
+import * as utils from "@/utils/utils";
 
 const INPUT = 1;
 const SELECT = 2;
@@ -74,6 +75,7 @@ const RADIO = 3;
 const SWITCH = 4;
 const BUTTON = 5;
 const INPUT_AREA = 6;
+const DATE_PICKER = 7;
 const DISPLAY_INFO = [
   {
     key: "policyTitle",
@@ -117,12 +119,12 @@ const DISPLAY_INFO = [
     span: 1,
     options: [
       {
-        value: "已发布",
-        label: "已发布"
+        value: "可用",
+        label: "可用"
       },
       {
-        value: "未发布",
-        label: "未发布"
+        value: "不可用",
+        label: "不可用"
       }
     ],
     disabled: false
@@ -131,9 +133,9 @@ const DISPLAY_INFO = [
     key: "publishTime",
     name: "发布时间",
     value: "2015-10-1",
-    type: INPUT,
+    type: DATE_PICKER,
     span: 1,
-    disabled: true
+    disabled: false
   },
   {
     key: "publishPerson",
@@ -141,7 +143,7 @@ const DISPLAY_INFO = [
     value: "教务处",
     type: INPUT,
     span: 1,
-    disabled: true
+    disabled: false
   }
 ];
 
@@ -153,19 +155,9 @@ export default {
         info:
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget."
       },
-      fileList: [
-        {
-          name: "food.jpeg",
-          url:
-            "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-        },
-        {
-          name: "food2.jpeg",
-          url:
-            "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-        }
-      ],
-      editor: ""
+      fileList: [],
+      editor: "",
+      uploadData: {}
     };
   },
   components: {
@@ -174,26 +166,45 @@ export default {
   methods: {
     initData() {
       const policyId = this.$route.params.id;
-      axios
-        .post("/api/policy/policy", {
+      Promise.all([
+        axios.post("/api/policy/policy", {
           policyId: policyId
-        })
+        }),
+        axios.get("/api/category/policy/categories")
+      ])
         .then(res => {
-          console.log("res", res);
-          res = res.data;
-          if (res.code == 200) {
-            this.file.fileName = "无附件信息";
-            if (res.file != undefined) {
-              this.file = res.file;
+          let _res = res[0].data;
+          let category = res[1].data;
+          let options = [];
+          if (category.code == 200) {
+            options = category.data.map(c => {
+              return {
+                label: c.identity_name,
+                value: c.identity_name
+              };
+            });
+          }
+          if (_res.code == 200) {
+            if (_res.file != undefined) {
+              this.fileList = _res.file.map(file => {
+                return {
+                  name: file.fileName,
+                  state: true,
+                  filePath: file.filePath
+                };
+              });
             }
-            let policy = res.policy;
+            let policy = _res.policy;
             this.baseInfo.forEach(item => {
               item.value = policy[item.key];
+              if (item.key == "policyCategory") {
+                item.options = options;
+              }
             });
             console.log("policy", policy);
             console.log("info", this.baseInfo);
             this.policyInfo.info = policy.policyIntroduction;
-            this.editor.txt.html(`<p>${this.policyInfo}</p>`);
+            this.editor.txt.html(`<p>${this.policyInfo.info}</p>`);
           } else {
             this.$message.error("不存在该政策！");
           }
@@ -209,13 +220,73 @@ export default {
       return (rowIndex - 1) * 3 + colIndex - 1;
     },
     submitUpload() {
+      this.uploadData.policyId = this.$route.params.id;
+      console.log(this.uploadData);
       this.$refs.upload.submit();
+    },
+    deleteAll() {
+      axios
+        .post("/api/policy/delete/files", {
+          files: this.fileList
+        })
+        .then(res => {
+          console.log("del", res);
+          if (res.status == 200 && res.data.code == 200) {
+            this.fileList = [];
+          }
+        });
+    },
+    handleSuccess() {
+      console.log('success')
+      axios
+        .post("/api/policy/policy", {
+          policyId: this.$route.params.id
+        })
+        .then(res => {
+          let _res = res.data
+          if (_res.code == 200) {
+            if (_res.file != undefined) {
+              console.log(_res.file)
+              this.fileList = _res.file.map(file => {
+                return {
+                  name: file.fileName,
+                  state: true,
+                  filePath: file.filePath
+                };
+              });
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        });
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
     handlePreview(file) {
       console.log(file);
+    },
+    confirmChange() {
+      let info = utils.displayInfo2MySql(
+        utils.filterName.POLICY,
+        this.baseInfo
+      );
+      if ("publish_time" in info) {
+        info.publish_time = new Date(info.publish_time).toLocaleDateString();
+      }
+      info.policy_introduction = this.policyInfo.info;
+      info.policy_id = this.$route.params.id;
+      axios
+        .post("/api/policy/change/policy", {
+          policy: info
+        })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   mounted() {
@@ -231,6 +302,10 @@ export default {
 </script>
 
 <style scoped>
+.less-z-index {
+  z-index: 1;
+}
+
 .admin-check-info-wrapper {
   /*background-color: #ECF0F1;*/
   background-color: #fff;

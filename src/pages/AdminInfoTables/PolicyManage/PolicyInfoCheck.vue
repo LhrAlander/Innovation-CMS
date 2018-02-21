@@ -41,13 +41,13 @@
         </el-col>
       </el-row>
 
-      <el-button type="success" size="mini" @click='downloadFile'>下载附件</el-button>
-      <el-row :gutter="200" class="info-content">
+      <el-button type="success" size="mini" @click='downloadFile'  v-if="files.length > 0">下载附件</el-button>
+      <el-row :gutter="200" class="info-content"  v-if="files.length > 0">
         <el-col :span="24" class="info-item">
           <div class="item-content">
             <div class="attack-link">
               <ul>
-                <li>{{ file.fileName }}</li>
+                <li v-for="file in files">{{ file.fileName }}</li>
               </ul>
             </div>
           </div>
@@ -146,9 +146,7 @@ export default {
       policyInfo: {
         info: '不存在政策！'
       },
-      file: {
-        fileName: '无附件信息'
-      }
+      files: []
     };
   },
   components: {
@@ -173,9 +171,8 @@ export default {
           console.log('res', res);
           res = res.data;
           if (res.code == 200) {
-            this.file.fileName = '无附件信息'
             if (res.file != undefined) {
-              this.file = res.file
+              this.files = res.file
             }
             let policy = res.policy
             this.baseInfo.forEach(item => {
