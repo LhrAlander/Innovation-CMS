@@ -184,7 +184,7 @@ export default {
         ]
       },
       //        获取表格数据的地址
-      url: "",
+      url: "/api/award/awards",
       filterTmpl: {
         awardName: {
           label: "获奖名称",
@@ -220,14 +220,7 @@ export default {
     };
   },
   mounted: function() {
-    axios.get("/api/award/awards")
-      .then(res => {
-        res = res.data;
-        if (res.code == 200) {
-          console.log(res);
-        }
-      });
-    this.loadData(this.filter, this.currentName, this.pageSize);
+    this.loadData(this.filter, this.currentPage, this.pageSize);
   },
   methods: {
     getRowKeys(row) {
@@ -236,17 +229,20 @@ export default {
     //        异步加载数据
     loadData(filter, pageNum, pageSize) {
       axios
-        .get(this.url, { param: filter, pageNum: pageNum, pageSize: pageSize })
-        .then(
-          function(res) {
-            this.tableData = res.data.pagesTableData;
-            this.totalCount = res.data.number;
-          },
-          function() {
-            console.log("failed");
+        .get(this.url, {
+          params: {
+            param: filter,
+            pageNum: pageNum,
+            pageSize: pageSize
           }
-        )
-        .catch(function(err) {
+        })
+        .then(res => {
+          console.log(res);
+          this.tableData = []
+          this.tableData = res.data.data
+          this.totalCount = res.data.count;
+        })
+        .catch(err => {
           console.log(err);
         });
     },
@@ -280,12 +276,12 @@ export default {
     //        单页大小改变回调事件
     handleSizeChange(val) {
       this.pageSize = val;
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        当前页改变回调事件
     handleCurrentChange(val) {
       this.currentPage = val;
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        点击筛选触发的事件
     enterFilter() {
@@ -295,7 +291,7 @@ export default {
     receiveFilter(filter) {
       if (filter !== undefined) this.filter = filter;
       this.showFilterBox = false;
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        标签的key格式化器
     keyFormater: function(value) {
@@ -307,7 +303,7 @@ export default {
     valueFormater: utils.valueFormater,
     quitFilter: function() {
       this.filter = this.resetObject(this.filter);
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     enterAdd: function() {
       this.showInfoAdd = true;

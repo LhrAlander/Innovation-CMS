@@ -96,7 +96,6 @@ export default {
           id: 1,
           awardName: "获奖名称",
           projectName: "项目名称",
-          userId: "用户名",
           username: "用户姓名",
           contact: "联系方式"
         }
@@ -122,7 +121,6 @@ export default {
         // 格式化标签映射表
         awardName: "获奖名称",
         projectName: "项目名称",
-        userId: "用户名",
         username: "用户姓名",
         contact: "联系方式"
       },
@@ -136,10 +134,6 @@ export default {
         },
         projectName: {
           label: "项目名称",
-          inputType: 0 // 0 代表 input
-        },
-        userId: {
-          label: "用户名",
           inputType: 0 // 0 代表 input
         },
         username: {
@@ -158,7 +152,6 @@ export default {
         projectName: [
           { required: true, message: "请输入项目名称", trigger: "blur" }
         ],
-        userId: [{ required: true, message: "请输入用户名", trigger: "blur" }],
         username: [
           { required: true, message: "请输入用户姓名", trigger: "blur" }
         ],
@@ -167,7 +160,7 @@ export default {
         ]
       },
       //        获取表格数据的地址
-      url: "",
+      url: "/api/award/users",
       filterTmpl: {
         awardName: {
           label: "获奖名称",
@@ -175,10 +168,6 @@ export default {
         },
         projectName: {
           label: "项目名称",
-          inputType: 0 // 0 代表 input
-        },
-        userId: {
-          label: "用户名",
           inputType: 0 // 0 代表 input
         },
         username: {
@@ -190,7 +179,6 @@ export default {
         //搜索条件
         awardName: "", //获奖名称
         projectName: "", //项目名称
-        userId: "", //用户名
         username: "" //用户姓名
       },
       pageSize: 15, //每页大小
@@ -203,14 +191,7 @@ export default {
     };
   },
   mounted: function() {
-    axios.get('/api/award/users')
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-    this.loadData(this.filter, this.currentName, this.pageSize);
+    this.loadData(this.filter, this.currentPage, this.pageSize);
   },
   methods: {
     getRowKeys(row) {
@@ -218,18 +199,21 @@ export default {
     },
     //        异步加载数据
     loadData(filter, pageNum, pageSize) {
-      axios
-        .get(this.url, { param: filter, pageNum: pageNum, pageSize: pageSize })
-        .then(
-          function(res) {
-            this.tableData = res.data.pagesTableData;
-            this.totalCount = res.data.number;
-          },
-          function() {
-            console.log("failed");
+     axios
+        .get(this.url, {
+          params: {
+            param: filter,
+            pageNum: pageNum,
+            pageSize: pageSize
           }
-        )
-        .catch(function(err) {
+        })
+        .then(res => {
+          console.log(res);
+          this.tableData = []
+          this.tableData = res.data.data
+          this.totalCount = res.data.count;
+        })
+        .catch(err => {
           console.log(err);
         });
     },
@@ -242,7 +226,9 @@ export default {
       return r;
     },
 
-    handleMore(index, row) {},
+    handleMore(index, row) {
+      this.$router.push(`/check/studentInfo/${row.userId}`);
+    },
     //        删除按钮事件
     handleDelete(index, row) {
       var array = [];
@@ -263,12 +249,12 @@ export default {
     //        单页大小改变回调事件
     handleSizeChange(val) {
       this.pageSize = val;
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        当前页改变回调事件
     handleCurrentChange(val) {
       this.currentPage = val;
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        点击筛选触发的事件
     enterFilter() {
@@ -278,7 +264,7 @@ export default {
     receiveFilter(filter) {
       if (filter !== undefined) this.filter = filter;
       this.showFilterBox = false;
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        标签的key格式化器
     keyFormater: function(value) {
@@ -290,7 +276,7 @@ export default {
     valueFormater: utils.valueFormater,
     quitFilter: function() {
       this.filter = this.resetObject(this.filter);
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     enterAdd: function() {
       this.showInfoAdd = true;

@@ -219,6 +219,7 @@ export default {
 <style scoped>
 #policy-info {
   padding: 1rem;
+  border: 1px solid #ddd;
 }
 
 .admin-check-info-wrapper {
