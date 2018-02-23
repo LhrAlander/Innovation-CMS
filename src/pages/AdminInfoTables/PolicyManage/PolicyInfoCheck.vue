@@ -31,11 +31,6 @@
       <el-row :gutter="200" class="info-content">
         <el-col :span="24" class="info-item">
           <div class="item-content">
-            <!-- <el-input
-              type="textarea"
-              :rows="18"
-              disabled="true"
-              v-model="policyInfo.info"></el-input> -->
               <div id="policy-info" v-html="policyInfo.info"></div>
           </div>
         </el-col>
@@ -192,12 +187,20 @@ export default {
     },
     // 下载附件
     downloadFile() {
-      window.open(
-        "/api/download?filePath=" +
-          this.file.filePath +
+      for (let i = 0; i < this.files.length; i++) {
+        console.log(this.files[i]);
+        let iframe = document.createElement("iframe");
+        iframe.style.display = "none";
+        iframe.src =
+          "/api/download?filePath=" +
+          this.files[i].filePath +
           "&fileName=" +
-          this.file.fileName
-      );
+          this.files[i].fileName;
+        iframe.onload = function() {
+          document.body.removeChild(iframe);
+        };
+        document.body.appendChild(iframe);
+      }
     },
     getRowCount(arr) {
       return Math.ceil(arr.length / 3);

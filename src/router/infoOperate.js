@@ -146,13 +146,13 @@ export default [
   // 通知公告信息添加
   {
     name: "NotificationInfoAdd",
-    path: "/add/notificationInfo",
+    path: "/add/notificationInfo/:id",
     component: NotificationAdd
   },
   // 通知公告信息查看
   {
     name: "NotificationInfoCheck",
-    path: "/check/notificationInfo",
+    path: "/check/notificationInfo/:id",
     component: NotificationCheck
   },
   // 文件制度信息编辑

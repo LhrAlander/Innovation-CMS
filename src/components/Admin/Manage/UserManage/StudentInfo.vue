@@ -244,7 +244,7 @@ export default {
     getRowKeys(row) {
       return row.id;
     },
-    //        异步加载数据
+    // 异步加载数据
     loadData(filter, pageNum, pageSize) {
       axios
         .get(this.url, {
@@ -276,7 +276,7 @@ export default {
     handleMore(index, row) {
       this.$router.push(`/check/studentInfo/${row.studentId}`);
     },
-    //        删除按钮事件
+    // 删除按钮事件
     handleDelete(index, row) {
       var array = [];
       array.push(row.id);
@@ -289,25 +289,25 @@ export default {
         }
       );
     },
-    //        编辑按钮事件
+    // 编辑按钮事件
     handleEdit(index, row) {
       this.$router.push("/edit/studentInfo/1");
     },
-    //        单页大小改变回调事件
+    // 单页大小改变回调事件
     handleSizeChange(val) {
       this.pageSize = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    //        当前页改变回调事件
+    // 当前页改变回调事件
     handleCurrentChange(val) {
       this.currentPage = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    //        点击筛选触发的事件
+    // 点击筛选触发的事件
     enterFilter() {
       this.showFilterBox = true;
     },
-    //        接收子组件filterbox传递的筛选条件数据
+    // 接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {
       if (filter !== undefined) {
         this.filter = filter;

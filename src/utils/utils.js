@@ -8,6 +8,18 @@ const filterName = {
   TEAM: 'TEAM',
   POLICY: 'POLICY',
   UNIT: 'UNIT',
+  NOTIFICATION: 'NOTIFICATION',
+  notification: {
+    category: 'notification_identity',
+    title: 'notification_title',
+    status: 'notification_state',
+    publishTime: 'publish_time',
+    publisherName: 'publish_user',
+    notificationTitle: 'notification_title',
+    notificationIdentity: 'notification_identity',
+    state: 'state',
+    publisherUser: 'publish_user',
+  },
   unit: {
     unitName: 'unit_name',
     unitType: 'unit_identity',
@@ -73,7 +85,7 @@ const filterName = {
     username: 'user_id',
   }
 }
-//        标签的value格式化器根据 映射的字段类型，value的值，映射表来确定value值对应的label
+// 标签的value格式化器根据 映射的字段类型，value的值，映射表来确定value值对应的label
 function valueFormater(type, value, map) {
   if (map[type] === undefined) {
     return value;
@@ -100,7 +112,6 @@ function filter2Mysql(type, filter) {
     console.log('进入映射', filter)
 
     for (let key in filter) {
-      console.log(key)
       let value = String.trim(filter[key])
       if (value && value != null && value != '' && value != undefined) {
         let _key = item[key] || key
@@ -112,7 +123,7 @@ function filter2Mysql(type, filter) {
   switch (type) {
     case filterName.USER:
       return transform(filterName.user)
-      break;
+      break
     case filterName.STUDENT:
       return transform(filterName.student)
       break
@@ -121,6 +132,21 @@ function filter2Mysql(type, filter) {
       break
     case filterName.COMPANY:
       return transform(filterName.company)
+      break
+    case filterName.PROJECT:
+      return transform(filterName.project)
+      break
+    case filterName.TEAM:
+      return transform(filterName.team)
+      break
+    case filterName.POLICY:
+      return transform(filterName.policy)
+      break
+    case filterName.UNIT:
+      return transform(filterName.unit)
+      break
+    case filterName.NOTIFICATION:
+      return transform(filterName.notification)
       break
   }
 }
@@ -173,6 +199,9 @@ function displayInfo2MySql(type, displayInfo) {
       break
     case filterName.UNIT:
       return transform(filterName.unit)
+      break
+    case filterName.NOTIFICATION:
+      return transform(filterName.notification)
       break
   }
 }
