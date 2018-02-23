@@ -7,6 +7,14 @@ const filterName = {
   PROJECT: 'PROJECT',
   TEAM: 'TEAM',
   POLICY: 'POLICY',
+  UNIT: 'UNIT',
+  unit: {
+    unitName: 'unit_name',
+    unitType: 'unit_identity',
+    unitAddress: 'unit_address',
+    unitPerson: 'unit_principal',
+    unitPhone: 'unit_phone'
+  },
   policy: {
     policyTitle: 'policy_title',
     policyCategory: 'policy_identity',
@@ -162,6 +170,9 @@ function displayInfo2MySql(type, displayInfo) {
       break
     case filterName.POLICY:
       return transform(filterName.policy)
+      break
+    case filterName.UNIT:
+      return transform(filterName.unit)
       break
   }
 }

@@ -33,7 +33,7 @@
         <span class="info-title">
           <i class="iconfont box">&#xe603;</i>
           依托单位负责人基本信息展示
-          <el-button type="primary" class="leader-info-check info-detail-check">详情查看</el-button>
+          <el-button type="primary" class="leader-info-check info-detail-check" @click="leaderDetail">详情查看</el-button>
           <el-row :gutter="200" class="info-content">
              <el-col :span="8" class="info-item">
               <span class="item-name">用户名</span>
@@ -69,7 +69,7 @@
               <div class="item-content">
                 <el-input disabled v-model="team.name"></el-input>
               </div>
-               <el-button type="primary" class="teacher-info-check info-detail-check">详情查看</el-button>
+               <el-button type="primary" class="teacher-info-check info-detail-check" @click="teamDetail(team)">详情查看</el-button>
             </el-col>
           </el-row>
         </span>
@@ -84,217 +84,237 @@
 </template>
 
 <script>
-  import InfoDisplayTemp from 'components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp'
+import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp";
+import axios from 'axios'
 
-  const INPUT = 1
-  const SELECT = 2
-  const RADIO = 3
-  const SWITCH = 4
-  const BUTTON = 5
-  const INPUT_AREA = 6
-  const DISPLAY_INFO = [
-    {
-      key: 'unitName',
-      name: '单位',
-      value: '单位名称',
-      type: INPUT,
-      span: 1,
-      disabled: false
-    },
-    {
-      key: 'unitType',
-      name: '单位类别',
-      value: '实验室',
-      type: SELECT,
-      options: [
-        {
-          value: "实验室",
-          label: "实验室"
-        },
-        {
-          value: "企业1",
-          label: "企业1"
-        }
-      ],
-      span: 1
-    },
-    {
-      key: 'unitPerson',
-      name: '单位负责人',
-      value: '石兴民',
-      type: SELECT,
-      span: 1,
-      options: [
-        {
-          value: "石兴民",
-          label: "石兴民"
-        },
-        {
-          value: "某某某",
-          label: "某某某"
-        }
-      ],
-      disabled: false
-    },
-    {
-      key: 'unitAddress',
-      name: '单位地址',
-      value: 'xxx',
-      type: INPUT,
-      span: 2,
-      disabled: false
-    },
-    {
-      key: 'unitPhone',
-      name: '单位电话',
-      value: '123456',
-      type: INPUT,
-      span: 1,
-      disabled: false
-    }
-  ]
+const INPUT = 1;
+const SELECT = 2;
+const RADIO = 3;
+const SWITCH = 4;
+const BUTTON = 5;
+const INPUT_AREA = 6;
+const DISPLAY_INFO = [
+  {
+    key: "unitName",
+    name: "单位",
+    value: "单位名称",
+    type: INPUT,
+    span: 1,
+    disabled: false
+  },
+  {
+    key: "unitType",
+    name: "单位类别",
+    value: "实验室",
+    type: SELECT,
+    options: [
+      {
+        value: "实验室",
+        label: "实验室"
+      },
+      {
+        value: "企业1",
+        label: "企业1"
+      }
+    ],
+    span: 1
+  },
+  {
+    key: "unitPerson",
+    name: "单位负责人",
+    value: "石兴民",
+    type: SELECT,
+    span: 1,
+    options: [
+      {
+        value: "石兴民",
+        label: "石兴民"
+      },
+      {
+        value: "某某某",
+        label: "某某某"
+      }
+    ],
+    disabled: false
+  },
+  {
+    key: "unitAddress",
+    name: "单位地址",
+    value: "xxx",
+    type: INPUT,
+    span: 2,
+    disabled: false
+  },
+  {
+    key: "unitPhone",
+    name: "单位电话",
+    value: "123456",
+    type: INPUT,
+    span: 1,
+    disabled: false
+  }
+];
 
-  export default {
-    data () {
-      return {
-        baseInfo: DISPLAY_INFO,
-        leader: {
-          userId: 2015210405043,
-          name: "林海瑞",
-          userPhone: 123456789
-        },
-        teacher: {
-          userId: 123456789,
-          name: "石兴民",
-          userPhone: 123456789
-        },
-        teamInfo: [
-          [
-            {
-              name: "team1"
-            },
-            {
-              name: "team2"
-            }
-          ],
-          [
-            {
-              name: "team3"
-            },
-            {
-              name: "team4"
-            }
-          ],
-          [
-            {
-              name: "team5"
-            }
-          ],
+export default {
+  data() {
+    return {
+      baseInfo: DISPLAY_INFO,
+      leader: {
+        userId: 2015210405043,
+        name: "林海瑞",
+        userPhone: 123456789
+      },
+      teamInfo: [
+        [
+          {
+            name: "team1"
+          },
+          {
+            name: "team2"
+          }
+        ],
+        [
+          {
+            name: "team3"
+          },
+          {
+            name: "team4"
+          }
+        ],
+        [
+          {
+            name: "team5"
+          }
         ]
-      }
+      ]
+    };
+  },
+  components: {
+    InfoDisplayTemp
+  },
+  components: {
+    InfoDisplayTemp
+  },
+  mounted() {
+    this.initData();
+  },
+  methods: {
+    initData() {
+      const unitId = this.$route.params.id;
+      axios
+        .post("/api/dependent/dependent", {
+          unitId
+        })
+        .then(res => {
+          res = res.data
+          this.baseInfo.forEach(item => {
+            console.log(item.key)
+            item.value = res.data.unit[item.key];
+          });
+          this.teamInfo = res.data.teams;
+          this.leader = res.data.user;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
-    components: {
-      InfoDisplayTemp
+    leaderDetail() {
+      this.$router.push(`/check/teacherInfo/${this.leader.userId}`);
     },
-    methods: {
-      getRowCount (arr) {
-        return Math.ceil(arr.length / 3)
-      },
-      getItemIndex (rowIndex, colIndex) {
-        return (rowIndex - 1) * 3 + colIndex - 1
-      },
-      // 进入编辑模式
-      goForEdit () {
-        this.$router.push('/edit/depUnitInfo/1')
-      }
+    teamDetail(team) {
+      this.$router.push(`/check/teamInfo/${team.teamId}`);
+    },
+    getRowCount(arr) {
+      return Math.ceil(arr.length / 3);
+    },
+    getItemIndex(rowIndex, colIndex) {
+      return (rowIndex - 1) * 3 + colIndex - 1;
+    },
+    // 进入编辑模式
+    goForEdit() {
+      this.$router.push(`/edit/depUnitInfo/${this.$route.params.id}`);
     }
   }
+};
 </script>
 
 <style scoped>
+.admin-check-info-wrapper {
+  /*background-color: #ECF0F1;*/
+  background-color: #fff;
+  height: 100%;
+  padding: 1.4rem 5rem;
+}
 
-  .admin-check-info-wrapper {
-    /*background-color: #ECF0F1;*/
-    background-color: #fff;
-    height: 100%;
-    padding: 1.4rem 5rem;
-  }
+.mode-crumb-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-  .mode-crumb-box {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+h1 {
+  display: block;
+  text-align: center;
+  font-size: 1.7rem;
+  padding-bottom: 1.4rem;
+  border-bottom: 0.3rem solid #cbcbcb;
+}
 
+.breadcrumb {
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #2a3f54;
+  display: inline-block;
+}
 
-  h1 {
-    display: block;
-    text-align: center;
-    font-size: 1.7rem;
-    padding-bottom: 1.4rem;
-    border-bottom: .3rem solid #cbcbcb;
+.breadcrumb .iconfont {
+  font-size: 1.5rem;
+  margin-right: 0.3rem;
+}
 
-  }
+.info-wrapper {
+  padding: 2rem 3rem;
+}
 
-  .breadcrumb {
-    padding: 1rem;
-    font-size: 1rem;
-    font-weight: bold;
-    color: #2A3F54;
-    display: inline-block;
-  }
+.info-title {
+  font-size: 1rem;
+  color: #2a3f54;
+  font-weight: bold;
+}
 
+.iconfont.box {
+  font-weight: normal;
+  margin-right: 0.3rem;
+}
 
-  .breadcrumb .iconfont {
-    font-size: 1.5rem;
-    margin-right: .3rem;
-  }
+.el-row.info-content {
+  margin: 1.5rem 0;
+}
 
-  .info-wrapper {
-    padding: 2rem 3rem;
-  }
+.el-input {
+  background-color: #ffff00;
+  font-size: 0.9rem;
+}
 
-  .info-title {
-    font-size: 1rem;
-    color: #2A3F54;
-    font-weight: bold;
-  }
+.info-item {
+  display: flex;
+  align-items: center;
+}
 
-  .iconfont.box {
-    font-weight: normal;
-    margin-right: .3rem;
-  }
+.item-name {
+  font-size: 1rem;
+  width: 5rem;
+  margin-right: 1rem;
+}
 
-  .el-row.info-content {
-    margin: 1.5rem 0;
-  }
+.item-content {
+  flex: 1;
+}
 
-  .el-input {
-    background-color: #ffff00;
-    font-size: .9rem;
-  }
-
-  .info-item {
-    display: flex;
-    align-items: center;
-  }
-
-  .item-name {
-    font-size: 1rem;
-    width: 5rem;
-    margin-right: 1rem;
-  }
-
-  .item-content {
-    flex: 1;
-  }
-
-  .info-detail-check {
-    height: 1.8rem;
-    padding: .3rem;
-    margin-left: 1rem;
-  }
-
-
-
+.info-detail-check {
+  height: 1.8rem;
+  padding: 0.3rem;
+  margin-left: 1rem;
+}
 </style>
