@@ -53,7 +53,17 @@ const filterName = {
     projectPerson: 'project_principal',
     regYear: 'register_year',
     startYear: 'start_year',
-    stopYear: 'finish_year'
+    stopYear: 'finish_year',
+    projectCategory: 'project_identity',
+    projectLevel: 'project_level',
+    guideTeacher: 'teacherId',
+    projectId: 'project_id',
+    dependentUnit: 'team_id',
+    applyYear: 'register_year',
+    beginYear: 'start_year',
+    deadlineYear: 'finish_year',
+    principalName: 'studentName',
+    guideTeacherName: 'teacherName',
   },
   team: {
     teamName: 'team_name',

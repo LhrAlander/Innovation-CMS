@@ -97,25 +97,10 @@ export default {
     return {
       tableData: [
         {
-          // 表格数据
           id: 1
         }
       ],
       valueLabelMap: {
-        // 下拉类型的input的具体数据
-        //          role: [{ // 用户类别映射表
-        //            value: 0,
-        //            label: '全部'
-        //          }, {
-        //            value: 1,
-        //            label: '学生'
-        //          }, {
-        //            value: 2,
-        //            label: '老师'
-        //          }, {
-        //            value: 3,
-        //            label: '企业'
-        //          }],
         projectCategory: [
           {
             value: 0,
@@ -292,7 +277,7 @@ export default {
         principalName: "", //项目负责人用户名
         guideTeacherName: "" //指导老师用户名
       },
-      pageSize: 15, //每页大小
+      pageSize: 10, //每页大小
       currentPage: 1, //当前页
       start: 1, //查询的页码
       totalCount: 30, //返回的记录总数
@@ -302,6 +287,7 @@ export default {
     };
   },
   mounted: function() {
+    utils.filter2Mysql(utils.filterName.PROJECT, this.filter);
     this.loadData(this.filter, this.currentPage, this.pageSize);
   },
   methods: {
@@ -310,6 +296,7 @@ export default {
     },
     //        异步加载数据
     loadData(filter, pageNum, pageSize) {
+    console.log(this.filter, this.currentPage, this.pageSize);
       axios
         .get(this.url, {
           params: {
@@ -361,22 +348,25 @@ export default {
     //        单页大小改变回调事件
     handleSizeChange(val) {
       this.pageSize = val;
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        当前页改变回调事件
     handleCurrentChange(val) {
       this.currentPage = val;
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    //        点击筛选触发的事件
+    // 点击筛选触发的事件
     enterFilter() {
       this.showFilterBox = true;
     },
-    //        接收子组件filterbox传递的筛选条件数据
+    // 接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {
-      if (filter !== undefined) this.filter = filter;
+      if (filter !== undefined) {
+        this.filter = filter;
+      }
       this.showFilterBox = false;
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      utils.filter2Mysql(utils.filterName.PROJECT, this.filter);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        标签的key格式化器
     keyFormater: function(value) {
@@ -388,7 +378,7 @@ export default {
     valueFormater: utils.valueFormater,
     quitFilter: function() {
       this.filter = this.resetObject(this.filter);
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     enterAdd: function() {
       this.showInfoAdd = true;

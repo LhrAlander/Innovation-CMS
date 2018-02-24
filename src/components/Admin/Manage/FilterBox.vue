@@ -32,12 +32,14 @@
               v-model="filter[key]"
               align="right"
               type="year"
+              value-format="yyyy"
               placeholder="选择年"
               clearable>
             </el-date-picker>
             <el-cascader
               v-else-if="value.inputType === 4"
               expand-trigger="hover"
+              value-format="yyyy"
               :options="options"
               :show-all-levels="false"
               v-model="filter[key]">
