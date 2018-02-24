@@ -9,6 +9,15 @@ const filterName = {
   POLICY: 'POLICY',
   UNIT: 'UNIT',
   NOTIFICATION: 'NOTIFICATION',
+  FILE_SYSTEM: 'FILE_SYSTEM',
+  fileSystem: {
+    category: 'file_type',
+    title: 'title',
+    status: 'state',
+    publishTime: 'publish_time',
+    publisherName: 'publish_user',
+    effectiveDate: 'effective_time'
+  },
   notification: {
     category: 'notification_identity',
     title: 'notification_title',
@@ -113,6 +122,7 @@ function filter2Mysql(type, filter) {
 
     for (let key in filter) {
       let value = String.trim(filter[key])
+      console.log(key + ': ' + value)
       if (value && value != null && value != '' && value != undefined) {
         let _key = item[key] || key
         filter[_key] = value
@@ -147,6 +157,9 @@ function filter2Mysql(type, filter) {
       break
     case filterName.NOTIFICATION:
       return transform(filterName.notification)
+      break
+    case filterName.FILE_SYSTEM:
+      return transform(filterName.fileSystem)
       break
   }
 }
@@ -203,6 +216,9 @@ function displayInfo2MySql(type, displayInfo) {
     case filterName.NOTIFICATION:
       return transform(filterName.notification)
       break
+    case filterName.FILE_SYSTEM:
+        return transform(filterName.fileSystem)
+        break
   }
 }
 

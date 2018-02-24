@@ -93,12 +93,11 @@
 </template>
 <script>
 import axios from "axios";
-import ElButton from "../../../../../node_modules/element-ui/packages/button/src/button.vue";
 import FilterBox from "components/Admin/Manage/FilterBox";
 import InfoAdd from "components/Admin/Manage/InfoAdd";
 import * as utils from "utils/utils";
 export default {
-  components: { ElButton, FilterBox, InfoAdd },
+  components: { FilterBox, InfoAdd },
   data() {
     return {
       tableData: [
@@ -219,11 +218,8 @@ export default {
     getRowKeys(row) {
       return row.id;
     },
-    //        异步加载数据
+    // 异步加载数据
     loadData(filter, pageNum, pageSize) {
-      if ('publish_time' in filter) {
-        console.log(filter.publish_time)
-      }
       axios
         .get(this.url, {
           params: {
@@ -255,10 +251,10 @@ export default {
       this.$router.push(`/check/notificationInfo/${row.notificationId}`);
     },
     handlePublic(index, row) {
-      if (row.status === "published") {
-        row.status = "unpublished";
+      if (row.status === "可用") {
+        row.status = "不可用";
       } else {
-        row.status = "published";
+        row.status = "可用";
       }
     },
     //        删除按钮事件

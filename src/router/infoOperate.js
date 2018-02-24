@@ -170,7 +170,7 @@ export default [
   // 文件制度信息查看
   {
     name: "FileInfoCheck",
-    path: "/add/fileInfo",
+    path: "/check/fileInfo/:id",
     component: FileInfoAdminCheck
   }
 ]
