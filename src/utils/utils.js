@@ -117,10 +117,13 @@ function valueFormater(type, value, map) {
     }
   }
 }
-function resetObject(object) {
+function resetObject(object, filterTmpl) {
   let o = object;
   for (var key in o) {
     o[key] = '';
+    if (filterTmpl[key].inputType == 4) {
+      o[key] = []
+    }
   }
   return o;
 }

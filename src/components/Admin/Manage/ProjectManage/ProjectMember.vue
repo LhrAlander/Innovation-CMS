@@ -81,16 +81,7 @@ export default {
   components: { FilterBox, InfoAdd },
   data() {
     return {
-      tableData: [
-        {
-          // 表格数据
-          id: 1,
-          projectName: "项目名称",
-          userId: "用户名",
-          username: "用户姓名",
-          contact: "联系方式"
-        }
-      ],
+      tableData: [],
       projectOptions: [],
       valueLabelMap: {
         projectName: [
@@ -168,7 +159,8 @@ export default {
       filterTmpl: {
         projectId: {
           label: "项目名称",
-          inputType: 4 // 0 代表 input
+          inputType: 4, // 0 代表 input
+          options: []
         },
         userId: {
           label: "用户名",
@@ -225,7 +217,7 @@ export default {
             option.children = teams;
           }
           options.push(option);
-          this.projectOptions = options
+          this.filterTmpl.projectId.options = options
         }
       })
       .catch(err => {

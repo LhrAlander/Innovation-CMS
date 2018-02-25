@@ -44,8 +44,7 @@
             <el-cascader
               v-else-if="value.inputType === 4"
               expand-trigger="hover"
-              value-format="yyyy"
-              :options="options"
+              :options="value.options"
               :show-all-levels="false"
               v-model="filter[key]">
             </el-cascader>
