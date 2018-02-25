@@ -64,6 +64,8 @@ const filterName = {
     deadlineYear: 'finish_year',
     principalName: 'studentName',
     guideTeacherName: 'teacherName',
+    userId: 'user_id',
+    username: 'user_name'
   },
   team: {
     teamName: 'team_name',

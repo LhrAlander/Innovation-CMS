@@ -91,91 +91,8 @@ export default {
           contact: "联系方式"
         }
       ],
-      projectOptions: [
-        {
-          value: "depUnit1",
-          label: "依托单位1",
-          children: [
-            {
-              value: "group1",
-              label: "团队1",
-              children: [
-                {
-                  value: "project1",
-                  label: "项目1"
-                },
-                {
-                  value: "project2",
-                  label: "项目2"
-                }
-              ]
-            },
-            {
-              value: "group2",
-              label: "团队2",
-              children: [
-                {
-                  value: "project3",
-                  label: "项目3"
-                },
-                {
-                  value: "project4",
-                  label: "项目4"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          value: "depUnit2",
-          label: "依托单位2",
-          children: [
-            {
-              value: "group3",
-              label: "团队3",
-              children: [
-                {
-                  value: "project5",
-                  label: "项目5"
-                },
-                {
-                  value: "project6",
-                  label: "项目6"
-                }
-              ]
-            },
-            {
-              value: "group4",
-              label: "团队4",
-              children: [
-                {
-                  value: "project7",
-                  label: "项目7"
-                },
-                {
-                  value: "project8",
-                  label: "项目8"
-                }
-              ]
-            }
-          ]
-        }
-      ],
+      projectOptions: [],
       valueLabelMap: {
-        // 下拉类型的input的具体数据
-        //          role: [{ // 用户类别映射表
-        //            value: 0,
-        //            label: '全部'
-        //          }, {
-        //            value: 1,
-        //            label: '学生'
-        //          }, {
-        //            value: 2,
-        //            label: '老师'
-        //          }, {
-        //            value: 3,
-        //            label: '企业'
-        //          }],
         projectName: [
           {
             value: "project1",
@@ -249,7 +166,7 @@ export default {
       //        获取表格数据的地址
       url: "/api/project/users",
       filterTmpl: {
-        projectName: {
+        projectId: {
           label: "项目名称",
           inputType: 4 // 0 代表 input
         },
@@ -264,11 +181,11 @@ export default {
       },
       filter: {
         //搜索条件
-        projectName: "", //项目名称
+        projectId: "", //项目名称
         userId: "", //用户名
         username: "" //用户姓名
       },
-      pageSize: 15, //每页大小
+      pageSize: 10, //每页大小
       currentPage: 1, //当前页
       start: 1, //查询的页码
       totalCount: 30, //返回的记录总数
@@ -278,14 +195,55 @@ export default {
     };
   },
   mounted: function() {
+    axios.get("api/dependent/choices")
+      .then(res => {
+        let options = [];
+        let selectors = res.data.data;
+        for (let i = 0; i < selectors.length; i++) {
+          let selector = selectors[i];
+          let option = {
+            label: selector.unitName,
+            value: selector.unitId
+          };
+          let teams = [];
+          for (let i = 0; i < selector.teams.length; i++) {
+            let team = selector.teams[i];
+            console.log(team);
+            let _team = {
+              label: team.teamName,
+              value: team.teamId
+            };
+            _team.children = team.projects.map(project =>{
+              return {
+                value: project.projectId,
+                label: project.projectName
+              }
+            })
+            teams.push(_team);
+          }
+          if (teams.length > 0) {
+            option.children = teams;
+          }
+          options.push(option);
+          this.projectOptions = options
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    // utils.filter2Mysql(utils.filterName.PROJECT, this.filter);
     this.loadData(this.filter, this.currentPage, this.pageSize);
   },
   methods: {
     getRowKeys(row) {
       return row.id;
     },
-    //        异步加载数据
+    // 异步加载数据
     loadData(filter, pageNum, pageSize) {
+      if ('projectId' in filter && filter.projectId instanceof Array) {
+        filter.projectId = filter.projectId[2]
+      }
+      console.log(filter, pageNum, pageSize)
       axios
         .get(this.url, {
           params: {
@@ -296,8 +254,8 @@ export default {
         })
         .then(res => {
           console.log(res);
-          this.tableData = []
-          this.tableData = res.data.data
+          this.tableData = [];
+          this.tableData = res.data.data;
           this.totalCount = res.data.count;
         })
         .catch(err => {
@@ -336,12 +294,12 @@ export default {
     //        单页大小改变回调事件
     handleSizeChange(val) {
       this.pageSize = val;
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        当前页改变回调事件
     handleCurrentChange(val) {
       this.currentPage = val;
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        点击筛选触发的事件
     enterFilter() {
@@ -349,9 +307,12 @@ export default {
     },
     //        接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {
-      if (filter !== undefined) this.filter = filter;
+      if (filter !== undefined) {
+        this.filter = filter;
+      }
       this.showFilterBox = false;
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      // utils.filter2Mysql(utils.filterName.PROJECT, this.filter);
+      this.loadData(filter, this.currentPage, this.pageSize);
     },
     //        标签的key格式化器
     keyFormater: function(value) {
@@ -379,7 +340,7 @@ export default {
     },
     quitFilter: function() {
       this.filter = this.resetObject(this.filter);
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     enterAdd: function() {
       this.showInfoAdd = true;
