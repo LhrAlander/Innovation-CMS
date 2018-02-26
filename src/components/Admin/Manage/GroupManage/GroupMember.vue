@@ -129,40 +129,7 @@ export default {
           ]
         }
       ],
-      valueLabelMap: {
-        // 下拉类型的input的具体数据
-        //          role: [{ // 用户类别映射表
-        //            value: 0,
-        //            label: '全部'
-        //          }, {
-        //            value: 1,
-        //            label: '学生'
-        //          }, {
-        //            value: 2,
-        //            label: '老师'
-        //          }, {
-        //            value: 3,
-        //            label: '企业'
-        //          }],
-        groupName: [
-          {
-            value: "group1",
-            label: "团队1"
-          },
-          {
-            value: "group2",
-            label: "团队2"
-          },
-          {
-            value: "group3",
-            label: "团队3"
-          },
-          {
-            value: "group4",
-            label: "团队4"
-          }
-        ]
-      },
+      valueLabelMap: {},
 
       keyFormatMap: {
         // 格式化标签映射表
@@ -206,7 +173,7 @@ export default {
       //        获取表格数据的地址
       url: "/api/team/users",
       filterTmpl: {
-        groupName: {
+        teamId: {
           label: "团队名称",
           inputType: 4 // 0 代表 input
         },
@@ -221,11 +188,11 @@ export default {
       },
       filter: {
         //搜索条件
-        groupName: "", //项目名称
+        teamId: "", //项目名称
         userId: "", //用户名
         username: "" //用户姓名
       },
-      pageSize: 15, //每页大小
+      pageSize: 10, //每页大小
       currentPage: 1, //当前页
       start: 1, //查询的页码
       totalCount: 30, //返回的记录总数
@@ -243,6 +210,10 @@ export default {
     },
     //        异步加载数据
     loadData(filter, pageNum, pageSize) {
+      console.log(filter, pageNum, pageSize)
+      if ("teamId" in filter && filter.teamId instanceof Array) {
+        filter.teamId = filter.teamId.pop();
+      }
       axios
         .get(this.url, {
           params: {
@@ -302,11 +273,49 @@ export default {
     },
     //        点击筛选触发的事件
     enterFilter() {
-      this.showFilterBox = true;
+      if (!("options" in this.filterTmpl.teamId)) {
+        console.log("init options");
+        axios
+          .get("api/dependent/choices")
+          .then(res => {
+            let teamOptions = [];
+            let selectors = res.data.data;
+            for (let i = 0; i < selectors.length; i++) {
+              let selector = selectors[i];
+              let teamOption = {
+                label: selector.unitName,
+                value: selector.unitId
+              };
+              let teams = [];
+              for (let i = 0; i < selector.teams.length; i++) {
+                let team = selector.teams[i];
+                console.log(team);
+                let _team = {
+                  label: team.teamName,
+                  value: team.teamId
+                };
+                teams.push(_team);
+              }
+              if (teams.length > 0) {
+                teamOption.children = teams;
+              }
+              teamOptions.push(teamOption);
+            }
+            this.filterTmpl.teamId.options = teamOptions;
+            this.showFilterBox = true;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else {
+        this.showFilterBox = true;
+      }
     },
     //        接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {
-      if (filter !== undefined) this.filter = filter;
+      if (filter !== undefined) {
+        this.filter = filter;
+      }
       this.showFilterBox = false;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
@@ -335,7 +344,7 @@ export default {
       }
     },
     quitFilter: function() {
-      this.filter = this.resetObject(this.filter);
+      this.filter = this.resetObject(this.filter, this.filterTmpl);
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     enterAdd: function() {
