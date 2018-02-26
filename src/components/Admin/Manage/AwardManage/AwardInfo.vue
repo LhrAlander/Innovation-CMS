@@ -89,51 +89,11 @@ export default {
   components: { FilterBox, InfoAdd },
   data() {
     return {
-      tableData: [
-        {
-          // 表格数据
-          id: 1,
-          awardName: "搞笑奖", //获奖名称
-          awardLevel: "国家级", //获奖等级
-          awardSecondLevel: "一等奖", // 一等奖
-          awardTime: "2099-9-9" //获奖时间
-        }
-      ],
+      tableData: [],
       valueLabelMap: {
-        // 下拉类型的input的中值和标签的映射表
-        //          role: [{ // 用户类别映射表
-        //            value: 0,
-        //            label: '全部'
-        //          }, {
-        //            value: 1,
-        //            label: '学生'
-        //          }, {
-        //            value: 2,
-        //            label: '老师'
-        //          }, {
-        //            value: 3,
-        //            label: '企业'
-        //          }],
-        awardLevel: [
-          {
-            value: 0,
-            label: "级别0"
-          },
-          {
-            value: 1,
-            label: "级别1"
-          }
-        ],
-        awardSecondLevel: [
-          {
-            value: 0,
-            label: "级别0"
-          },
-          {
-            value: 1,
-            label: "级别1"
-          }
-        ]
+        awardName: [],
+        awardLevel: [],
+        awardSecondLevel: []
       },
 
       keyFormatMap: {
@@ -188,7 +148,7 @@ export default {
       filterTmpl: {
         awardName: {
           label: "获奖名称",
-          inputType: 0 // 0 代表 input
+          inputType: 1 // 0 代表 input
         },
         awardLevel: {
           label: "获奖等级",
@@ -210,7 +170,7 @@ export default {
         awardSecondLevel: "", //获奖级别
         awardTime: "" //获奖时间
       },
-      pageSize: 15, //每页大小
+      pageSize: 10, //每页大小
       currentPage: 1, //当前页
       start: 1, //查询的页码
       totalCount: 30, //返回的记录总数
@@ -238,8 +198,8 @@ export default {
         })
         .then(res => {
           console.log(res);
-          this.tableData = []
-          this.tableData = res.data.data
+          this.tableData = [];
+          this.tableData = res.data.data;
           this.totalCount = res.data.count;
         })
         .catch(err => {
@@ -285,11 +245,50 @@ export default {
     },
     //        点击筛选触发的事件
     enterFilter() {
-      this.showFilterBox = true;
+      if (this.valueLabelMap.awardName.length < 1) {
+        Promise.all([
+          axios.get("/api/award/awardNames"),
+          axios.get("/api/category/award/levels"),
+          axios.get("/api/category/award/categories")
+        ])
+          .then(res => {
+            if (res != null && res instanceof Array) {
+              let names = res[0].data.data;
+              let levels = res[1].data.data;
+              let categories = res[2].data.data;
+              this.valueLabelMap.awardName = names.map(i => {
+                return {
+                  label: i,
+                  value: i
+                };
+              });
+              this.valueLabelMap.awardLevel = categories.map(i => {
+                return {
+                  label: i.identity_name,
+                  value: i.identity_name
+                };
+              });
+              this.valueLabelMap.awardSecondLevel = levels.map(i => {
+                return {
+                  label: i.level_name,
+                  value: i.level_name
+                };
+              });
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        this.showFilterBox = true;
+      } else {
+        this.showFilterBox = true;
+      }
     },
     //        接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {
-      if (filter !== undefined) this.filter = filter;
+      if (filter !== undefined) {
+        this.filter = filter;
+      }
       this.showFilterBox = false;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
@@ -302,7 +301,7 @@ export default {
     resetObject: utils.resetObject,
     valueFormater: utils.valueFormater,
     quitFilter: function() {
-      this.filter = this.resetObject(this.filter);
+      this.filter = this.resetObject(this.filter, this.filterTmpl);
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     enterAdd: function() {
