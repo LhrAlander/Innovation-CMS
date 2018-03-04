@@ -66,7 +66,7 @@
             size="small"
             type="primary"
             @click="handlePublic(scope.$index, scope.row)"
-            v-html="scope.row.status==='published' ? '下架' : '发布'"></el-button>
+            v-html="scope.row.status==='可用' ? '下架' : '发布'"></el-button>
           <el-button
             size="small"
             class="edit-btn"
@@ -101,56 +101,19 @@ export default {
   components: { FilterBox, InfoAdd },
   data() {
     return {
-      tableData: [
-        {
-          // 表格数据
-          id: 1,
-          govCategory: "政策类别",
-          title: "标题",
-          status: "published",
-          intro: "政策简介",
-          policyId: "1"
-        }
-      ],
+      tableData: [],
       valueLabelMap: {
-        // 下拉类型的input的具体数据
-        //          role: [{ // 用户类别映射表
-        //            value: 0,
-        //            label: '全部'
-        //          }, {
-        //            value: 1,
-        //            label: '学生'
-        //          }, {
-        //            value: 2,
-        //            label: '老师'
-        //          }, {
-        //            value: 3,
-        //            label: '企业'
-        //          }],
         status: [
           {
-            value: "published",
+            value: "可用",
             label: "已发布"
           },
           {
-            value: "unpublished",
+            value: "不可用",
             label: "未发布"
           }
         ],
-        govCategory: [
-          {
-            value: 0,
-            label: "类别一"
-          },
-          {
-            value: 1,
-            label: "类别二"
-          },
-          {
-            value: 2,
-            label: "类别三"
-          }
-        ]
+        govCategory: []
       },
 
       keyFormatMap: {
@@ -223,15 +186,24 @@ export default {
     },
     //        异步加载数据
     loadData(filter, pageNum, pageSize) {
+      console.log(filter);
       axios
-        .get(this.url, { param: filter, pageNum: pageNum, pageSize: pageSize })
+        .get(this.url, {
+          params: {
+            param: filter,
+            pageNum: pageNum,
+            pageSize: pageSize
+          }
+        })
         .then(res => {
+          console.log(res);
+          this.tableData = [];
           this.tableData = res.data.data;
-          this.totalCount = res.data.number;
+          this.totalCount = res.data.count;
         })
         .catch(err => {
-          console.log(err)
-        })
+          console.log(err);
+        });
     },
     unique(array) {
       var r = [];
@@ -243,15 +215,15 @@ export default {
     },
 
     handleMore(index, row) {
-      console.log(index, row)
-      const policyId = row.policyId
+      console.log(index, row);
+      const policyId = row.policyId;
       this.$router.push(`/check/policyinfo/${policyId}`);
     },
     handlePublic(index, row) {
-      if (row.status === "published") {
-        row.status = "unpublished";
+      if (row.status === "可用") {
+        row.status = "不可用";
       } else {
-        row.status = "published";
+        row.status = "可用";
       }
     },
     //        删除按钮事件
@@ -267,32 +239,47 @@ export default {
         }
       );
     },
-    //        编辑按钮事件
+    // 编辑按钮事件
     handleEdit(index, row) {
       console.log(index, row);
       this.$router.push({ name: "PolicyInfoEdit" });
     },
-    //        单页大小改变回调事件
+    // 单页大小改变回调事件
     handleSizeChange(val) {
       this.pageSize = val;
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    //        当前页改变回调事件
+    // 当前页改变回调事件
     handleCurrentChange(val) {
       this.currentPage = val;
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    //        点击筛选触发的事件
+    // 点击筛选触发的事件
     enterFilter() {
       this.showFilterBox = true;
+      if (this.valueLabelMap.govCategory.length < 1) {
+        axios.get("/api/category/policy/categories")
+          .then(res => {
+            console.log(res);
+            res = res.data.data;
+            this.valueLabelMap.govCategory = res.map(i => {
+              return {
+                value: i.identity_name,
+                label: i.identity_name
+              }
+            })
+          });
+      }
     },
-    //        接收子组件filterbox传递的筛选条件数据
+    // 接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {
-      if (filter !== undefined) this.filter = filter;
+      if (filter !== undefined) {
+        this.filter = filter;
+      }
       this.showFilterBox = false;
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    //        标签的key格式化器
+    // 标签的key格式化器
     keyFormater: function(value) {
       if (!value) return "";
       value = value.toString();
@@ -301,11 +288,11 @@ export default {
     resetObject: utils.resetObject,
     valueFormater: utils.valueFormater,
     quitFilter: function() {
-      this.filter = this.resetObject(this.filter);
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.filter = this.resetObject(this.filter, this.filterTmpl);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     enterAdd: function() {
-      //        this.showInfoAdd = true;
+      // this.showInfoAdd = true;
       this.$router.push({ name: "PolicyInfoAdd" });
     },
     receiveInfo: function(data) {
