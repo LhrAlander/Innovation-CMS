@@ -90,58 +90,10 @@ export default {
   components: { ElButton, FilterBox, InfoAdd },
   data() {
     return {
-      tableData: [
-        {
-          // 表格数据
-          id: 1,
-          unitName: "单位名称",
-          unitCategory: "单位类别",
-          leader: "负责人",
-          leaderPhone: "负责人联系方式",
-          leaderId: "负责人用户名(学号)",
-          address: "单位地址",
-          email: "负责人邮箱"
-        }
-      ],
+      tableData: [],
       valueLabelMap: {
-        unitName: [
-          {
-            // 用户类别映射表
-            value: 0,
-            label: "单位0"
-          },
-          {
-            value: 1,
-            label: "单位1"
-          },
-          {
-            value: 2,
-            label: "单位2"
-          },
-          {
-            value: 3,
-            label: "单位3"
-          }
-        ],
-        unitCategory: [
-          {
-            // 用户类别映射表
-            value: 0,
-            label: "类别0"
-          },
-          {
-            value: 1,
-            label: "类别1"
-          },
-          {
-            value: 2,
-            label: "类别2"
-          },
-          {
-            value: 3,
-            label: "类别3"
-          }
-        ]
+        unitName: [],
+        unitCategory: []
       },
 
       keyFormatMap: {
@@ -283,11 +235,39 @@ export default {
     },
     //        点击筛选触发的事件
     enterFilter() {
-      this.showFilterBox = true;
+      if (this.valueLabelMap.unitName.length < 1) {
+        axios
+          .get("/api/dependent/choices")
+          .then(res => {
+            this.valueLabelMap.unitName = res.data.data.map(i => {
+              return {
+                label: i.unitName,
+                value: i.unitName
+              };
+            });
+            return axios.get("/api/category/dependent/categories");
+          })
+          .then(res => {
+            this.valueLabelMap.unitCategory = res.data.data.map(i => {
+              return {
+                value: i.identity_name,
+                label: i.identity_name
+              }
+            })
+            this.showFilterBox = true;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else {
+        this.showFilterBox = true;
+      }
     },
     //        接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {
-      if (filter !== undefined) this.filter = filter;
+     if (filter !== undefined) {
+        this.filter = filter;
+      }
       this.showFilterBox = false;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
@@ -300,7 +280,7 @@ export default {
     resetObject: utils.resetObject,
     valueFormater: utils.valueFormater,
     quitFilter: function() {
-      this.filter = this.resetObject(this.filter);
+      this.filter = this.resetObject(this.filter, this.filterTmpl);
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     enterAdd: function() {

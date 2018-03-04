@@ -256,9 +256,9 @@ export default {
     },
     // 点击筛选触发的事件
     enterFilter() {
-      this.showFilterBox = true;
       if (this.valueLabelMap.govCategory.length < 1) {
-        axios.get("/api/category/policy/categories")
+        axios
+          .get("/api/category/policy/categories")
           .then(res => {
             console.log(res);
             res = res.data.data;
@@ -266,9 +266,15 @@ export default {
               return {
                 value: i.identity_name,
                 label: i.identity_name
-              }
-            })
+              };
+            });
+            this.showFilterBox = true;
+          })
+          .catch(err => {
+            console.log(err);
           });
+      } else {
+        this.showFilterBox = true;
       }
     },
     // 接收子组件filterbox传递的筛选条件数据
