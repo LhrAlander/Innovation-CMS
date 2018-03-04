@@ -242,7 +242,6 @@ export default {
     // 编辑按钮事件
     handleEdit(index, row) {
       console.log(index, row);
-      
       this.$router.push({ name: "PolicyInfoEdit" });
     },
     // 单页大小改变回调事件
