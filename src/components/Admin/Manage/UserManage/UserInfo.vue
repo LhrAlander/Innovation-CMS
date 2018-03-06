@@ -94,11 +94,6 @@ export default {
       valueLabelMap: {
         role: [
           {
-            // 用户类别映射表
-            value: 0,
-            label: "全部"
-          },
-          {
             value: 1,
             label: "学生"
           },
@@ -197,7 +192,7 @@ export default {
     getRowKeys(row) {
       return row.id;
     },
-    //        异步加载数据
+    // 异步加载数据
     loadData(filter, pageNum, pageSize) {
       axios
         .get(this.url, {
@@ -241,25 +236,25 @@ export default {
         }
       );
     },
-    //        编辑按钮事件
+    // 编辑按钮事件
     handleEdit(index, row) {
       this.$router.push(`/edit/userInfo/${row.username}`);
     },
-    //        单页大小改变回调事件
+    // 单页大小改变回调事件
     handleSizeChange(val) {
       this.pageSize = val;
       this.loadData(this.filter, this.currentName, this.pageSize);
     },
-    //        当前页改变回调事件
+    // 当前页改变回调事件
     handleCurrentChange(val) {
       this.currentPage = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    //        点击筛选触发的事件
+    // 点击筛选触发的事件
     enterFilter() {
       this.showFilterBox = true;
     },
-    //        接收子组件filterbox传递的筛选条件数据
+    // 接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {
       if (filter !== undefined) this.filter = filter;
       this.showFilterBox = false;
@@ -270,12 +265,11 @@ export default {
           parseInt(this.filter.user_identity)
         ].label;
       }
-      this.currentPage = 1
-      this.loadData(this.filter, this.currentPage, this.pageSize)
+      this.currentPage = 1;
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
 
-
-    //        标签的key格式化器
+    // 标签的key格式化器
     keyFormater: function(value) {
       if (!value) return "";
       value = value.toString();
@@ -291,8 +285,8 @@ export default {
       this.showInfoAdd = true;
     },
     receiveInfo: function(data) {
-      utils.filter2Mysql(utils.filterName.USER, data)
-      console.log(data)
+      utils.filter2Mysql(utils.filterName.USER, data);
+      console.log(data);
       if (data) {
         axios.post("", { data: data }, { emulateJson: true }).then(
           function(res) {

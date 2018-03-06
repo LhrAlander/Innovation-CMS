@@ -284,7 +284,7 @@
       }
     },
     mounted: function () {
-      this.loadData(this.filter, this.currentName, this.pageSize);
+      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     methods: {
       getRowKeys(row) {
@@ -333,12 +333,12 @@
 //        单页大小改变回调事件
       handleSizeChange(val) {
         this.pageSize = val;
-        this.loadData(this.filter, this.currentName, this.pageSize);
+        this.loadData(this.filter, this.currentPage, this.pageSize);
       },
 //        当前页改变回调事件
       handleCurrentChange(val) {
         this.currentPage = val;
-        this.loadData(this.filter, this.currentName, this.pageSize);
+        this.loadData(this.filter, this.currentPage, this.pageSize);
       },
 //        点击筛选触发的事件
       enterFilter() {
@@ -349,7 +349,7 @@
         if (filter !== undefined)
           this.filter = filter;
         this.showFilterBox = false;
-        this.loadData(this.filter, this.currentName, this.pageSize);
+        this.loadData(this.filter, this.currentPage, this.pageSize);
       },
 //        标签的key格式化器
       keyFormater: function (value) {
@@ -361,7 +361,7 @@
       valueFormater: utils.valueFormater,
       quitFilter: function () {
         this.filter = this.resetObject(this.filter);
-        this.loadData(this.filter, this.currentName, this.pageSize);
+        this.loadData(this.filter, this.currentPage, this.pageSize);
       },
       receiveInfo: function (data) {
         if (data) {

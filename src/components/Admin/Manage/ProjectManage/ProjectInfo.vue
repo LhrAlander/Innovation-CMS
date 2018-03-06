@@ -208,10 +208,10 @@ export default {
           label: "项目级别",
           inputType: 1
         },
-        guideTeacher: {
-          label: "指导老师",
-          inputType: 0
-        },
+        // guideTeacher: {
+        //   label: "指导老师",
+        //   inputType: 0
+        // },
         applyYear: {
           label: "项目申请年份",
           inputType: 3
@@ -232,10 +232,10 @@ export default {
           label: "项目截至年份",
           inputType: 3
         },
-        principalName: {
-          label: "项目负责人用户名",
-          inputType: 0
-        },
+        // principalName: {
+        //   label: "项目负责人用户名",
+        //   inputType: 0
+        // },
         guideTeacherName: {
           label: "指导老师用户名",
           inputType: 0
