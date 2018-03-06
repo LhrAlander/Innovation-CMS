@@ -95,32 +95,10 @@ export default {
   components: { FilterBox, InfoAdd },
   data() {
     return {
-      tableData: [
-        {
-          id: 1
-        }
-      ],
+      tableData: [],
       valueLabelMap: {
-        projectCategory: [
-          {
-            value: 0,
-            label: "类别0"
-          },
-          {
-            value: 1,
-            label: "类别1"
-          }
-        ],
-        projectLevel: [
-          {
-            value: 0,
-            label: "级别0"
-          },
-          {
-            value: 1,
-            label: "级别1"
-          }
-        ]
+        projectCategory: [],
+        projectLevel: []
       },
 
       keyFormatMap: {
@@ -296,7 +274,7 @@ export default {
     },
     //        异步加载数据
     loadData(filter, pageNum, pageSize) {
-    console.log(this.filter, this.currentPage, this.pageSize);
+      console.log(this.filter, this.currentPage, this.pageSize);
       axios
         .get(this.url, {
           params: {
@@ -357,7 +335,32 @@ export default {
     },
     // 点击筛选触发的事件
     enterFilter() {
-      this.showFilterBox = true;
+      if (this.valueLabelMap.projectCategory.length < 1) {
+        Promise.all([
+          axios.get("/api/category/project/categories"),
+          axios.get("/api/category/project/levels")
+        ])
+          .then(res => {
+            this.valueLabelMap.projectCategory = res[0].data.data.map(i => {
+              return {
+                label: i.identity_name,
+                value: i.identity_name
+              };
+            });
+            this.valueLabelMap.projectLevel = res[1].data.data.map(i => {
+              return {
+                label: i.level_name,
+                value: i.level_name
+              };
+            });
+            this.showFilterBox = true;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else {
+        this.showFilterBox = true;
+      }
     },
     // 接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {

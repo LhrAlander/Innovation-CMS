@@ -90,33 +90,8 @@ export default {
   components: { ElButton, FilterBox, InfoAdd },
   data() {
     return {
-      tableData: [
-        {
-          // 表格数据
-          id: 1,
-          username: "用户名",
-          name: "姓名",
-          role: "用户类别",
-          status: "用户状态",
-          phone: "手机号",
-          email: "邮箱"
-        }
-      ],
+      tableData: [],
       valueLabelMap: {
-        // 下拉类型的input的具体数据
-        //          role: [{ // 用户类别映射表
-        //            value: 0,
-        //            label: '全部'
-        //          }, {
-        //            value: 1,
-        //            label: '学生'
-        //          }, {
-        //            value: 2,
-        //            label: '教师'
-        //          }, {
-        //            value: 3,
-        //            label: '企业'
-        //          }],
         role: [
           {
             // 用户类别映射表

@@ -181,16 +181,7 @@ const DISPLAY_INFO = [
     name: "项目类别",
     value: "实验室",
     type: SELECT,
-    options: [
-      {
-        value: "实验室",
-        label: "实验室"
-      },
-      {
-        value: "企业1",
-        label: "企业1"
-      }
-    ],
+    options: [],
     span: 1
   },
   {
@@ -199,24 +190,7 @@ const DISPLAY_INFO = [
     value: "国家级",
     type: SELECT,
     span: 1,
-    options: [
-      {
-        value: "国家级",
-        label: "国家级"
-      },
-      {
-        value: "省部级",
-        label: "省部级"
-      },
-      {
-        value: "校级",
-        label: "校级"
-      },
-      {
-        value: "院级",
-        label: "院级"
-      }
-    ],
+    options: [],
     disabled: false
   },
   {
@@ -402,7 +376,6 @@ export default {
         .then(res => {
           // 项目基本信息
           this.baseInfo.forEach(item => {
-            console.log(item.key, item.key in res[0].data.project);
             item.value = res[0].data.project[item.key];
           });
           if (res[0].data.regFile != undefined) {
@@ -444,7 +417,7 @@ export default {
           });
 
           this.baseInfo.forEach(item => {
-            if (item.key == "projectType") {
+            if (item.key == "projectIdentity") {
               item.options = categories;
             }
             if (item.key == "projectLevel") {
@@ -474,7 +447,6 @@ export default {
             }
             options.push(option);
           }
-          console.log(options);
           this.baseInfo.forEach(item => {
             if (item.key == "projectDep") {
               // 构造当前值
@@ -492,7 +464,6 @@ export default {
                 }
               }
               item.value = item.value instanceof Array ? item.value : [];
-              console.log("value", item.value);
               item.options = options;
             }
           });
@@ -504,23 +475,19 @@ export default {
     uploadRegFile() {
       this.fileData.projectId = this.$route.params.id;
       this.fileData.type = 1;
-      console.log(this.fileData);
       this.$refs.regUpload.submit();
     },
     uploadFinishFile() {
       this.fileData.projectId = this.$route.params.id;
       this.fileData.type = 2;
-      console.log(this.fileData);
       this.$refs.finishUpload.submit();
     },
     deleteAllRegFiles() {
-      console.log(this.regFile);
       axios
         .post("/api/project/delete/files", {
           files: this.regFile
         })
         .then(res => {
-          console.log("del", res);
           if (res.status == 200 && res.data.code == 200) {
             this.regFile = [];
           }
@@ -532,7 +499,6 @@ export default {
           files: this.finishFile
         })
         .then(res => {
-          console.log("del", res);
           if (res.status == 200 && res.data.code == 200) {
             this.finishFile = [];
           }
@@ -543,10 +509,8 @@ export default {
       window.open("http://localhost:3000/api/download");
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
     },
     handleChange(file, fileList) {
-      console.log("change", file, fileList);
     },
     regUploadSuccess(file) {
       axios
@@ -554,7 +518,6 @@ export default {
           projectId: projectId
         })
         .then(res => {
-          console.log(res);
           if (res.data.regFile != undefined) {
             this.regFile = [];
             for (let i = 0; i < res.data.regFile.length; i++) {
@@ -574,7 +537,6 @@ export default {
           projectId: projectId
         })
         .then(res => {
-          console.log(res);
           if (res.data.finishFile != undefined) {
             this.finishFile = [];
             for (let i = 0; i < res.data.finishFile.length; i++) {
@@ -620,13 +582,11 @@ export default {
           info[key] = new Date(info[key]).toLocaleDateString();
         }
       });
-      console.log("confirm", info);
       axios
         .post("/api/project/change/project", {
           project: info
         })
         .then(res => {
-          console.log(res);
         })
         .catch(err => {
           console.log(err);

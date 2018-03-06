@@ -45,6 +45,7 @@ const filterName = {
   },
   project: {
     projectType: 'project_identity',
+    projectIdentity: 'project_identity',
     projectId: 'project_id',
     projectName: 'project_name',
     projectLevel: 'project_level',
@@ -119,9 +120,10 @@ function valueFormater(type, value, map) {
 }
 function resetObject(object, filterTmpl) {
   let o = object;
+  console.log(object, filterTmpl)
   for (var key in o) {
     o[key] = '';
-    if (filterTmpl[key].inputType == 4) {
+    if (filterTmpl && filterTmpl[key].inputType == 4) {
       o[key] = []
     }
   }
