@@ -6,7 +6,6 @@
     :modal = "false"
     :close-on-click-modal = "false"
   >
-  {{ form }}
     <el-form :inline="true" ref="form" :model="form" label-width="9rem" :rules = "rules">
       <el-row>
         <el-col :span="12" v-for="(value, key, index) in tmpl" :key="index">
@@ -39,7 +38,7 @@
             <el-cascader
               v-else-if="value.inputType === 4"
               expand-trigger="hover"
-              :options="options"
+              :options="value.options"
               :show-all-levels="false"
               v-model="form[key]">
             </el-cascader>
