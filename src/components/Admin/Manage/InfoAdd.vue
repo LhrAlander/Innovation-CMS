@@ -6,6 +6,7 @@
     :modal = "false"
     :close-on-click-modal = "false"
   >
+  {{ form }}
     <el-form :inline="true" ref="form" :model="form" label-width="9rem" :rules = "rules">
       <el-row>
         <el-col :span="12" v-for="(value, key, index) in tmpl" :key="index">
@@ -116,7 +117,8 @@
       handleDetermine() {
         this.$refs.form.validate((valid) => {
           if (valid) {
-            this.$emit("sendInfo", this.form);
+            let _form = JSON.parse(JSON.stringify(this.form))
+            this.$emit("sendInfo", _form);
             this.visible = false;
             this.$refs.form.resetFields();
           } else {

@@ -94,15 +94,15 @@ export default {
       valueLabelMap: {
         role: [
           {
-            value: 1,
+            value: 0,
             label: "学生"
           },
           {
-            value: 2,
+            value: 1,
             label: "教师"
           },
           {
-            value: 3,
+            value: 2,
             label: "企业"
           }
         ]
@@ -285,17 +285,27 @@ export default {
       this.showInfoAdd = true;
     },
     receiveInfo: function(data) {
-      utils.filter2Mysql(utils.filterName.USER, data);
-      console.log(data);
       if (data) {
-        axios.post("", { data: data }, { emulateJson: true }).then(
-          function(res) {
+        const user = {
+          user_id: data.username,
+          user_name: data.name,
+          user_identity: this.valueLabelMap.role[parseInt(data.role)].label
+        };
+        axios
+          .post("/api/user/user", { user: user }, { emulateJson: true })
+          .then(res => {
+            console.log(res);
             this.loadData(this.filter, this.currentPage, this.pageSize);
-          },
-          function() {
-            console.log("failed");
-          }
-        );
+            if (res.data.code == 200) {
+              this.$message({
+                type: "success",
+                message: "添加用户信息成功!"
+              });
+            }
+          })
+          .catch(err => {
+            this.$message.error("添加用户信息失败！请与管理员联系！")
+          });
       }
       this.showInfoAdd = false;
     }

@@ -334,6 +334,7 @@ export default {
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     // 点击筛选触发的事件
+    
     enterFilter() {
       if (this.valueLabelMap.projectCategory.length < 1) {
         Promise.all([
