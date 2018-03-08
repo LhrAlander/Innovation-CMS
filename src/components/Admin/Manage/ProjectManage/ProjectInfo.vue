@@ -142,7 +142,7 @@ export default {
         },
         dependentUnit: {
           label: "项目依托单位",
-          inputType: 0
+          inputType: 4
         },
         beginYear: {
           label: "项目开始年份",
@@ -222,7 +222,7 @@ export default {
         },
         dependentUnit: {
           label: "项目依托单位",
-          inputType: 0
+          inputType: 4
         },
         beginYear: {
           label: "项目开始年份",
@@ -274,7 +274,9 @@ export default {
     },
     //        异步加载数据
     loadData(filter, pageNum, pageSize) {
-      console.log(this.filter, this.currentPage, this.pageSize);
+      if ('team_id' in filter) {
+        filter.team_id = filter.team_id.split(',')[1]
+      }
       axios
         .get(this.url, {
           params: {
@@ -334,12 +336,13 @@ export default {
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     // 点击筛选触发的事件
-    
+
     enterFilter() {
       if (this.valueLabelMap.projectCategory.length < 1) {
         Promise.all([
           axios.get("/api/category/project/categories"),
-          axios.get("/api/category/project/levels")
+          axios.get("/api/category/project/levels"),
+          axios.get("api/dependent/choices")
         ])
           .then(res => {
             this.valueLabelMap.projectCategory = res[0].data.data.map(i => {
@@ -354,6 +357,32 @@ export default {
                 value: i.level_name
               };
             });
+
+            // 构建级联选择器
+            let options = [];
+            let selectors = res[2].data.data;
+            for (let i = 0; i < selectors.length; i++) {
+              let selector = selectors[i];
+              let option = {
+                label: selector.unitName,
+                value: selector.unitId
+              };
+              let teams = [];
+              for (let i = 0; i < selector.teams.length; i++) {
+                let team = selector.teams[i];
+                let _team = {
+                  label: team.teamName,
+                  value: team.teamId
+                };
+                teams.push(_team);
+              }
+              if (teams.length > 0) {
+                option.children = teams;
+              }
+              options.push(option);
+            }
+            this.filterTmpl.dependentUnit.options = options;
+
             this.showFilterBox = true;
           })
           .catch(err => {
@@ -381,7 +410,8 @@ export default {
     resetObject: utils.resetObject,
     valueFormater: utils.valueFormater,
     quitFilter: function() {
-      this.filter = this.resetObject(this.filter);
+      this.filter = this.resetObject(this.filter, this.filterTmpl);
+      utils.filter2Mysql(utils.filterName.PROJECT, this.filter);
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     enterAdd: function() {

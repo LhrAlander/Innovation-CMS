@@ -27,29 +27,29 @@
 </template>
 
 <script>
-    export default {
-      props: {
-        item: Object
-      },
-      data () {
-        return {
-          INPUT : 1,
-          SELECT : 2,
-          RADIO : 3,
-          SWITCH : 4,
-          BUTTON : 5
-        }
-      },
-      methods: {
-        clickBtn (item) {
-          this.$emit("clickBtn")
-        }
-      }
+export default {
+  props: {
+    item: Object
+  },
+  data() {
+    return {
+      INPUT: 1,
+      SELECT: 2,
+      RADIO: 3,
+      SWITCH: 4,
+      BUTTON: 5
+    };
+  },
+  methods: {
+    clickBtn(item) {
+      this.$emit("clickBtn");
     }
+  }
+};
 </script>
 
 <style scoped>
-  .el-radio {
-    font-size: 1.8rem;
-  }
+.el-radio {
+  font-size: 1.8rem;
+}
 </style>

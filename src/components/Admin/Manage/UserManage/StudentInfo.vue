@@ -325,7 +325,7 @@ export default {
     resetObject: utils.resetObject,
     valueFormater: utils.valueFormater,
     quitFilter: function() {
-      this.filter = this.resetObject(this.filter);
+      this.filter = this.resetObject(this.filter, this.filterTmpl);
       utils.filter2Mysql(utils.filterName.STUDENT, this.filter);
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },

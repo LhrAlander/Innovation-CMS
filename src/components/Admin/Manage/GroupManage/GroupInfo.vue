@@ -90,22 +90,7 @@ export default {
   components: { FilterBox, InfoAdd },
   data() {
     return {
-      tableData: [
-        {
-          // 表格数据
-          id: 1,
-          groupName: "团队名称",
-          leaderName: "林海瑞",
-          leaderSpecialty: "搞笑",
-          teacher: "滕飞",
-          dependentUnit: "滕氏集团",
-          intro: "BAT总部",
-          leaderPhone: "888888888",
-          leaderId: "1234567890",
-          teacherPhone: "111111111",
-          teacherId: "2222222222"
-        }
-      ],
+      tableData: [],
       valueLabelMap: {
         unitId: []
       },

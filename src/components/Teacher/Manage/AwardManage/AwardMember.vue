@@ -253,7 +253,7 @@
       resetObject: utils.resetObject,
       valueFormater: utils.valueFormater,
       quitFilter: function () {
-        this.filter = this.resetObject(this.filter);
+        this.filter = this.resetObject(this.filter, this.filterTmpl);
         this.loadData(this.filter, this.currentName, this.pageSize);
       },
       receiveInfo: function (data) {

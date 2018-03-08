@@ -220,6 +220,7 @@ export default {
     },
     // 异步加载数据
     loadData(filter, pageNum, pageSize) {
+      console.log('filter')
       axios
         .get(this.url, {
           params: {
@@ -229,7 +230,6 @@ export default {
           }
         })
         .then(res => {
-          console.log(res);
           this.tableData = [];
           this.tableData = res.data.data;
           this.totalCount = res.data.count;

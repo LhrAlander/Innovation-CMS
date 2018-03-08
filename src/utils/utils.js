@@ -119,15 +119,24 @@ function valueFormater(type, value, map) {
   }
 }
 function resetObject(object, filterTmpl) {
-  let o = object;
-  console.log(object, filterTmpl)
+  // let o = object;
+  // console.log(object, filterTmpl)
+  // for (var key in o) {
+  //   o[key] = '';
+  //   if (filterTmpl && filterTmpl[key].inputType == 4) {
+  //     o[key] = []
+  //   }
+  // }
+  // return o;
+  let o = filterTmpl;
+  let r = {}
   for (var key in o) {
-    o[key] = '';
-    if (filterTmpl && filterTmpl[key].inputType == 4) {
-      o[key] = []
+    r[key] = ''
+    if (o[key].inputType == 4) {
+      r[key] = []
     }
   }
-  return o;
+  return r
 }
 
 
