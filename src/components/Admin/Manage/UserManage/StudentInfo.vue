@@ -334,14 +334,16 @@ export default {
     },
     receiveInfo: function(data) {
       if (data) {
-        axios.post("", { data: data }, { emulateJson: true }).then(
-          function(res) {
-            this.loadData(this.filter, this.currentPage, this.pageSize);
-          },
-          function() {
-            console.log("failed");
-          }
-        );
+         const user = {
+          user_id: data.studentId,
+          user_name: data.name,
+          user_identity: '学生'
+        };
+        console.log(data, user)
+        this.$store.dispatch('addUserInfo', {
+          that: this,
+          user
+        })
       }
       this.showInfoAdd = false;
     }

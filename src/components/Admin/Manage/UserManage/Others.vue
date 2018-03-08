@@ -90,35 +90,8 @@ export default {
   components: { ElButton, FilterBox, InfoAdd },
   data() {
     return {
-      tableData: [
-        {
-          // 表格数据
-          id: 1,
-          companyName: "1", //企业名称
-          principalName: "1", //负责人姓名
-          companyAccess: "1", //企业联系方式
-          status: "1", //用户状态
-          principalPhone: "1", //负责人手机号
-          gender: "1", //性别
-          email: "1", //邮箱
-          specAddress: "浙江省杭州市海曙路58号杭州师范大学仓前校区博文苑8号楼" //企业具体位置
-        }
-      ],
+      tableData: [],
       valueLabelMap: {
-        // 下拉类型的input的具体数据
-        //          role: [{ // 用户类别映射表
-        //            value: 0,
-        //            label: '全部'
-        //          }, {
-        //            value: 1,
-        //            label: '学生'
-        //          }, {
-        //            value: 2,
-        //            label: '老师'
-        //          }, {
-        //            value: 3,
-        //            label: '企业'
-        //          }],
         status: [
           {
             value: 0,
@@ -160,34 +133,38 @@ export default {
           label: "企业名称",
           inputType: 0 // 0 代表 input
         },
+        principalId: {
+          label: '负责人用户名',
+          inputType: 0
+        },
         principalName: {
           label: "负责人姓名",
           inputType: 0 // 0 代表 input
         },
-        companyAccess: {
-          label: "企业联系方式",
-          inputType: 0
-        },
-        status: {
-          label: "用户状态",
-          inputType: 1
-        },
-        principalPhone: {
-          label: "负责人手机号",
-          inputType: 0
-        },
-        gender: {
-          label: "性别",
-          inputType: 1
-        },
-        email: {
-          label: "邮箱",
-          inputType: 0
-        },
-        specAddress: {
-          label: "企业具体位置",
-          inputType: 0
-        }
+        // companyAccess: {
+        //   label: "企业联系方式",
+        //   inputType: 0
+        // },
+        // status: {
+        //   label: "用户状态",
+        //   inputType: 1
+        // },
+        // principalPhone: {
+        //   label: "负责人手机号",
+        //   inputType: 0
+        // },
+        // gender: {
+        //   label: "性别",
+        //   inputType: 1
+        // },
+        // email: {
+        //   label: "邮箱",
+        //   inputType: 0
+        // },
+        // specAddress: {
+        //   label: "企业具体位置",
+        //   inputType: 0
+        // }
       },
       infoAddRules: {
         companyName: [
@@ -196,20 +173,23 @@ export default {
         principalName: [
           { required: true, message: "请输入负责人姓名", trigger: "blur" }
         ],
-        companyAccess: [
-          { required: true, message: "请输入企业联系方式", trigger: "blur" }
+         principalId: [
+          { required: true, message: "请输入负责人用户名", trigger: "blur" }
         ],
-        status: [
-          { required: true, message: "请输入用户状态", trigger: "blur" }
-        ],
-        principalPhone: [
-          { required: true, message: "请输入负责人手机号", trigger: "blur" }
-        ],
-        gender: [{ required: true, message: "请输入性别", trigger: "blur" }],
-        email: [{ required: true, message: "请输入邮箱", trigger: "blur" }],
-        specAddress: [
-          { required: true, message: "请输入企业具体位置", trigger: "blur" }
-        ]
+        // companyAccess: [
+        //   { required: true, message: "请输入企业联系方式", trigger: "blur" }
+        // ],
+        // status: [
+        //   { required: true, message: "请输入用户状态", trigger: "blur" }
+        // ],
+        // principalPhone: [
+        //   { required: true, message: "请输入负责人手机号", trigger: "blur" }
+        // ],
+        // gender: [{ required: true, message: "请输入性别", trigger: "blur" }],
+        // email: [{ required: true, message: "请输入邮箱", trigger: "blur" }],
+        // specAddress: [
+        //   { required: true, message: "请输入企业具体位置", trigger: "blur" }
+        // ]
       },
       //        获取表格数据的地址
       url: "/api/company/companies",
@@ -218,22 +198,26 @@ export default {
           label: "企业名称",
           inputType: 0 // 0 代表 input
         },
+        principalId: {
+          label: '负责人用户名',
+          inputType: 0
+        },
         principalName: {
           label: "负责人姓名",
           inputType: 0 // 0 代表 input
         },
-        status: {
-          label: "用户状态",
-          inputType: 1
-        },
-        gender: {
-          label: "性别",
-          inputType: 1
-        },
-        specAddress: {
-          label: "企业具体位置",
-          inputType: 0
-        }
+        // status: {
+        //   label: "用户状态",
+        //   inputType: 1
+        // },
+        // gender: {
+        //   label: "性别",
+        //   inputType: 1
+        // },
+        // specAddress: {
+        //   label: "企业具体位置",
+        //   inputType: 0
+        // }
       },
       filter: {
         //搜索条件
@@ -350,14 +334,20 @@ export default {
     },
     receiveInfo: function(data) {
       if (data) {
-        axios.post("", { data: data }, { emulateJson: true }).then(
-          function(res) {
-            this.loadData(this.filter, this.currentPage, this.pageSize);
-          },
-          function() {
-            console.log("failed");
-          }
-        );
+        const user = {
+          user_id: data.principalId,
+          user_name: data.principalName,
+          company_name: data.companyName,
+          user_identity: '企业'
+        };
+        console.log(user, data)
+        axios.post('/api/company/add/company', {user})
+          .then(res => {
+            console.log(res)
+          })
+          .catch(err => {
+            console.log(err)
+          })
       }
       this.showInfoAdd = false;
     }

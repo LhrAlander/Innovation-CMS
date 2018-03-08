@@ -226,11 +226,37 @@ const changeCompanyInfo = ({ commit, state }, payload) => {
       that.$message.error("修改企业信息失败");
     })
 }
+
+
+// 管理员添加用户基本嘻嘻
+const addUserInfo = ({ commit, state }, payload) => {
+  const { that, user } = payload
+  axios
+    .post("/api/user/user", { user: user }, { emulateJson: true })
+    .then(res => {
+      console.log(res);
+      that.loadData(that.filter, that.currentPage, that.pageSize);
+      if (res.data.code == 200) {
+        that.$message({
+          type: "success",
+          message: "添加用户信息成功!"
+        });
+      }
+      else {
+        that.$message.error("添加用户信息失败！请与管理员联系！")
+      }
+    })
+    .catch(err => {
+      that.$message.error("添加用户信息失败！请与管理员联系！")
+    });
+}
+
 export default {
   delUser,
   resetPwd,
   changeUserBaseInfo,
   changeStudentInfo,
   changeTeacherInfo,
-  changeCompanyInfo
+  changeCompanyInfo,
+  addUserInfo
 }

@@ -101,10 +101,10 @@ export default {
             value: 1,
             label: "教师"
           },
-          {
-            value: 2,
-            label: "企业"
-          }
+          // {
+          //   value: 2,
+          //   label: "企业"
+          // }
         ]
       },
 
@@ -291,21 +291,10 @@ export default {
           user_name: data.name,
           user_identity: this.valueLabelMap.role[parseInt(data.role)].label
         };
-        axios
-          .post("/api/user/user", { user: user }, { emulateJson: true })
-          .then(res => {
-            console.log(res);
-            this.loadData(this.filter, this.currentPage, this.pageSize);
-            if (res.data.code == 200) {
-              this.$message({
-                type: "success",
-                message: "添加用户信息成功!"
-              });
-            }
-          })
-          .catch(err => {
-            this.$message.error("添加用户信息失败！请与管理员联系！")
-          });
+        this.$store.dispatch('addUserInfo', {
+          that: this,
+          user
+        })
       }
       this.showInfoAdd = false;
     }
