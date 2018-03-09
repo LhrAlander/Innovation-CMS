@@ -29,12 +29,23 @@ import AwardMember from 'components/Admin/Manage/AwardManage/AwardMember'
 
 // 管理员查看表单
 
+import LoginAndRegister from 'components/LoginAndRegister'
 
 
 export default [
   {
     'path': '/',
     component: Index
+  },
+  {
+    name: 'Login',
+    path: '/Login',
+    component: LoginAndRegister,
+  },
+  {
+    name: 'Register',
+    path: '/Register',
+    component: LoginAndRegister,
   },
   {
     'path': '/admin',

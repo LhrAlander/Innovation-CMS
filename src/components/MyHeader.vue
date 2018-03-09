@@ -15,9 +15,9 @@
           <el-col :span="3"><router-link to="/"><div class="grid-content bg-purple-light nav-item">学校文件</div></router-link></el-col>
           <el-col :span="3"><router-link to="/"><div class="grid-content bg-purple nav-item">通知公告</div></router-link></el-col>
           <el-col :span="4" class="logAndReg">
-            <router-link to="/">登录</router-link>
+            <router-link to="/Login">登录</router-link>
             <span class="separate">|</span>
-            <router-link to="/">注册</router-link>
+            <router-link to="/Register">注册</router-link>
           </el-col>
         </el-row>
       </div>

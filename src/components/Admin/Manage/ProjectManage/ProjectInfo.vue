@@ -274,8 +274,8 @@ export default {
     },
     //        异步加载数据
     loadData(filter, pageNum, pageSize) {
-      if ("team_id" in filter) {
-        filter.team_id = filter.team_id.split(",")[1];
+      if ('team_id' in filter) {
+        filter.team_id = filter.team_id.split(',')[1]
       }
       axios
         .get(this.url, {
@@ -337,22 +337,59 @@ export default {
     },
     // 点击筛选触发的事件
 
-    async enterFilter() {
-      try {
-        if (this.valueLabelMap.projectCategory.length < 1) {
-          let res = await this.$store.dispatch("getSelectors");
-          console.log(res);
-          this.valueLabelMap.projectCategory = res[0];
+    enterFilter() {
+      if (this.valueLabelMap.projectCategory.length < 1) {
+        Promise.all([
+          axios.get("/api/category/project/categories"),
+          axios.get("/api/category/project/levels"),
+          axios.get("api/dependent/choices")
+        ])
+          .then(res => {
+            this.valueLabelMap.projectCategory = res[0].data.data.map(i => {
+              return {
+                label: i.identity_name,
+                value: i.identity_name
+              };
+            });
+            this.valueLabelMap.projectLevel = res[1].data.data.map(i => {
+              return {
+                label: i.level_name,
+                value: i.level_name
+              };
+            });
 
-          this.valueLabelMap.projectLevel = res[1];
-          this.filterTmpl.dependentUnit.options = res[2];
-          this.infoAddTmpl.dependentUnit.options = res[2];
-          this.showFilterBox = true;
-        } else {
-          this.showFilterBox = true;
-        }
-      } catch (error) {
-        console.log(error);
+            // 构建级联选择器
+            let options = [];
+            let selectors = res[2].data.data;
+            for (let i = 0; i < selectors.length; i++) {
+              let selector = selectors[i];
+              let option = {
+                label: selector.unitName,
+                value: selector.unitId
+              };
+              let teams = [];
+              for (let i = 0; i < selector.teams.length; i++) {
+                let team = selector.teams[i];
+                let _team = {
+                  label: team.teamName,
+                  value: team.teamId
+                };
+                teams.push(_team);
+              }
+              if (teams.length > 0) {
+                option.children = teams;
+              }
+              options.push(option);
+            }
+            this.filterTmpl.dependentUnit.options = options;
+
+            this.showFilterBox = true;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else {
+        this.showFilterBox = true;
       }
     },
     // 接收子组件filterbox传递的筛选条件数据
@@ -377,23 +414,8 @@ export default {
       utils.filter2Mysql(utils.filterName.PROJECT, this.filter);
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    enterAdd: async function() {
-      try {
-        if (this.valueLabelMap.projectCategory.length < 1) {
-          let res = await this.$store.dispatch("getSelectors");
-          console.log(res);
-          this.valueLabelMap.projectCategory = res[0];
-
-          this.valueLabelMap.projectLevel = res[1];
-          this.filterTmpl.dependentUnit.options = res[2];
-          this.infoAddTmpl.dependentUnit.options = res[2];
-          this.showInfoAdd = true;
-        } else {
-          this.showInfoAdd = true;
-        }
-      } catch (error) {
-        console.log(error);
-      }
+    enterAdd: function() {
+      this.showInfoAdd = true;
     },
     receiveInfo: function(data) {
       if (data) {

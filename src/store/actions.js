@@ -251,62 +251,7 @@ const addUserInfo = ({ commit, state }, payload) => {
     });
 }
 
-
-// 获取项目筛选信息
-const getSelectors = ({commit, state}, payload) => {
-  
-  return Promise.all([
-    axios.get("/api/category/project/categories"),
-    axios.get("/api/category/project/levels"),
-    axios.get("api/dependent/choices")
-  ])
-    .then(res => {
-      let projectCategory = res[0].data.data.map(i => {
-        return {
-          label: i.identity_name,
-          value: i.identity_name
-        };
-      });
-      let projectLevel = res[1].data.data.map(i => {
-        return {
-          label: i.level_name,
-          value: i.level_name
-        };
-      });
-
-      // 构建级联选择器
-      let options = [];
-      let selectors = res[2].data.data;
-      for (let i = 0; i < selectors.length; i++) {
-        let selector = selectors[i];
-        let option = {
-          label: selector.unitName,
-          value: selector.unitId
-        };
-        let teams = [];
-        for (let i = 0; i < selector.teams.length; i++) {
-          let team = selector.teams[i];
-          let _team = {
-            label: team.teamName,
-            value: team.teamId
-          };
-          teams.push(_team);
-        }
-        if (teams.length > 0) {
-          option.children = teams;
-        }
-        options.push(option);
-      }
-      return[projectCategory, projectLevel, options]
-    })
-    .catch(err => {
-      return err
-      console.log(err);
-    });
-}
-
 export default {
-  getSelectors,
   delUser,
   resetPwd,
   changeUserBaseInfo,
