@@ -30,7 +30,7 @@ import AwardMember from 'components/Admin/Manage/AwardManage/AwardMember'
 // 管理员查看表单
 
 import LoginAndRegister from 'components/LoginAndRegister'
-
+import Recruit from 'components/Recruit'
 
 export default [
   {
@@ -46,6 +46,11 @@ export default [
     name: 'Register',
     path: '/Register',
     component: LoginAndRegister,
+  },
+  {
+    name: 'Recruit',
+    path: '/Recruit',
+    component: Recruit
   },
   {
     'path': '/admin',
