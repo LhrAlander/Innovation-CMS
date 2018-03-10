@@ -94,6 +94,14 @@ import * as utils from "utils/utils";
 export default {
   components: { FilterBox, InfoAdd },
   data() {
+    var cascaderVal = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请选择依托单位'))
+      }
+      else {
+        callback()
+      }
+    }
     return {
       tableData: [],
       valueLabelMap: {
@@ -134,7 +142,7 @@ export default {
         },
         applyYear: {
           label: "项目申请年份",
-          inputType: 3
+          inputType: 2
         },
         projectId: {
           label: "项目编号",
@@ -146,11 +154,11 @@ export default {
         },
         beginYear: {
           label: "项目开始年份",
-          inputType: 3
+          inputType: 2
         },
         deadlineYear: {
           label: "项目截至年份",
-          inputType: 3
+          inputType: 2
         },
         principalName: {
           label: "项目负责人用户名",
@@ -161,6 +169,7 @@ export default {
           inputType: 0
         }
       },
+      
       infoAddRules: {
         projectName: [
           { required: true, message: "请输入项目名称", trigger: "blur" }
@@ -176,9 +185,6 @@ export default {
         ],
         projectId: [
           { required: true, message: "请输入项目编号", trigger: "blur" }
-        ],
-        dependentUnit: [
-          { required: true, message: "请输入项目依托单位", trigger: "blur" }
         ],
         beginYear: [
           { required: true, message: "请输入项目开始年份", trigger: "blur" }
@@ -336,58 +342,15 @@ export default {
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     // 点击筛选触发的事件
-
-    enterFilter() {
+    async enterFilter() {
       if (this.valueLabelMap.projectCategory.length < 1) {
-        Promise.all([
-          axios.get("/api/category/project/categories"),
-          axios.get("/api/category/project/levels"),
-          axios.get("api/dependent/choices")
-        ])
-          .then(res => {
-            this.valueLabelMap.projectCategory = res[0].data.data.map(i => {
-              return {
-                label: i.identity_name,
-                value: i.identity_name
-              };
-            });
-            this.valueLabelMap.projectLevel = res[1].data.data.map(i => {
-              return {
-                label: i.level_name,
-                value: i.level_name
-              };
-            });
-
-            // 构建级联选择器
-            let options = [];
-            let selectors = res[2].data.data;
-            for (let i = 0; i < selectors.length; i++) {
-              let selector = selectors[i];
-              let option = {
-                label: selector.unitName,
-                value: selector.unitId
-              };
-              let teams = [];
-              for (let i = 0; i < selector.teams.length; i++) {
-                let team = selector.teams[i];
-                let _team = {
-                  label: team.teamName,
-                  value: team.teamId
-                };
-                teams.push(_team);
-              }
-              if (teams.length > 0) {
-                option.children = teams;
-              }
-              options.push(option);
-            }
-            this.filterTmpl.dependentUnit.options = options;
-
-            this.showFilterBox = true;
-          })
-          .catch(err => {
-            console.log(err);
-          });
+       let res = await this.$store.dispatch("getSelectors");
+        console.log(res);
+        this.valueLabelMap.projectCategory = res[0];
+        this.valueLabelMap.projectLevel = res[1];
+        this.filterTmpl.dependentUnit.options = res[2];
+        this.infoAddTmpl.dependentUnit.options = res[2];
+        this.showFilterBox = true;
       } else {
         this.showFilterBox = true;
       }
@@ -414,19 +377,41 @@ export default {
       utils.filter2Mysql(utils.filterName.PROJECT, this.filter);
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    enterAdd: function() {
+    enterAdd: async function() {
+      if (this.valueLabelMap.projectCategory.length < 1) {
+       let res = await this.$store.dispatch("getSelectors");
+        console.log(res);
+        this.valueLabelMap.projectCategory = res[0];
+        this.valueLabelMap.projectLevel = res[1];
+        this.filterTmpl.dependentUnit.options = res[2];
+        this.infoAddTmpl.dependentUnit.options = res[2];
+      } 
       this.showInfoAdd = true;
     },
     receiveInfo: function(data) {
       if (data) {
-        axios.post("", { data: data }, { emulateJson: true }).then(
-          function(res) {
-            this.loadData(this.filter, this.currentPage, this.pageSize);
-          },
-          function() {
-            console.log("failed");
-          }
-        );
+        console.log(data)
+        const project = {
+          project_id: data.projectId,
+          project_status: '可用',
+          project_name: data.projectName,
+          project_identity: data.projectCategory,
+          project_level: data.projectLevel,
+          team_id: data.dependentUnit[1],
+          project_teacher: data.guideTeacherName,
+          project_principal: data.principalName,
+          register_year: data.applyYear,
+          start_year: data.beginYear,
+          finish_year: data.deadlineYear
+        }
+        console.log(project)
+        axios.post('/api/project/add/project', {project})
+          .then(res => {
+            console.log(res)
+          })
+          .catch(err => {
+            console.log(err)
+          })
       }
       this.showInfoAdd = false;
     }

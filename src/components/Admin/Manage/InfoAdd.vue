@@ -24,22 +24,23 @@
                             v-model="form[key]"
                             align="right"
                             type="date"
+                            value-format="yyyy-MM-dd"
                             placeholder="选择日期"
-                            clearable
-                            :picker-options="datePickerOptions">
+                            clearable>
             </el-date-picker>
             <el-date-picker
               v-else-if="value.inputType === 3"
               v-model="form[key]"
               align="right"
               type="year"
+              value-format="yyyy"
               placeholder="选择年"
               clearable>
             </el-date-picker>
             <el-cascader
               v-else-if="value.inputType === 4"
               expand-trigger="hover"
-              :options="options"
+              :options="value.options"
               :show-all-levels="false"
               v-model="form[key]">
             </el-cascader>
@@ -110,7 +111,7 @@
     },
     methods: {
       handleCancel() {
-        // this.$emit("sendInfo");
+        this.$emit("sendInfo");
         this.visible = false;
         this.$refs.form.resetFields();
       },

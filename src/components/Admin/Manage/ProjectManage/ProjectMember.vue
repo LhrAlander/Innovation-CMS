@@ -84,40 +84,7 @@ export default {
       tableData: [],
       projectOptions: [],
       valueLabelMap: {
-        projectName: [
-          {
-            value: "project1",
-            label: "项目1"
-          },
-          {
-            value: "project2",
-            label: "项目2"
-          },
-          {
-            value: "project3",
-            label: "项目3"
-          },
-          {
-            value: "project4",
-            label: "项目4"
-          },
-          {
-            value: "project5",
-            label: "项目5"
-          },
-          {
-            value: "project6",
-            label: "项目6"
-          },
-          {
-            value: "project7",
-            label: "项目7"
-          },
-          {
-            value: "project8",
-            label: "项目8"
-          }
-        ]
+        projectName: []
       },
 
       keyFormatMap: {
@@ -134,7 +101,7 @@ export default {
       infoAddTmpl: {
         projectName: {
           label: "项目名称",
-          inputType: 0 // 0 代表 input
+          inputType: 4 // 0 代表 input
         },
         userId: {
           label: "用户名",
@@ -146,9 +113,9 @@ export default {
         }
       },
       infoAddRules: {
-        projectName: [
-          { required: true, message: "请输入项目名称", trigger: "blur" }
-        ],
+        // projectName: [
+        //   { required: true, message: "请输入项目名称", trigger: "blur" }
+        // ],
         userId: [{ required: true, message: "请输入用户名", trigger: "blur" }],
         joinTime: [
           { required: true, message: "请输入加入时间", trigger: "blur" }
@@ -160,7 +127,6 @@ export default {
         projectId: {
           label: "项目名称",
           inputType: 4, // 0 代表 input
-          options: []
         },
         userId: {
           label: "用户名",
@@ -187,43 +153,6 @@ export default {
     };
   },
   mounted: function() {
-    axios.get("api/dependent/choices")
-      .then(res => {
-        let options = [];
-        let selectors = res.data.data;
-        for (let i = 0; i < selectors.length; i++) {
-          let selector = selectors[i];
-          let option = {
-            label: selector.unitName,
-            value: selector.unitId
-          };
-          let teams = [];
-          for (let i = 0; i < selector.teams.length; i++) {
-            let team = selector.teams[i];
-            console.log(team);
-            let _team = {
-              label: team.teamName,
-              value: team.teamId
-            };
-            _team.children = team.projects.map(project =>{
-              return {
-                value: project.projectId,
-                label: project.projectName
-              }
-            })
-            teams.push(_team);
-          }
-          if (teams.length > 0) {
-            option.children = teams;
-          }
-          options.push(option);
-          this.filterTmpl.projectId.options = options
-        }
-      })
-      .catch(err => {
-        console.log(err)
-      })
-    // utils.filter2Mysql(utils.filterName.PROJECT, this.filter);
     this.loadData(this.filter, this.currentPage, this.pageSize);
   },
   methods: {
@@ -294,7 +223,13 @@ export default {
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        点击筛选触发的事件
-    enterFilter() {
+    async enterFilter() {
+      if (!('options' in this.filterTmpl.projectId && this.filterTmpl.projectId.options.length > 0)) {
+        let res = await this.$store.dispatch("getSelectors");
+        console.log(res)
+        this.filterTmpl.projectId.options = res[3];
+        this.infoAddTmpl.projectName.options = res[3];
+      }
       this.showFilterBox = true;
     },
     //        接收子组件filterbox传递的筛选条件数据
@@ -334,19 +269,30 @@ export default {
       this.filter = this.resetObject(this.filter, this.filterTmpl);
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    enterAdd: function() {
+    enterAdd: async function() {
+      if (!('options' in this.infoAddTmpl.projectName && this.infoAddTmpl.projectName.options.length > 0)) {
+        let res = await this.$store.dispatch("getSelectors");
+        console.log(res)
+        this.filterTmpl.projectId.options = res[3];
+        this.infoAddTmpl.projectName.options = res[3];
+      }
       this.showInfoAdd = true;
     },
     receiveInfo: function(data) {
       if (data) {
-        axios.post("", { data: data }, { emulateJson: true }).then(
-          function(res) {
-            this.loadData(this.filter, this.currentPage, this.pageSize);
-          },
-          function() {
-            console.log("failed");
-          }
-        );
+        console.log(data)
+        const user = {
+          project_id: data.projectName[2],
+          user_id: data.userId,
+          add_time: data.joinTime
+        }
+        axios.post('/api/project/add/project/user', {user})
+          .then(res => {
+            console.log(res)
+          })
+          .catch(err => {
+            console.log(err)
+          })
       }
       this.showInfoAdd = false;
     }
