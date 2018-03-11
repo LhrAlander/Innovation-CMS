@@ -110,7 +110,7 @@ export default {
         teacherId: "指导老师用户名"
       },
       infoAddTmpl: {
-        dependentUnit: {
+        unitId: {
           label: "所在依托单位",
           inputType: 1 // 0 代表 input
         },
@@ -128,7 +128,7 @@ export default {
         }
       },
       infoAddRules: {
-        dependentUnit: [
+        unitId: [
           { required: true, message: "请输入依托单位", trigger: "blur" }
         ],
         groupName: [
@@ -262,47 +262,18 @@ export default {
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        点击筛选触发的事件
-    enterFilter() {
+    async enterFilter() {
       if (!("options" in this.filterTmpl.teamId)) {
-        console.log("init options");
-        axios
-          .get("api/dependent/choices")
-          .then(res => {
-            let teamOptions = [];
-            let unitOptions = [];
-            let selectors = res.data.data;
-            for (let i = 0; i < selectors.length; i++) {
-              let selector = selectors[i];
-              let teamOption = {
-                label: selector.unitName,
-                value: selector.unitId
-              };
-              unitOptions.push({
-                label: selector.unitName,
-                value: selector.unitId
-              });
-              let teams = [];
-              for (let i = 0; i < selector.teams.length; i++) {
-                let team = selector.teams[i];
-                console.log(team);
-                let _team = {
-                  label: team.teamName,
-                  value: team.teamId
-                };
-                teams.push(_team);
-              }
-              if (teams.length > 0) {
-                teamOption.children = teams;
-              }
-              teamOptions.push(teamOption);
-            }
-            this.filterTmpl.teamId.options = teamOptions;
-            this.valueLabelMap.unitId = unitOptions;
-            this.showFilterBox = true;
-          })
-          .catch(err => {
-            console.log(err);
-          });
+        let res = await this.$store.dispatch("getSelectors");
+        this.valueLabelMap.unitId = res[2].map(i => {
+          return {
+            label: i.label,
+            value: i.value
+          };
+        });
+        console.log(this.valueLabelMap.unitId);
+        this.filterTmpl.teamId.options = res[2];
+        this.showFilterBox = true;
       } else {
         this.showFilterBox = true;
       }
@@ -327,19 +298,39 @@ export default {
       this.filter = this.resetObject(this.filter, this.filterTmpl);
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    enterAdd: function() {
-      this.showInfoAdd = true;
+    enterAdd: async function() {
+      if (!("options" in this.filterTmpl.teamId)) {
+        let res = await this.$store.dispatch("getSelectors");
+        this.valueLabelMap.unitId = res[2].map(i => {
+          return {
+            label: i.label,
+            value: i.value
+          };
+        });
+        console.log(this.valueLabelMap.unitId);
+        this.filterTmpl.teamId.options = res[2];
+        this.showInfoAdd = true;
+      } else {
+        this.showInfoAdd = true;
+      }
     },
     receiveInfo: function(data) {
       if (data) {
-        axios.post("", { data: data }, { emulateJson: true }).then(
-          function(res) {
-            this.loadData(this.filter, this.currentPage, this.pageSize);
-          },
-          function() {
-            console.log("failed");
-          }
-        );
+        const team = {
+          team_name: data.groupName,
+          team_dependent_unit: data.unitId,
+          team_teacher: data.teacherId,
+          team_principal: data.leaderId,
+          team_state: "可用"
+        };
+        axios.post("/api/team/add/team", { team })
+          .then(res => {
+            console.log(res)
+          })
+          .catch(err => {
+            console.log(err)
+          })
+        console.log(team);
       }
       this.showInfoAdd = false;
     }
