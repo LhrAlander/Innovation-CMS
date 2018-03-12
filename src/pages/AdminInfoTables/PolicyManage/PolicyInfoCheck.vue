@@ -28,7 +28,7 @@
         </el-col>
       </el-row>
       <span>发布内容简介</span>
-      <el-row :gutter="200" class="info-content">
+      <el-row :gutter="200" class="info-content less-z-index">
         <el-col :span="24" class="info-item">
           <div class="item-content">
               <div id="policy-info" v-html="policyInfo.info"></div>
