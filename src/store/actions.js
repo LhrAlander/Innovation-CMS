@@ -252,8 +252,8 @@ const addUserInfo = ({ commit, state }, payload) => {
 }
 
 // 获取项目筛选信息
-const getSelectors = ({commit, state}, payload) => {
-  
+const getSelectors = ({ commit, state }, payload) => {
+
   return Promise.all([
     axios.get("/api/category/project/categories"),
     axios.get("/api/category/project/levels"),
@@ -314,7 +314,7 @@ const getSelectors = ({commit, state}, payload) => {
         console.log(options, projectOptions)
         options = JSON.parse(JSON.stringify(options))
       }
-      return[projectCategory, projectLevel, projectOptions, options]
+      return [projectCategory, projectLevel, projectOptions, options]
     })
     .catch(err => {
       return err
@@ -322,7 +322,29 @@ const getSelectors = ({commit, state}, payload) => {
     });
 }
 
+// 获取获奖筛选信息
+const getAwards = ({ commit, state }, payload) => {
+ return Promise.all([
+    axios.get("/api/award/awardNames"),
+    axios.get("/api/category/award/levels"),
+    axios.get("/api/category/award/categories")
+  ])
+    .then(res => {
+      if (res != null && res instanceof Array) {
+        let names = res[0].data.data;
+        let levels = res[1].data.data;
+        let categories = res[2].data.data;
+        return [names, levels, categories]
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      return err
+    });
+}
+
 export default {
+  getAwards,
   getSelectors,
   delUser,
   resetPwd,

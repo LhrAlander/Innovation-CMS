@@ -135,12 +135,7 @@ export default {
           { required: true, message: "请输入获奖级别", trigger: "blur" }
         ],
         awardTime: [
-          {
-            type: "date",
-            required: true,
-            message: "请选择日期",
-            trigger: "change"
-          }
+          { required: true, message: "请输入项目开始年份", trigger: "blur" }
         ]
       },
       //        获取表格数据的地址
@@ -244,41 +239,30 @@ export default {
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        点击筛选触发的事件
-    enterFilter() {
+    async enterFilter() {
       if (this.valueLabelMap.awardName.length < 1) {
-        Promise.all([
-          axios.get("/api/award/awardNames"),
-          axios.get("/api/category/award/levels"),
-          axios.get("/api/category/award/categories")
-        ])
-          .then(res => {
-            if (res != null && res instanceof Array) {
-              let names = res[0].data.data;
-              let levels = res[1].data.data;
-              let categories = res[2].data.data;
-              this.valueLabelMap.awardName = names.map(i => {
-                return {
-                  label: i,
-                  value: i
-                };
-              });
-              this.valueLabelMap.awardLevel = categories.map(i => {
-                return {
-                  label: i.identity_name,
-                  value: i.identity_name
-                };
-              });
-              this.valueLabelMap.awardSecondLevel = levels.map(i => {
-                return {
-                  label: i.level_name,
-                  value: i.level_name
-                };
-              });
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          });
+        const res = await this.$store.dispatch(
+          "getAwards"
+        );
+        console.log(res)
+        this.valueLabelMap.awardName = res[0].map(i => {
+          return {
+            label: i,
+            value: i
+          };
+        });
+        this.valueLabelMap.awardLevel = res[2].map(i => {
+          return {
+            label: i.identity_name,
+            value: i.identity_name
+          };
+        });
+        this.valueLabelMap.awardSecondLevel = res[1].map(i => {
+          return {
+            label: i.level_name,
+            value: i.level_name
+          };
+        });
         this.showFilterBox = true;
       } else {
         this.showFilterBox = true;
@@ -304,19 +288,50 @@ export default {
       this.filter = this.resetObject(this.filter, this.filterTmpl);
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    enterAdd: function() {
-      this.showInfoAdd = true;
+    enterAdd: async function() {
+      if (this.valueLabelMap.awardName.length < 1) {
+        const res = await this.$store.dispatch(
+          "getAwards"
+        );
+        console.log(res)
+        this.valueLabelMap.awardName = res[0].map(i => {
+          return {
+            label: i,
+            value: i
+          };
+        });
+        this.valueLabelMap.awardLevel = res[2].map(i => {
+          return {
+            label: i.identity_name,
+            value: i.identity_name
+          };
+        });
+        this.valueLabelMap.awardSecondLevel = res[1].map(i => {
+          return {
+            label: i.level_name,
+            value: i.level_name
+          };
+        });
+        this.showInfoAdd = true;
+      } else {
+        this.showInfoAdd = true;
+      }
     },
     receiveInfo: function(data) {
       if (data) {
-        axios.post("", { data: data }, { emulateJson: true }).then(
-          function(res) {
-            this.loadData(this.filter, this.currentPage, this.pageSize);
-          },
-          function() {
-            console.log("failed");
-          }
-        );
+        const award = {
+          award_time: data.awardTime,
+          award_name: data.awardName,
+          award_identity: data.awardLevel,
+          award_level: data.awardSecondLevel
+        }
+        axios.post('/api/award/add/award', {award})
+          .then(res => {
+            console.log(res)
+          })
+          .catch(err => {
+            console.log(err)
+          })
       }
       this.showInfoAdd = false;
     }
