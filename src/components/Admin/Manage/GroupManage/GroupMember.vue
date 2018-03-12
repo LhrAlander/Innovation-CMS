@@ -272,42 +272,13 @@ export default {
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        点击筛选触发的事件
-    enterFilter() {
+    async enterFilter() {
       if (!("options" in this.filterTmpl.teamId)) {
-        console.log("init options");
-        axios
-          .get("api/dependent/choices")
-          .then(res => {
-            let teamOptions = [];
-            let selectors = res.data.data;
-            for (let i = 0; i < selectors.length; i++) {
-              let selector = selectors[i];
-              let teamOption = {
-                label: selector.unitName,
-                value: selector.unitId
-              };
-              let teams = [];
-              for (let i = 0; i < selector.teams.length; i++) {
-                let team = selector.teams[i];
-                console.log(team);
-                let _team = {
-                  label: team.teamName,
-                  value: team.teamId
-                };
-                teams.push(_team);
-              }
-              if (teams.length > 0) {
-                teamOption.children = teams;
-              }
-              teamOptions.push(teamOption);
-            }
-            this.filterTmpl.teamId.options = teamOptions;
-            this.showFilterBox = true;
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      } else {
+        let res = await this.$store.dispatch("getSelectors");
+        this.filterTmpl.teamId.options = res[2];
+        this.infoAddTmpl.groupName.options = res[2]
+        this.showFilterBox = true;
+       } else {
         this.showFilterBox = true;
       }
     },
@@ -347,19 +318,32 @@ export default {
       this.filter = this.resetObject(this.filter, this.filterTmpl);
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    enterAdd: function() {
-      this.showInfoAdd = true;
+    enterAdd: async function() {
+      if (!("options" in this.filterTmpl.teamId)) {
+        let res = await this.$store.dispatch("getSelectors");
+        this.filterTmpl.teamId.options = res[2];
+        this.infoAddTmpl.groupName.options = res[2]
+        this.showInfoAdd = true;
+       } else {
+        this.showInfoAdd = true;
+      }
     },
     receiveInfo: function(data) {
       if (data) {
-        axios.post("", { data: data }, { emulateJson: true }).then(
-          function(res) {
-            this.loadData(this.filter, this.currentPage, this.pageSize);
-          },
-          function() {
-            console.log("failed");
-          }
-        );
+        const user = {
+          team_id: data.groupName[1],
+          user_id: data.userId,
+          add_time: data.joinTime,
+          is_in_service: 1
+        }
+        axios.post("/api/team/add/team/user", { user })
+          .then(res => {
+            console.log(res)
+          })
+          .catch(err => {
+            console.log(err)
+          })
+        
       }
       this.showInfoAdd = false;
     }
