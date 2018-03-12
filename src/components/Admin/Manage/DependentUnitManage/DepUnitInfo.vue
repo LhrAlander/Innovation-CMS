@@ -117,11 +117,18 @@ export default {
         leaderId: {
           label: "负责人用户名(学号)",
           inputType: 0 // 0 代表 input
+        },
+        unitCategory: {
+          label: "单位类别",
+          inputType: 1 // 0 代表 input
         }
       },
       infoAddRules: {
         unitName: [
           { required: true, message: "请输入单位名称", trigger: "blur" }
+        ],
+        unitCategory: [
+          { required: true, message: "请输入单位类别", trigger: "blur" }
         ],
         leaderId: [
           {
@@ -233,39 +240,42 @@ export default {
       this.currentPage = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    //        点击筛选触发的事件
-    enterFilter() {
-      if (this.valueLabelMap.unitName.length < 1) {
-        axios
-          .get("/api/dependent/choices")
-          .then(res => {
-            this.valueLabelMap.unitName = res.data.data.map(i => {
-              return {
-                label: i.unitName,
-                value: i.unitName
-              };
-            });
-            return axios.get("/api/category/dependent/categories");
-          })
-          .then(res => {
-            this.valueLabelMap.unitCategory = res.data.data.map(i => {
-              return {
-                value: i.identity_name,
-                label: i.identity_name
-              }
-            })
-            this.showFilterBox = true;
-          })
-          .catch(err => {
-            console.log(err);
+    initSelectors() {
+      axios
+        .get("/api/dependent/choices")
+        .then(res => {
+          this.valueLabelMap.unitName = res.data.data.map(i => {
+            return {
+              label: i.unitName,
+              value: i.unitName
+            };
           });
+          return axios.get("/api/category/dependent/categories");
+        })
+        .then(res => {
+          this.valueLabelMap.unitCategory = res.data.data.map(i => {
+            return {
+              value: i.identity_name,
+              label: i.identity_name
+            };
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    //        点击筛选触发的事件
+    async enterFilter() {
+      if (this.valueLabelMap.unitName.length < 1) {
+        await this.initSelectors();
+        this.showFilterBox = true;
       } else {
         this.showFilterBox = true;
       }
     },
     //        接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {
-     if (filter !== undefined) {
+      if (filter !== undefined) {
         this.filter = filter;
       }
       this.showFilterBox = false;
@@ -283,19 +293,28 @@ export default {
       this.filter = this.resetObject(this.filter, this.filterTmpl);
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    enterAdd: function() {
-      this.showInfoAdd = true;
+    async enterAdd() {
+        if (this.valueLabelMap.unitName.length < 1) {
+        await this.initSelectors();
+        this.showInfoAdd = true;
+      } else {
+        this.showInfoAdd = true;
+      }
     },
     receiveInfo: function(data) {
       if (data) {
-        axios.post("", { data: data }, { emulateJson: true }).then(
-          function(res) {
-            this.loadData(this.filter, this.currentPage, this.pageSize);
-          },
-          function() {
-            console.log("failed");
-          }
-        );
+        const dependent = {
+          unit_name: data.unitName,
+          unit_identity: data.unitCategory,
+          unit_principal: data.leaderId
+        }
+        axios.post('/api/dependent/add/dependent', {dependent})
+          .then(res => {
+            console.log(res)
+          })
+          .catch(err => {
+            console.log(err)
+          })
       }
       this.showInfoAdd = false;
     }
