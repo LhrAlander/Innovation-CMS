@@ -90,16 +90,7 @@ export default {
   components: { ElButton, FilterBox, InfoAdd },
   data() {
     return {
-      tableData: [
-        {
-          // 表格数据
-          id: 1,
-          awardName: "获奖名称",
-          projectName: "项目名称",
-          username: "用户姓名",
-          contact: "联系方式"
-        }
-      ],
+      tableData: [],
       valueLabelMap: {
         name: [],
         awardLevel: [],
@@ -117,35 +108,44 @@ export default {
         // 格式化额外信息映射表
       },
       infoAddTmpl: {
-        awardName: {
+        awardTime: {
+          label: "获奖时间",
+          inputType: 2
+        },
+        name: {
           label: "获奖名称",
-          inputType: 0 // 0 代表 input
+          inputType: 1 // 0 代表 input
+        },
+        awardLevel: {
+          label: "获奖等级",
+          inputType: 1 // 0 代表 input
+        },
+        awardSecondLevel: {
+          label: "获奖等级",
+          inputType: 1 // 0 代表 input
         },
         projectName: {
           label: "项目名称",
           inputType: 4 // 0 代表 input
         },
         username: {
-          label: "用户姓名",
-          inputType: 0
-        },
-        contact: {
-          label: "联系方式",
+          label: "用户名",
           inputType: 0
         }
       },
       infoAddRules: {
-        awardName: [
-          { required: true, message: "请输入获奖名称", trigger: "blur" }
+        name: [{ required: true, message: "请输入获奖名称", trigger: "blur" }],
+        awardLevel: [
+          { required: true, message: "请输入获奖级别", trigger: "blur" }
         ],
-        projectName: [
-          { required: true, message: "请输入项目名称", trigger: "blur" }
+        awardSecondLevel: [
+          { required: true, message: "请输入获奖等级", trigger: "blur" }
+        ],
+        awardTime: [
+          { required: true, message: "请输入获奖时间", trigger: "blur" }
         ],
         username: [
           { required: true, message: "请输入用户姓名", trigger: "blur" }
-        ],
-        contact: [
-          { required: true, message: "请输入联系方式", trigger: "blur" }
         ]
       },
       //        获取表格数据的地址
@@ -198,9 +198,9 @@ export default {
     },
     //        异步加载数据
     loadData(filter, pageNum, pageSize) {
-      if (filter.projectName == '个人') {
-        filter.projectId = '个人'
-        delete filter.projectName
+      if (filter.projectName == "个人") {
+        filter.projectId = "个人";
+        delete filter.projectName;
       }
       axios
         .get(this.url, {
@@ -259,42 +259,37 @@ export default {
       this.currentPage = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
+    async initSelectors() {
+      const res = await this.$store.dispatch("getAwards");
+      const teams = await this.$store.dispatch("getSelectors");
+      this.infoAddTmpl.projectName.options = teams[3];
+      this.infoAddTmpl.projectName.options.push({
+        label: "个人",
+        value: "个人"
+      });
+      this.valueLabelMap.name = res[0].map(i => {
+        return {
+          label: i,
+          value: i
+        };
+      });
+      this.valueLabelMap.awardLevel = res[2].map(i => {
+        return {
+          label: i.identity_name,
+          value: i.identity_name
+        };
+      });
+      this.valueLabelMap.awardSecondLevel = res[1].map(i => {
+        return {
+          label: i.level_name,
+          value: i.level_name
+        };
+      });
+    },
     //        点击筛选触发的事件
-    enterFilter() {
+    async enterFilter() {
       if (this.valueLabelMap.name.length < 1) {
-        Promise.all([
-          axios.get("/api/award/awardNames"),
-          axios.get("/api/category/award/levels"),
-          axios.get("/api/category/award/categories")
-        ])
-          .then(res => {
-            if (res != null && res instanceof Array) {
-              let names = res[0].data.data;
-              let levels = res[1].data.data;
-              let categories = res[2].data.data;
-              this.valueLabelMap.name = names.map(i => {
-                return {
-                  label: i,
-                  value: i
-                };
-              });
-              this.valueLabelMap.awardLevel = categories.map(i => {
-                return {
-                  label: i.identity_name,
-                  value: i.identity_name
-                };
-              });
-              this.valueLabelMap.awardSecondLevel = levels.map(i => {
-                return {
-                  label: i.level_name,
-                  value: i.level_name
-                };
-              });
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          });
+        await this.initSelectors();
         this.showFilterBox = true;
       } else {
         this.showFilterBox = true;
@@ -318,19 +313,36 @@ export default {
       this.filter = this.resetObject(this.filter, this.filterTmpl);
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    enterAdd: function() {
-      this.showInfoAdd = true;
+    enterAdd: async function() {
+      if (this.valueLabelMap.name.length < 1) {
+        await this.initSelectors();
+        this.showInfoAdd = true;
+      } else {
+        this.showInfoAdd = true;
+      }
     },
     receiveInfo: function(data) {
       if (data) {
-        axios.post("", { data: data }, { emulateJson: true }).then(
-          function(res) {
-            this.loadData(this.filter, this.currentPage, this.pageSize);
+        console.log(data);
+        const award = {
+          award: {
+            award_time: data.awardTime,
+            award_name: data.name,
+            award_identity: data.awardLevel,
+            award_level: data.awardSecondLevel
           },
-          function() {
-            console.log("failed");
+          user: {
+            award_project: data.projectName.pop(),
+            user_id: data.username
           }
-        );
+        };
+        axios.post('/api/award/add/user', {award})
+          .then(res => {
+            console.log(res)
+          })
+          .catch(err => {
+            console.log(err)
+          })
       }
       this.showInfoAdd = false;
     }
