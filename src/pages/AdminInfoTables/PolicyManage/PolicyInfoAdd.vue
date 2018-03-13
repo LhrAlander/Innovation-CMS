@@ -92,24 +92,7 @@ const DISPLAY_INFO = [
     value: "国家政策",
     type: SELECT,
     span: 1,
-    options: [
-      {
-        value: "国家政策",
-        label: "国家政策"
-      },
-      {
-        value: "浙江省政策",
-        label: "浙江省政策"
-      },
-      {
-        value: "校级政策",
-        label: "校级政策"
-      },
-      {
-        value: "院级政策",
-        label: "院级政策"
-      }
-    ],
+    options: [],
     disabled: false
   },
   {
@@ -194,19 +177,20 @@ export default {
       }
       info.policy_introduction = this.policyInfo.info;
       info.state = "可用";
-      axios.post("/api/policy/add/policy", { policy: info })
-      .then(res => {
-        console.log(res)
-        if (res.status == 200 && res.data.code == 200) {
-          const policyId = res.data.policyId;
-          this.uploadData.policyId = policyId;
-          console.log(policyId)
-          this.$refs.upload.submit();
-        }
-      })
-      .catch(err => {
-        console.log(err)
-      });
+      axios
+        .post("/api/policy/add/policy", { policy: info })
+        .then(res => {
+          console.log(res);
+          if (res.status == 200 && res.data.code == 200) {
+            const policyId = res.data.policyId;
+            this.uploadData.policyId = policyId;
+            console.log(policyId);
+            this.$refs.upload.submit();
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   mounted() {
@@ -215,6 +199,29 @@ export default {
       this.policyInfo.info = html;
     };
     editor.create();
+    axios
+      .get("/api/category/policy/categories")
+      .then(res => {
+        let category = res.data;
+        let options = [];
+        if (category.code == 200) {
+          options = category.data.map(c => {
+            return {
+              label: c.identity_name,
+              value: c.identity_name
+            };
+          });
+        }
+        console.log(options)
+        this.baseInfo.forEach(item => {
+          if (item.key == "policyCategory") {
+            item.options = options;
+          }
+        });
+      })
+      .catch(err => {
+        console.log(err)
+      });
   }
 };
 </script>
