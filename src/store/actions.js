@@ -260,6 +260,7 @@ const getSelectors = ({ commit, state }, payload) => {
     axios.get("api/dependent/choices")
   ])
     .then(res => {
+      console.log(res)
       let projectCategory = res[0].data.data.map(i => {
         return {
           label: i.identity_name,
@@ -281,7 +282,8 @@ const getSelectors = ({ commit, state }, payload) => {
         let selector = selectors[i];
         let option = {
           label: selector.unitName,
-          value: selector.unitId
+          value: selector.unitId,
+          children: []
         };
         let teams = [];
         for (let i = 0; i < selector.teams.length; i++) {

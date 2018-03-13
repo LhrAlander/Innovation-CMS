@@ -126,7 +126,7 @@ export default {
       filterTmpl: {
         projectId: {
           label: "项目名称",
-          inputType: 4, // 0 代表 input
+          inputType: 4 // 0 代表 input
         },
         userId: {
           label: "用户名",
@@ -161,10 +161,10 @@ export default {
     },
     // 异步加载数据
     loadData(filter, pageNum, pageSize) {
-      if ('projectId' in filter && filter.projectId instanceof Array) {
-        filter.projectId = filter.projectId[2]
+      if ("projectId" in filter && filter.projectId instanceof Array) {
+        filter.projectId = filter.projectId[2];
       }
-      console.log(filter, pageNum, pageSize)
+      console.log(filter, pageNum, pageSize);
       axios
         .get(this.url, {
           params: {
@@ -197,16 +197,51 @@ export default {
     },
     //        删除按钮事件
     handleDelete(index, row) {
-      var array = [];
-      array.push(row.id);
-      axios.post("", { array: array }, { emulateJson: true }).then(
-        function(res) {
-          this.loadData(this.filter, this.currentPage, this.pageSize);
-        },
-        function() {
-          console.log("failed");
-        }
-      );
+      let user = {
+        joinTime: row.joinTime,
+        projectId: row.projectId,
+        userId: row.userId,
+        del:false
+      };
+      console.log(user)
+      if (new Date() - new Date(row.joinTime) < 24 * 60 * 60 * 1000) {
+        this.$confirm(
+          "该成员在项目时间过短（小于一天），是否删除该成员记录",
+          "提示",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          }
+        )
+          .then(() => {
+            console.log('yes', user)
+            user.del = true;
+            axios
+              .post("/api/project/del/project/user", {user})
+              .then(res => {})
+              .catch(err => {});
+          })
+          .catch(() => {
+            axios
+              .post("/api/project/del/project/user", {user})
+              .then(res => {
+                console.log(res);
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          });
+      } else {
+        axios
+          .post("/api/project/del/project/user", {user})
+          .then(res => {
+            console.log(res);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
     },
     //        编辑按钮事件
     handleEdit(index, row) {
@@ -224,9 +259,14 @@ export default {
     },
     //        点击筛选触发的事件
     async enterFilter() {
-      if (!('options' in this.filterTmpl.projectId && this.filterTmpl.projectId.options.length > 0)) {
+      if (
+        !(
+          "options" in this.filterTmpl.projectId &&
+          this.filterTmpl.projectId.options.length > 0
+        )
+      ) {
         let res = await this.$store.dispatch("getSelectors");
-        console.log(res)
+        console.log(res);
         this.filterTmpl.projectId.options = res[3];
         this.infoAddTmpl.projectName.options = res[3];
       }
@@ -270,9 +310,14 @@ export default {
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     enterAdd: async function() {
-      if (!('options' in this.infoAddTmpl.projectName && this.infoAddTmpl.projectName.options.length > 0)) {
+      if (
+        !(
+          "options" in this.infoAddTmpl.projectName &&
+          this.infoAddTmpl.projectName.options.length > 0
+        )
+      ) {
         let res = await this.$store.dispatch("getSelectors");
-        console.log(res)
+        console.log(res);
         this.filterTmpl.projectId.options = res[3];
         this.infoAddTmpl.projectName.options = res[3];
       }
@@ -280,19 +325,20 @@ export default {
     },
     receiveInfo: function(data) {
       if (data) {
-        console.log(data)
+        console.log(data);
         const user = {
           project_id: data.projectName[2],
           user_id: data.userId,
           add_time: data.joinTime
-        }
-        axios.post('/api/project/add/project/user', {user})
+        };
+        axios
+          .post("/api/project/add/project/user", { user })
           .then(res => {
-            console.log(res)
+            console.log(res);
           })
           .catch(err => {
-            console.log(err)
-          })
+            console.log(err);
+          });
       }
       this.showInfoAdd = false;
     }

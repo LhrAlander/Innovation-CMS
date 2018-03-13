@@ -226,7 +226,6 @@ export default {
     //        删除按钮事件
     handleDelete(index, row) {
       let state = row.status == '可用' ? '不可用' : '可用'
-
       axios.post('/api/user/delUser', {userId: row.username, state})
         .then(res => {
           console.log(res)

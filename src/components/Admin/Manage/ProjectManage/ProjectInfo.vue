@@ -67,7 +67,7 @@
           <el-button
             size="small"
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除
+            @click="handleDelete(scope.$index, scope.row)">{{ scope.row.status == '可用' ? '禁用' : '启用'}}
           </el-button>
         </template>
       </el-table-column>
@@ -115,7 +115,8 @@ export default {
         projectCategory: "项目类别",
         projectLevel: "项目级别",
         guideTeacher: "指导老师",
-        applyYear: "项目申请年份"
+        applyYear: "项目申请年份",
+        status: "状态"
       },
       expandFormatMap: {
         // 格式化额外信息映射表
@@ -316,16 +317,16 @@ export default {
     },
     //        删除按钮事件
     handleDelete(index, row) {
-      var array = [];
-      array.push(row.id);
-      axios.post("", { array: array }, { emulateJson: true }).then(
-        function(res) {
-          this.loadData(this.filter, this.currentPage, this.pageSize);
-        },
-        function() {
-          console.log("failed");
-        }
-      );
+     let state = row.status == '可用' ? '不可用' : '可用'
+     console.log(row)
+     axios.post('/api/project/delete/project', {projectId: row.projectId, project_status: state})
+      .then(res => {
+        console.log(res)
+        row.status = state
+      })
+      .catch(err => {
+        console.log(err)
+      })
     },
     //        编辑按钮事件
     handleEdit(index, row) {
