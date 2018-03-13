@@ -36,7 +36,8 @@
       type="date"
       placeholder="选择日期"
       :rows="3"
-      v-model="item.value">
+      v-model="item.value"
+      value-format="yyyy-MM-dd">
     </el-date-picker>
 
 

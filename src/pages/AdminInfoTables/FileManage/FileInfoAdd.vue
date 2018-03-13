@@ -10,7 +10,7 @@
         文件与制度管理&nbsp; >&nbsp;文件与制度创建
       </div>
       <div class="btn-wrapper">
-        <el-button type="warning" plain class="modify-mode-btn">确认创建</el-button>
+        <el-button type="warning" plain class="modify-mode-btn" @click='confirmCreate'>确认创建</el-button>
       </div>
     </div>
 
@@ -28,14 +28,9 @@
         </el-col>
       </el-row>
       <span>发布内容简介</span>
-      <el-row :gutter="200" class="info-content">
+      <el-row :gutter="200" class="info-content less-z-index">
         <el-col :span="24" class="info-item">
           <div class="item-content">
-            <!--
-            <el-input-->
-              <!--type="textarea"-->
-              <!--:rows="18"-->
-              <!--v-model="fileInfo.info"></el-input>-->
             <div id="editor-ele"></div>
           </div>
         </el-col>
@@ -44,19 +39,19 @@
       <span>附件</span>
       <el-row :gutter="200" class="info-content">
         <el-col :span="24" class="info-item">
-          <!--<div class="item-content">-->
-            <!--<div class="attack-link"></div>-->
-          <!--</div>-->
           <el-upload
             class="upload"
             ref="upload"
-            action="/api/upload/file"
+            name="uploadFile"
+            action="/api/upload/fileSystem"
             :on-preview="handlePreview"
             :on-remove="handleRemove"
+            :on-success="handleSuccess"
             :file-list="fileList"
+            :data='uploadData'
             :auto-upload="false">
             <el-button slot="trigger" size="small" type="primary">选取附件</el-button>
-            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+            <!-- <el-button style="margin-left: 10px;" size="small" type="danger" @click="deleteAll">删除全部</el-button> -->
             <div slot="tip" class="el-upload__tip">选择完文件后请手动点击按钮上传</div>
           </el-upload>
         </el-col>
@@ -68,218 +63,239 @@
 </template>
 
 <script>
-  import InfoDisplayTemp from 'components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp'
-  import E from 'wangeditor'
+import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp";
+import E from "wangeditor";
+import axios from "axios";
+import * as utils from "@/utils/utils";
 
-  const INPUT = 1
-  const SELECT = 2
-  const RADIO = 3
-  const SWITCH = 4
-  const BUTTON = 5
-  const INPUT_AREA = 6
-  const DISPLAY_INFO = [
-    {
-      key: 'notificationTitle',
-      name: '标题',
-      value: '',
-      type: INPUT,
-      span: 1,
-      disabled: false
-    },
-    {
-      key: 'notificationCategory',
-      name: '类别',
-      value: '通知',
-      type: SELECT,
-      span: 1,
-      options: [
-        {
-          value: "通知",
-          label: "通知"
-        },
-        {
-          value: "公告",
-          label: "公告"
-        }
-      ],
-      disabled: false
-    },
-    {
-      key: 'notificationStatus',
-      name: '状态',
-      value: '已发布',
-      type: SELECT,
-      span: 1,
-      options: [
-        {
-          value: "已发布",
-          label: "已发布"
-        },
-        {
-          value: "未发布",
-          label: "未发布"
-        }
-      ],
-      disabled: false
-    },
-    {
-      key: 'publishTime',
-      name: '发布时间',
-      value: '2015-10-1',
-      type: INPUT,
-      span: 1,
-      disabled: true
-    },
-    {
-      key: 'startTime',
-      name: '生效时间',
-      value: '2017-10-1',
-      type: INPUT,
-      span: 1,
-      disabled: false
-    },
-    {
-      key: 'publishPerson',
-      name: '发布者',
-      value: '',
-      type: INPUT,
-      span: 1,
-      disabled: false
-    },
-  ]
-
-  export default {
-    data () {
-      return {
-        baseInfo: DISPLAY_INFO,
-        fileInfo: {
-            info: ""
-        },
-        fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
+const INPUT = 1;
+const SELECT = 2;
+const RADIO = 3;
+const SWITCH = 4;
+const BUTTON = 5;
+const INPUT_AREA = 6;
+const DATE_PICKER = 7;
+const DISPLAY_INFO = [
+  {
+    key: "title",
+    name: "标题",
+    value: "",
+    type: INPUT,
+    span: 1,
+    disabled: false
+  },
+  {
+    key: "file_type",
+    name: "类别",
+    value: "文件",
+    type: SELECT,
+    span: 1,
+    options: [
+      {
+        value: "文件",
+        label: "文件"
+      },
+      {
+        value: "制度",
+        label: "制度"
       }
-    },
-    components: {
-      InfoDisplayTemp
-    },
-    methods: {
-      getRowCount (arr) {
-        return Math.ceil(arr.length / 3)
+    ],
+    disabled: false
+  },
+  {
+    key: "state",
+    name: "状态",
+    value: "可用",
+    type: SELECT,
+    span: 1,
+    options: [
+      {
+        value: "可用",
+        label: "已发布"
       },
-      getItemIndex (rowIndex, colIndex) {
-        return (rowIndex - 1) * 3 + colIndex - 1
-      },
-      submitUpload() {
-        this.$refs.upload.submit();
-      },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePreview(file) {
-        console.log(file);
+      {
+        value: "不可用",
+        label: "未发布"
       }
-    },
-    mounted () {
-      let editor = new E('#editor-ele')
-      editor.customConfig.onchange = html => {
-        this.policyInfo.info = html
-      }
-
-      editor.create()
-    }
+    ],
+    disabled: false
+  },
+  {
+    key: "publish_time",
+    name: "发布时间",
+    value: "2015-10-1",
+    type: DATE_PICKER,
+    span: 1,
+    disabled: false
+  },
+  {
+    key: "effective_time",
+    name: "生效时间",
+    value: "2017-10-1",
+    type: DATE_PICKER,
+    span: 1,
+    disabled: false
+  },
+  {
+    key: "publish_user",
+    name: "发布者",
+    value: "",
+    type: INPUT,
+    span: 1,
+    disabled: false
   }
+];
+
+export default {
+  data() {
+    return {
+      baseInfo: DISPLAY_INFO,
+      fileInfo: {
+        info: ""
+      },
+      fileList: [],
+      editor: "",
+      uploadData: {}
+    };
+  },
+  components: {
+    InfoDisplayTemp
+  },
+  methods: {
+    getRowCount(arr) {
+      return Math.ceil(arr.length / 3);
+    },
+    getItemIndex(rowIndex, colIndex) {
+      return (rowIndex - 1) * 3 + colIndex - 1;
+    },
+    submitUpload() {
+      this.$refs.upload.submit();
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handlePreview(file) {
+      console.log(file);
+    },
+    confirmCreate() {
+      let info = {}
+      this.baseInfo.forEach(i => {
+        info[i.key] = i.value
+      })
+      info.introduction = this.fileInfo.info;
+      console.log(info)
+      axios
+        .post("/api/fileSystem/add/fileSystem", {info })
+        .then(res => {
+          console.log(res);
+          if (res.status == 200 && res.data.code == 200) {
+            const fileSystemId = res.data.fileSystemId;
+            this.uploadData.fileSystemId = fileSystemId;
+            console.log(fileSystemId);
+            this.$refs.upload.submit();
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  },
+  mounted() {
+    let editor = new E("#editor-ele");
+    editor.customConfig.onchange = html => {
+      this.fileInfo.info = html;
+    };
+    editor.create();
+  }
+};
 </script>
 
 <style scoped>
+.less-z-index {
+  z-index: 1;
+}
+.admin-check-info-wrapper {
+  /*background-color: #ECF0F1;*/
+  background-color: #fff;
+  height: 100%;
+  padding: 1.4rem 5rem;
+}
 
-  .admin-check-info-wrapper {
-    /*background-color: #ECF0F1;*/
-    background-color: #fff;
-    height: 100%;
-    padding: 1.4rem 5rem;
-  }
+.mode-crumb-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-  .mode-crumb-box {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+h1 {
+  display: block;
+  text-align: center;
+  font-size: 1.7rem;
+  padding-bottom: 1.4rem;
+  border-bottom: 0.3rem solid #cbcbcb;
+}
 
+.breadcrumb {
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #2a3f54;
+  display: inline-block;
+}
 
-  h1 {
-    display: block;
-    text-align: center;
-    font-size: 1.7rem;
-    padding-bottom: 1.4rem;
-    border-bottom: .3rem solid #cbcbcb;
+.breadcrumb .iconfont {
+  font-size: 1.5rem;
+  margin-right: 0.3rem;
+}
 
-  }
+.info-wrapper {
+  padding: 2rem 3rem;
+}
 
-  .breadcrumb {
-    padding: 1rem;
-    font-size: 1rem;
-    font-weight: bold;
-    color: #2A3F54;
-    display: inline-block;
-  }
+.info-title {
+  font-size: 1rem;
+  color: #2a3f54;
+  font-weight: bold;
+}
 
+.iconfont.box {
+  font-weight: normal;
+  margin-right: 0.3rem;
+}
 
-  .breadcrumb .iconfont {
-    font-size: 1.5rem;
-    margin-right: .3rem;
-  }
+.el-row.info-content {
+  margin: 1.5rem 0;
+}
 
-  .info-wrapper {
-    padding: 2rem 3rem;
-  }
+.el-input {
+  background-color: #ffff00;
+  font-size: 0.9rem;
+}
 
-  .info-title {
-    font-size: 1rem;
-    color: #2A3F54;
-    font-weight: bold;
-  }
+.info-item {
+  display: flex;
+  align-items: center;
+}
 
-  .iconfont.box {
-    font-weight: normal;
-    margin-right: .3rem;
-  }
+.item-name {
+  font-size: 1rem;
+  width: 6rem;
+  margin-right: 1rem;
+}
 
-  .el-row.info-content {
-    margin: 1.5rem 0;
-  }
+.item-content {
+  flex: 1;
+}
 
-  .el-input {
-    background-color: #ffff00;
-    font-size: .9rem;
-  }
+.info-detail-check {
+  height: 1.8rem;
+  padding: 0.3rem;
+  margin-left: 1rem;
+}
 
-  .info-item {
-    display: flex;
-    align-items: center;
-  }
-
-  .item-name {
-    font-size: 1rem;
-    width: 6rem;
-    margin-right: 1rem;
-  }
-
-  .item-content {
-    flex: 1;
-  }
-
-  .info-detail-check {
-    height: 1.8rem;
-    padding: .3rem;
-    margin-left: 1rem;
-  }
-
-
-  .attack-link {
-    width: 100%;
-    height: 5rem;
-    border: 1px solid #ddd;
-  }
-
-
-
+.attack-link {
+  width: 100%;
+  height: 5rem;
+  border: 1px solid #ddd;
+}
 </style>

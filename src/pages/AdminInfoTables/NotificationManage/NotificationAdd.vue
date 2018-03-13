@@ -10,7 +10,7 @@
         通知公告管理&nbsp; >&nbsp;通知公告创建
       </div>
       <div class="btn-wrapper">
-        <el-button type="warning" plain class="modify-mode-btn" @click='confirmCreate'>确认修改</el-button>
+        <el-button type="warning" plain class="modify-mode-btn" @click='confirmCreate'>确认创建</el-button>
       </div>
     </div>
 
