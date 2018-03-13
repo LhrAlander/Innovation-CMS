@@ -63,7 +63,7 @@
           <el-button
             size="small"
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            @click="handleDelete(scope.$index, scope.row)">{{ scope.row.status == '可用' ? '禁用' : '启用'}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -90,21 +90,7 @@ export default {
   components: { ElButton, FilterBox, InfoAdd },
   data() {
     return {
-      tableData: [
-        {
-          // 表格数据
-          id: 1,
-          teacherId: "工号",
-          name: "姓名",
-          phone: "手机号码",
-          status: "用户状态",
-          background: "学历",
-          degree: "学位",
-          specialty: "专业",
-          gender: "性别",
-          email: "邮箱"
-        }
-      ],
+      tableData: [],
       valueLabelMap: {
         status: [
           {
@@ -116,43 +102,16 @@ export default {
             label: "不可用"
           }
         ],
-        background: [
-          {
-            value: "小学",
-            label: "小学"
-          },
-          {
-            value: "博士",
-            label: "博士"
-          }
-        ],
-        degree: [
-          {
-            value: 0,
-            label: "小学"
-          },
-          {
-            value: 1,
-            label: "博士"
-          }
-        ],
-        specialty: [
-          {
-            value: 0,
-            label: "专业一"
-          },
-          {
-            value: 1,
-            label: "专业二"
-          }
-        ],
+        background: [],
+        degree: [],
+        specialty: [],
         gender: [
           {
-            value: 0,
+            value: "男",
             label: "男"
           },
           {
-            value: 1,
+            value: "女",
             label: "女"
           }
         ]
@@ -239,7 +198,6 @@ export default {
     };
   },
   mounted: function() {
-    utils.filter2Mysql(utils.filterName.TEACHER, this.filter);
     this.loadData(this.filter, this.currentPage, this.pageSize);
   },
   methods: {
@@ -281,16 +239,17 @@ export default {
     },
     //        删除按钮事件
     handleDelete(index, row) {
-      var array = [];
-      array.push(row.id);
-      axios.post("", { array: array }, { emulateJson: true }).then(
-        function(res) {
-          this.loadData(this.filter, this.currentPage, this.pageSize);
-        },
-        function() {
-          console.log("failed");
-        }
-      );
+      let state = row.status == "可用" ? "不可用" : "可用";
+      console.log(row);
+      axios
+        .post("/api/user/delUser", { userId: row.teacherId, state })
+        .then(res => {
+          console.log(res);
+          row.status = state;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     //        编辑按钮事件
     handleEdit(index, row) {
@@ -306,14 +265,27 @@ export default {
       this.currentPage = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
+    async initSelectors() {
+      axios
+        .get("/api/teacher/selectors")
+        .then(res => {
+          this.valueLabelMap.background = res.data.background;
+          this.valueLabelMap.degree = res.data.degree;
+          this.valueLabelMap.specialty = res.data.specialty;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     //        点击筛选触发的事件
     enterFilter() {
+      if (this.valueLabelMap.background.length < 1) {
+        this.initSelectors();
+      }
       this.showFilterBox = true;
     },
     //        接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {
-      utils.filter2Mysql(utils.filterName.TEACHER, filter)
-      console.log(filter)
       if (filter !== undefined) this.filter = filter;
       this.showFilterBox = false;
       this.loadData(this.filter, this.currentPage, this.pageSize);
@@ -338,12 +310,12 @@ export default {
         const user = {
           user_id: data.teacherId,
           user_name: data.name,
-          user_identity: '教师'
+          user_identity: "教师"
         };
-        this.$store.dispatch('addUserInfo', {
+        this.$store.dispatch("addUserInfo", {
           that: this,
           user
-        })
+        });
       }
       this.showInfoAdd = false;
     }

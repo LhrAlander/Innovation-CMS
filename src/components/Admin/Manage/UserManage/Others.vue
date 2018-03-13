@@ -63,7 +63,7 @@
           <el-button
             size="small"
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            @click="handleDelete(scope.$index, scope.row)">{{ scope.row.status == '可用' ? '禁用' : '启用'}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -133,7 +133,7 @@ export default {
           label: "企业名称",
           inputType: 0 // 0 代表 input
         },
-        principalId: {
+        userId: {
           label: '负责人用户名',
           inputType: 0
         },
@@ -141,30 +141,6 @@ export default {
           label: "负责人姓名",
           inputType: 0 // 0 代表 input
         },
-        // companyAccess: {
-        //   label: "企业联系方式",
-        //   inputType: 0
-        // },
-        // status: {
-        //   label: "用户状态",
-        //   inputType: 1
-        // },
-        // principalPhone: {
-        //   label: "负责人手机号",
-        //   inputType: 0
-        // },
-        // gender: {
-        //   label: "性别",
-        //   inputType: 1
-        // },
-        // email: {
-        //   label: "邮箱",
-        //   inputType: 0
-        // },
-        // specAddress: {
-        //   label: "企业具体位置",
-        //   inputType: 0
-        // }
       },
       infoAddRules: {
         companyName: [
@@ -173,23 +149,9 @@ export default {
         principalName: [
           { required: true, message: "请输入负责人姓名", trigger: "blur" }
         ],
-         principalId: [
+         userId: [
           { required: true, message: "请输入负责人用户名", trigger: "blur" }
         ],
-        // companyAccess: [
-        //   { required: true, message: "请输入企业联系方式", trigger: "blur" }
-        // ],
-        // status: [
-        //   { required: true, message: "请输入用户状态", trigger: "blur" }
-        // ],
-        // principalPhone: [
-        //   { required: true, message: "请输入负责人手机号", trigger: "blur" }
-        // ],
-        // gender: [{ required: true, message: "请输入性别", trigger: "blur" }],
-        // email: [{ required: true, message: "请输入邮箱", trigger: "blur" }],
-        // specAddress: [
-        //   { required: true, message: "请输入企业具体位置", trigger: "blur" }
-        // ]
       },
       //        获取表格数据的地址
       url: "/api/company/companies",
@@ -198,7 +160,7 @@ export default {
           label: "企业名称",
           inputType: 0 // 0 代表 input
         },
-        principalId: {
+        userId: {
           label: '负责人用户名',
           inputType: 0
         },
@@ -206,18 +168,6 @@ export default {
           label: "负责人姓名",
           inputType: 0 // 0 代表 input
         },
-        // status: {
-        //   label: "用户状态",
-        //   inputType: 1
-        // },
-        // gender: {
-        //   label: "性别",
-        //   inputType: 1
-        // },
-        // specAddress: {
-        //   label: "企业具体位置",
-        //   inputType: 0
-        // }
       },
       filter: {
         //搜索条件
@@ -237,7 +187,6 @@ export default {
     };
   },
   mounted: function() {
-    utils.filter2Mysql(utils.filterName.COMPANY, this.filter);
     this.loadData(this.filter, this.currentPage, this.pageSize);
   },
   methods: {
@@ -279,16 +228,17 @@ export default {
     },
     //        删除按钮事件
     handleDelete(index, row) {
-      var array = [];
-      array.push(row.id);
-      axios.post("", { array: array }, { emulateJson: true }).then(
-        function(res) {
-          this.loadData(this.filter, this.currentPage, this.pageSize);
-        },
-        function() {
-          console.log("failed");
-        }
-      );
+     let state = row.status == "可用" ? "不可用" : "可用";
+      console.log(row);
+      axios
+        .post("/api/user/delUser", { userId: row.userId, state })
+        .then(res => {
+          console.log(res);
+          row.status = state;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     //        编辑按钮事件
     handleEdit(index, row) {
@@ -313,7 +263,6 @@ export default {
       if (filter !== undefined) {
         this.filter = filter;
       }
-      utils.filter2Mysql(utils.filterName.COMPANY, this.filter);
       this.showFilterBox = false;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
@@ -335,7 +284,7 @@ export default {
     receiveInfo: function(data) {
       if (data) {
         const user = {
-          user_id: data.principalId,
+          user_id: data.userId,
           user_name: data.principalName,
           company_name: data.companyName,
           user_identity: '企业'

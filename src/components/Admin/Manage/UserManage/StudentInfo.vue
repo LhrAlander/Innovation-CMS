@@ -14,7 +14,9 @@
                 :tmpl = "filterTmpl"
                 :valueLabelMap = "valueLabelMap"
                 :keyFormatMap = "Object.assign({},keyFormatMap,expandFormatMap)"
-                @sendFilter="receiveFilter"></filter-box>
+                @sendFilter="receiveFilter"
+                @inputChange='inputChange'
+                @handleClear='inputClear'></filter-box>
     <info-add :show="showInfoAdd"
               :tmpl = "infoAddTmpl"
               :valueLabelMap = "valueLabelMap"
@@ -63,7 +65,7 @@
           <el-button
             size="small"
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            @click="handleDelete(scope.$index, scope.row)">{{ scope.row.status == '可用' ? '禁用' : '启用'}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -89,65 +91,28 @@ export default {
   components: { FilterBox, InfoAdd },
   data() {
     return {
-      tableData: [
-        {
-          // 表格数据
-          id: 1,
-          studentId: "用户名",
-          name: "姓名",
-          status: "用户状态",
-          phone: "手机号",
-          email: "邮箱"
-        }
-      ],
+      tableData: [],
       valueLabelMap: {
         status: [
           {
-            value: 1,
+            value: "可用",
             label: "可用"
           },
           {
-            value: 0,
+            value: "不可用",
             label: "不可用"
           }
         ],
-        institute: [
-          {
-            value: 0,
-            label: "名字很长的学院名字很长的学院"
-          },
-          {
-            value: 1,
-            label: "短名学院"
-          }
-        ],
-        specialty: [
-          {
-            value: 0,
-            label: "名字很长的学院名字很长的专业"
-          },
-          {
-            value: 1,
-            label: "短名专业"
-          }
-        ],
-        class: [
-          {
-            value: 0,
-            label: "名字很长的学院名字很长的班级"
-          },
-          {
-            value: 1,
-            label: "短名班级"
-          }
-        ],
+        institute: [],
+        specialty: [],
+        class: [],
         gender: [
           {
-            value: 0,
+            value: "男",
             label: "男"
           },
           {
-            value: 1,
+            value: "女",
             label: "女"
           }
         ]
@@ -187,7 +152,7 @@ export default {
       //        获取表格数据的地址
       url: "/api/student/students",
       filterTmpl: {
-        username: {
+        studentId: {
           label: "用户名",
           inputType: 0 // 0 代表 input
         },
@@ -205,11 +170,13 @@ export default {
         },
         specialty: {
           label: "专业",
-          inputType: 1
+          inputType: 1,
+          disabled: true
         },
         class: {
           label: "班级",
-          inputType: 1
+          inputType: 1,
+          disabled: true
         },
         gender: {
           label: "性别",
@@ -236,7 +203,6 @@ export default {
     };
   },
   mounted: function() {
-    utils.filter2Mysql(utils.filterName.STUDENT, this.filter);
     console.log(this.filter);
     this.loadData(this.filter, this.currentPage, this.pageSize);
   },
@@ -278,16 +244,17 @@ export default {
     },
     // 删除按钮事件
     handleDelete(index, row) {
-      var array = [];
-      array.push(row.id);
-      axios.post("", { array: array }, { emulateJson: true }).then(
-        function(res) {
-          this.loadData(this.filter, this.currentPage, this.pageSize);
-        },
-        function() {
-          console.log("failed");
-        }
-      );
+      let state = row.status == "可用" ? "不可用" : "可用";
+      console.log(row)
+      axios
+        .post("/api/user/delUser", { userId: row.studentId, state })
+        .then(res => {
+          console.log(res);
+          row.status = state;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     // 编辑按钮事件
     handleEdit(index, row) {
@@ -303,8 +270,82 @@ export default {
       this.currentPage = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
+    initSelectors(url) {
+      axios
+        .get("/api/baseInfo/academys")
+        .then(res => {
+          console.log(res);
+          this.valueLabelMap.institute = res.data.data.map(i => {
+            return {
+              label: i.academy,
+              value: i.academy
+            };
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    inputClear(type) {
+      if (type == "学院") {
+        console.log(this.filterTmpl.specialty);
+        console.log(type == "学院");
+        this.filterTmpl.specialty.disabled = true;
+        this.filterTmpl.class.disabled = true;
+      } else if (type == "专业") {
+        console.log(type);
+        this.filterTmpl.class.disabled = true;
+      }
+    },
+    async inputChange() {
+      const value = arguments[0];
+      const type = arguments[1].label;
+      console.log(value, type);
+      switch (type) {
+        case "学院":
+          axios
+            .post("/api/baseInfo/majors", { academy: value })
+            .then(res => {
+              if (res.data.code == 200) {
+                this.valueLabelMap.specialty = res.data.data.map(i => {
+                  return {
+                    label: i.major,
+                    value: i.major
+                  };
+                });
+                this.filterTmpl.specialty.disabled = false;
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+          break;
+        case "专业":
+          axios
+            .post("/api/baseInfo/classes", { major: value })
+            .then(res => {
+              if (res.data.code == 200) {
+                console.log(res);
+                this.valueLabelMap.class = res.data.data.map(i => {
+                  return {
+                    label: i._class,
+                    value: i._class
+                  };
+                });
+                this.filterTmpl.class.disabled = false;
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+          break;
+      }
+    },
     // 点击筛选触发的事件
-    enterFilter() {
+    async enterFilter() {
+      if (this.valueLabelMap.institute.length < 1) {
+        await this.initSelectors();
+      }
       this.showFilterBox = true;
     },
     // 接收子组件filterbox传递的筛选条件数据
@@ -313,7 +354,6 @@ export default {
         this.filter = filter;
       }
       this.showFilterBox = false;
-      utils.filter2Mysql(utils.filterName.STUDENT, this.filter);
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        标签的key格式化器
@@ -334,16 +374,16 @@ export default {
     },
     receiveInfo: function(data) {
       if (data) {
-         const user = {
+        const user = {
           user_id: data.studentId,
           user_name: data.name,
-          user_identity: '学生'
+          user_identity: "学生"
         };
-        console.log(data, user)
-        this.$store.dispatch('addUserInfo', {
+        console.log(data, user);
+        this.$store.dispatch("addUserInfo", {
           that: this,
           user
-        })
+        });
       }
       this.showInfoAdd = false;
     }

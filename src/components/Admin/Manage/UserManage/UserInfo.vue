@@ -63,7 +63,7 @@
           <el-button
             size="small"
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            @click="handleDelete(scope.$index, scope.row)">{{ scope.row.status == '可用' ? '禁用' : '启用'}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -94,11 +94,11 @@ export default {
       valueLabelMap: {
         role: [
           {
-            value: 0,
+            value: "学生",
             label: "学生"
           },
           {
-            value: 1,
+            value: "教师",
             label: "教师"
           },
           // {
@@ -185,7 +185,7 @@ export default {
     };
   },
   mounted: function() {
-    utils.filter2Mysql(utils.filterName.USER, this.filter);
+    // utils.filter2Mysql(utils.filterName.USER, this.filter);
     this.loadData(this.filter, this.currentPage, this.pageSize);
   },
   methods: {
@@ -225,16 +225,16 @@ export default {
     },
     //        删除按钮事件
     handleDelete(index, row) {
-      var array = [];
-      array.push(row.id);
-      axios.post("", { array: array }, { emulateJson: true }).then(
-        function(res) {
-          this.loadData(this.filter, this.currentPage, this.pageSize);
-        },
-        function() {
-          console.log("failed");
-        }
-      );
+      let state = row.status == '可用' ? '不可用' : '可用'
+
+      axios.post('/api/user/delUser', {userId: row.username, state})
+        .then(res => {
+          console.log(res)
+          row.status = state
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     // 编辑按钮事件
     handleEdit(index, row) {
@@ -258,13 +258,6 @@ export default {
     receiveFilter(filter) {
       if (filter !== undefined) this.filter = filter;
       this.showFilterBox = false;
-      // this.loadData(this.filter, this.currentName, this.pageSize);
-      utils.filter2Mysql(utils.filterName.USER, this.filter);
-      if ("user_identity" in this.filter) {
-        this.filter.user_identity = this.valueLabelMap.role[
-          parseInt(this.filter.user_identity)
-        ].label;
-      }
       this.currentPage = 1;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },

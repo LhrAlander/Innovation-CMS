@@ -16,7 +16,15 @@
               v-model="filter[key]" 
               :placeholder="placeholderFilter(value.inputType, value.label)">
             </el-input>
-            <el-select v-else-if="value.inputType === 1" v-model="filter[key]" clearable :placeholder="placeholderFilter(value.inputType, value.label)" class="infoadd-select">
+            <el-select 
+              v-else-if="value.inputType === 1" 
+              v-model="filter[key]" 
+              clearable 
+              :placeholder="placeholderFilter(value.inputType, value.label)" 
+              class="infoadd-select"
+              :disabled="value.disabled"
+              @change="handleSelectChange(filter[key], value)"
+              @clear="handleClear(value)">
               <el-option v-for="item in valueLabelMap[key]"
                          :key = "item.value"
                          :label = "item.label"
@@ -106,6 +114,14 @@ export default {
       }
       str = str + label;
       return str;
+    },
+    handleSelectChange () {
+      console.log('change')
+      this.$emit('inputChange', arguments[0], arguments[1])
+    },
+    handleClear(res) {
+      console.log('clear')
+      this.$emit('inputClear', res.label)
     }
   },
   components: {
