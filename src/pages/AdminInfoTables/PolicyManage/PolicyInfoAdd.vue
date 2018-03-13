@@ -214,7 +214,6 @@ export default {
     editor.customConfig.onchange = html => {
       this.policyInfo.info = html;
     };
-
     editor.create();
   }
 };
