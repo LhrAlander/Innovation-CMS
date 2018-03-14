@@ -89,16 +89,7 @@ export default {
   components: { FilterBox, InfoAdd },
   data() {
     return {
-      tableData: [
-        {
-          // 表格数据
-          id: 1,
-          groupName: "团队名称",
-          userId: "用户名",
-          username: "用户姓名",
-          contact: "联系方式"
-        }
-      ],
+      tableData: [],
       groupOptions: [
         {
           value: "depUnit1",
@@ -210,7 +201,7 @@ export default {
     },
     //        异步加载数据
     loadData(filter, pageNum, pageSize) {
-      console.log(filter, pageNum, pageSize)
+      console.log(filter, pageNum, pageSize);
       if ("teamId" in filter && filter.teamId instanceof Array) {
         filter.teamId = filter.teamId.pop();
       }
@@ -224,8 +215,8 @@ export default {
         })
         .then(res => {
           console.log(res);
-          this.tableData = []
-          this.tableData = res.data.data
+          this.tableData = [];
+          this.tableData = res.data.data;
           this.totalCount = res.data.count;
         })
         .catch(err => {
@@ -246,16 +237,51 @@ export default {
     },
     //        删除按钮事件
     handleDelete(index, row) {
-      var array = [];
-      array.push(row.id);
-      axios.post("", { array: array }, { emulateJson: true }).then(
-        function(res) {
-          this.loadData(this.filter, this.currentPage, this.pageSize);
-        },
-        function() {
-          console.log("failed");
-        }
-      );
+      console.log(row);
+      let user = {
+        team_id: row.teamId,
+        add_time: row.joinTime,
+        user_id: row.userId,
+        del: false
+      };
+      if (new Date() - new Date(row.joinTime) < 24 * 60 * 60 * 1000) {
+        this.$confirm(
+          "该成员在团队时间过短（小于一天），是否删除该成员记录",
+          "提示",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          }
+        )
+          .then(() => {
+            console.log("yes", user);
+            user.del = true;
+            axios
+              .post("/api/team/del/team/user", { user })
+              .then(res => {})
+              .catch(err => {});
+          })
+          .catch(() => {
+            axios
+              .post("/api/team/del/team/user", { user })
+              .then(res => {
+                console.log(res);
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          });
+      } else {
+        axios
+          .post("/api/team/del/team/user", { user })
+          .then(res => {
+            console.log(res);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
     },
     //        编辑按钮事件
     handleEdit(index, row) {
@@ -276,9 +302,9 @@ export default {
       if (!("options" in this.filterTmpl.teamId)) {
         let res = await this.$store.dispatch("getSelectors");
         this.filterTmpl.teamId.options = res[2];
-        this.infoAddTmpl.groupName.options = res[2]
+        this.infoAddTmpl.groupName.options = res[2];
         this.showFilterBox = true;
-       } else {
+      } else {
         this.showFilterBox = true;
       }
     },
@@ -322,9 +348,9 @@ export default {
       if (!("options" in this.filterTmpl.teamId)) {
         let res = await this.$store.dispatch("getSelectors");
         this.filterTmpl.teamId.options = res[2];
-        this.infoAddTmpl.groupName.options = res[2]
+        this.infoAddTmpl.groupName.options = res[2];
         this.showInfoAdd = true;
-       } else {
+      } else {
         this.showInfoAdd = true;
       }
     },
@@ -335,15 +361,15 @@ export default {
           user_id: data.userId,
           add_time: data.joinTime,
           is_in_service: 1
-        }
-        axios.post("/api/team/add/team/user", { user })
+        };
+        axios
+          .post("/api/team/add/team/user", { user })
           .then(res => {
-            console.log(res)
+            console.log(res);
           })
           .catch(err => {
-            console.log(err)
-          })
-        
+            console.log(err);
+          });
       }
       this.showInfoAdd = false;
     }

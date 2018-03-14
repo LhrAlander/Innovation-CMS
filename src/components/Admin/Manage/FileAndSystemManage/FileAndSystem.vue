@@ -275,7 +275,7 @@ export default {
       return row.id;
     },
     // 异步加载数据
-   loadData(filter, pageNum, pageSize) {
+    loadData(filter, pageNum, pageSize) {
       axios
         .get(this.url, {
           params: {
@@ -307,11 +307,23 @@ export default {
       this.$router.push(`/check/fileInfo/${row.fileSystemId}`);
     },
     handlePublic(index, row) {
-      if (row.status === "可用") {
-        row.status = "不可用";
-      } else {
-        row.status = "可用";
-      }
+      let status = row.status === "可用" ? "不可用" : "可用";
+      console.log(row);
+      let fileSystem = {
+        file_system_id: row.fileSystemId,
+        state: status
+      };
+      axios
+        .post("/api/fileSystem/change/file", { fileSystem })
+        .then(res => {
+          console.log(res);
+          if (res.data.code == 200) {
+            row.status = status;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     //        删除按钮事件
     handleDelete(index, row) {
@@ -346,7 +358,7 @@ export default {
     },
     //        接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {
-       if (filter !== undefined) {
+      if (filter !== undefined) {
         this.filter = filter;
       }
       this.showFilterBox = false;

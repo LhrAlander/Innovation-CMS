@@ -63,7 +63,7 @@
           <el-button
             size="small"
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            @click="handleDelete(scope.$index, scope.row)">{{ scope.row.status == '可用' ? '禁用' : '启用'}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -100,7 +100,8 @@ export default {
         groupName: "团队名称",
         leaderName: "团队负责人姓名",
         teacher: "指导老师",
-        dependentUnit: "所在依托单位"
+        dependentUnit: "所在依托单位",
+        status: "状态"
       },
       expandFormatMap: {
         // 格式化额外信息映射表
@@ -236,16 +237,16 @@ export default {
     },
     //        删除按钮事件
     handleDelete(index, row) {
-      var array = [];
-      array.push(row.id);
-      axios.post("", { array: array }, { emulateJson: true }).then(
-        function(res) {
-          this.loadData(this.filter, this.currentPage, this.pageSize);
-        },
-        function() {
-          console.log("failed");
-        }
-      );
+      let state = row.status == "可用" ? "不可用" : "可用";
+      console.log(row);
+      axios.post('/api/team/delete/team', {teamId: row.teamId, payload: {team_state: state}})
+        .then(res => {
+          console.log(res)
+          row.status = state
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     //        编辑按钮事件
     handleEdit(index, row) {
@@ -323,13 +324,14 @@ export default {
           team_principal: data.leaderId,
           team_state: "可用"
         };
-        axios.post("/api/team/add/team", { team })
+        axios
+          .post("/api/team/add/team", { team })
           .then(res => {
-            console.log(res)
+            console.log(res);
           })
           .catch(err => {
-            console.log(err)
-          })
+            console.log(err);
+          });
         console.log(team);
       }
       this.showInfoAdd = false;

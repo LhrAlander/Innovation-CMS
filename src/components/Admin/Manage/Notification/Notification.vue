@@ -251,11 +251,20 @@ export default {
       this.$router.push(`/check/notificationInfo/${row.notificationId}`);
     },
     handlePublic(index, row) {
-      if (row.status === "可用") {
-        row.status = "不可用";
-      } else {
-        row.status = "可用";
+      let status = row.status === '可用' ? '不可用' : '可用'
+      let notification = {
+        notificationId: row.notificationId,
+        state: status
       }
+      axios.post('/api/notification/change/notification', {notification})
+        .then(res => {
+          if (res.data.code == 200) {
+            row.status = status
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     //        删除按钮事件
     handleDelete(index, row) {

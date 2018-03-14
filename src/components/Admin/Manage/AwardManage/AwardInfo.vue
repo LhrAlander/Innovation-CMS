@@ -213,16 +213,14 @@ export default {
     handleMore(index, row) {},
     //        删除按钮事件
     handleDelete(index, row) {
-      var array = [];
-      array.push(row.id);
-      axios.post("", { array: array }, { emulateJson: true }).then(
-        function(res) {
-          this.loadData(this.filter, this.currentPage, this.pageSize);
-        },
-        function() {
-          console.log("failed");
-        }
-      );
+      console.log(row)
+      axios.post('/api/award/delete/award', {awardId: row.awardId})
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     //        编辑按钮事件
     handleEdit(index, row) {

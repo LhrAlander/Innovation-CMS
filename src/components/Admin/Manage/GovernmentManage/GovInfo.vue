@@ -220,11 +220,22 @@ export default {
       this.$router.push(`/check/policyinfo/${policyId}`);
     },
     handlePublic(index, row) {
-      if (row.status === "可用") {
-        row.status = "不可用";
-      } else {
-        row.status = "可用";
+      console.log(row)
+      let status = row.status === '可用' ? '不可用' : '可用'
+      let policy = {
+        policy_id: row.policyId,
+        state: status
       }
+      axios.post('/api/policy/change/policy', {policy})
+        .then(res => {
+          console.log(res)
+          if (res.data.code == 200) {
+            row.status = status
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     //        删除按钮事件
     handleDelete(index, row) {
