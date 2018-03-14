@@ -55,6 +55,7 @@ export default [
   {
     'path': '/admin',
     component: Admin,
+    meta: {requiresAuth: true},
     redirect: '/admin/userinfo',
     children: [
       {

@@ -16,6 +16,7 @@
             >
             </el-input>
             <el-input
+              type="password"
               placeholder="请输入密码"
               prefix-icon="el-icon-news"
               v-model="loginForm.password"
@@ -111,119 +112,136 @@
   </div>
 </template>
 <script>
-    import router from "../router/index";
-    import ElSwitch from "../../node_modules/element-ui/packages/switch/src/component.vue";
+import router from "../router/index";
+import ElSwitch from "../../node_modules/element-ui/packages/switch/src/component.vue";
+import axios from 'utils/https'
 
-    export default {
-      components: {ElSwitch},
-      data() {
-        return {
+export default {
+  components: { ElSwitch },
+  data() {
+    return {
+      activeName: "login",
 
-          activeName: 'login',
-
-          loginForm: {
-            //登录信息
-            id: '',
-            password: '',
-            isRememberPassword: '',
-          },
-
-          registerForm: {
-            //注册信息
-            studentId: '',
-            name: '',
-            gender: '',
-            tele: '',
-            verifyCode: '',
-            email: '',
-            institute: '',
-            major: '',
-            clazz: '',
-            password: '',
-            re_password: '',
-          },
-          instituteOptions: [{
-            value: 'aaa',
-            label: '啊啊啊学院'
-          }],
-          majorOptions: [{
-            value: 'bbb',
-            label: '不不不专业'
-          }],
-          clazzOptions: [{
-            value: 'ccc',
-            label: '擦擦擦班级'
-          }],
-
-
-        }
+      loginForm: {
+        //登录信息
+        id: "",
+        password: "",
+        isRememberPassword: ""
       },
-      mounted: function () {
-        // 根据路由信息来决定是登录还是注册
-        this.activeName = this.$route.name
-//        console.log(this.$route)
+
+      registerForm: {
+        //注册信息
+        studentId: "",
+        name: "",
+        gender: "",
+        tele: "",
+        verifyCode: "",
+        email: "",
+        institute: "",
+        major: "",
+        clazz: "",
+        password: "",
+        re_password: ""
       },
-      methods: {
-        handleClick(tab, event) {
-//          console.log(tab, event)
-          router.push({path: tab.name})
-        },
-        handleLogin() {
-          //TODO
-        },
-        handleRegister() {
-          //TODO
+      instituteOptions: [
+        {
+          value: "aaa",
+          label: "啊啊啊学院"
         }
-      }
+      ],
+      majorOptions: [
+        {
+          value: "bbb",
+          label: "不不不专业"
+        }
+      ],
+      clazzOptions: [
+        {
+          value: "ccc",
+          label: "擦擦擦班级"
+        }
+      ]
+    };
+  },
+  mounted: function() {
+    // 根据路由信息来决定是登录还是注册
+    this.activeName = this.$route.name;
+    //        console.log(this.$route)
+  },
+  methods: {
+    handleClick(tab, event) {
+      //          console.log(tab, event)
+      router.push({ path: tab.name });
+    },
+    handleLogin() {
+      //TODO
+      console.log(this.loginForm);
+      // axios.post('/api/login', {user: this.loginForm})
+      axios.get('/api/user/users')
+        .then(res => {
+          console.log(res)
+          this.$store.commit('login', res.data.token)
+          if (this.loginForm.isRememberPassword) {
+            window.localStorage.setItem('token', res.data.token)
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    handleRegister() {
+      //TODO
     }
+  }
+};
 </script>
 <style scoped>
-  .container {
-    width: 100%;
-    background-color: #f5f5f5;
-    padding-top: 100px;
-    padding-bottom: 100px;
-    min-height: 100%;
-  }
+.container {
+  width: 100%;
+  background-color: #f5f5f5;
+  padding-top: 100px;
+  padding-bottom: 100px;
+  min-height: 100%;
+}
 
-  .box {
-    min-width: 500px;
-    width: 30%;
-    margin: auto;
-    border: 1px solid #e4e4e4;
-    padding: 20px 100px;
-    box-shadow: 0 0 2px gray;
-    background-color: #fff;
-  }
+.box {
+  min-width: 500px;
+  width: 30%;
+  margin: auto;
+  border: 1px solid #e4e4e4;
+  padding: 20px 100px;
+  box-shadow: 0 0 2px gray;
+  background-color: #fff;
+}
 
-  .forgetPassword {
-    font-size: 14px;
-    color: #aaaaaa;
-  }
-  .forgetPassword:hover {
-    color: #4586FF;
-  }
-  .decorate {
-    position: absolute;
-    left: 100px;
-    top: 100px;
-  }
-  .project_title {
-    color: #5394c5;
-    font-size: 40px;
-    font-weight: bold;
-  }
+.forgetPassword {
+  font-size: 14px;
+  color: #aaaaaa;
+}
+.forgetPassword:hover {
+  color: #4586ff;
+}
+.decorate {
+  position: absolute;
+  left: 100px;
+  top: 100px;
+}
+.project_title {
+  color: #5394c5;
+  font-size: 40px;
+  font-weight: bold;
+}
 </style>
 <style>
-  .loginAndRegister .el-tabs__nav-wrap {
-    margin: auto;
-  }
-  .loginAndRegister .el-tabs__item {
-    width: 50% !important;
-    text-align: center;
-    font-size: 20px;
-  }
-  .loginAndRegister .el-tabs__nav {
-    width: 100%;
-  }
+.loginAndRegister .el-tabs__nav-wrap {
+  margin: auto;
+}
+.loginAndRegister .el-tabs__item {
+  width: 50% !important;
+  text-align: center;
+  font-size: 20px;
+}
+.loginAndRegister .el-tabs__nav {
+  width: 100%;
+}
 </style>
