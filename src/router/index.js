@@ -38,7 +38,20 @@ router.beforeEach((to, from, next) => {
       next()
     }
   } else {
-    next() // 确保一定要调用 next()
+    if(to.name == 'Login' || to.name == 'Register') {
+      let token = store.state.token || window.localStorage.getItem('token') || null
+      if (token != null) {
+        next({
+          path: '/'
+        })
+      }
+      else {
+        next()
+      }
+    }
+    else {
+      next() // 确保一定要调用 next()
+    }
   }
 })
 

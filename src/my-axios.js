@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'utils/https'
 
 // download url
 const downloadUrl = url => {

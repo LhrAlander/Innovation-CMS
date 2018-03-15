@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'utils/https'
 
 //  获取所有团队 
 let getAllTeams = () => {

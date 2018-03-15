@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'utils/https'
 
 // 获取所有用户类别
 let getAllUserCategories = function () {

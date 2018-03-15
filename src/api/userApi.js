@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'utils/https'
 
 let searchUser = function (userId) {
     return axios.post('/api/user/searchUser', {

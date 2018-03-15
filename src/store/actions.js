@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'utils/https'
 import * as utils from "@/utils/utils";
 
 // 管理员删除一个账号

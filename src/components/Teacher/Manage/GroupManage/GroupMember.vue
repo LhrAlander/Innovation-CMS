@@ -71,7 +71,7 @@
   </div>
 </template>
 <script>
-  import axios from 'axios'
+  import axios from 'utils/https'
   import ElButton from "../../../../../node_modules/element-ui/packages/button/src/button.vue";
   import FilterBox from "components/Admin/Manage/FilterBox"
   import InfoAdd from "components/Admin/Manage/InfoAdd"

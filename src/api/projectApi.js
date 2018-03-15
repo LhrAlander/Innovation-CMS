@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'utils/https'
 
 let testFiles = projectId => {
   return axios.post('/api/project/project', {

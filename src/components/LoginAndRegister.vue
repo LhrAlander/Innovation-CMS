@@ -176,14 +176,15 @@ export default {
     handleLogin() {
       //TODO
       console.log(this.loginForm);
-      // axios.post('/api/login', {user: this.loginForm})
-      axios.get('/api/user/users')
+      axios.post('/api/login', {user: this.loginForm})
+      // axios.get('/api/user/users')
         .then(res => {
           console.log(res)
           this.$store.commit('login', res.data.token)
           if (this.loginForm.isRememberPassword) {
             window.localStorage.setItem('token', res.data.token)
           }
+          this.$router.push('/')
         })
         .catch(err => {
           console.log(err)
