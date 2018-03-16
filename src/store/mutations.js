@@ -21,9 +21,14 @@ let cancelAuth = (state) => {
   state.authToken = ''
 }
 
+let setLoginUser = (state, user) => {
+  state.user = user
+}
+
 export default {
   login,
   isLogin,
   addAuthToken,
-  cancelAuth
+  cancelAuth,
+  setLoginUser
 }
