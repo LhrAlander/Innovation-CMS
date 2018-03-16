@@ -1,5 +1,6 @@
 import axios from 'utils/https'
 import * as utils from "@/utils/utils";
+import store from '../store/index'
 
 // 管理员删除一个账号
 const delUser = ({
@@ -326,7 +327,7 @@ const getSelectors = ({ commit, state }, payload) => {
 
 // 获取获奖筛选信息
 const getAwards = ({ commit, state }, payload) => {
- return Promise.all([
+  return Promise.all([
     axios.get("/api/award/awardNames"),
     axios.get("/api/category/award/levels"),
     axios.get("/api/category/award/categories")
@@ -345,6 +346,19 @@ const getAwards = ({ commit, state }, payload) => {
     });
 }
 
+// 权限判断
+const getAuth = ({ commit, state }, payload) => {
+  console.log('权限判断', payload.url)
+  axios.post(payload.url, { projectId: payload.projectId })
+    .then(res => {
+      console.log(res)
+      commit('addAuthToken', res.data.authToken)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
+
 export default {
   getAwards,
   getSelectors,
@@ -354,5 +368,6 @@ export default {
   changeStudentInfo,
   changeTeacherInfo,
   changeCompanyInfo,
-  addUserInfo
+  addUserInfo,
+  getAuth
 }

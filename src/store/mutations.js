@@ -8,11 +8,22 @@ let isLogin = state => {
 
 let logout = (state) => {
   state.token = null
+  state.authToken = ''
   state.isLogin = false
   window.localStorage.removeItem('token')
+}
+
+let addAuthToken = (state, token) => {
+  state.authToken = token
+}
+
+let cancelAuth = (state) => {
+  state.authToken = ''
 }
 
 export default {
   login,
   isLogin,
+  addAuthToken,
+  cancelAuth
 }

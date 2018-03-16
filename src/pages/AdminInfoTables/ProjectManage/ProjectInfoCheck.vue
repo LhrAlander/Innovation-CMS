@@ -341,8 +341,17 @@ export default {
   components: {
     InfoDisplayTemp
   },
-  mounted() {
-    this.initData();
+  async mounted() {
+    axios
+      .post("/api/auth/projectInfo", { projectId: this.$route.params.id })
+      .then(res => {
+        console.log(res);
+        this.$store.commit("addAuthToken", res.data.authToken);
+        this.initData();
+      })
+      .catch(err => {
+        this.$store.commit('clearAuth')
+      });
   },
   methods: {
     initData() {

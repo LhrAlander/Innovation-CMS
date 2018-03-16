@@ -7,7 +7,7 @@ import store from '../store/index'
 import router from '../router/index'
 import { Loading, Message } from 'element-ui'
 // 超时时间
-axios.defaults.timeout = 5000
+axios.defaults.timeout = 50000
 // http请求拦截器
 var loadinginstace
 axios.interceptors.request.use(config => {
@@ -17,6 +17,9 @@ axios.interceptors.request.use(config => {
   console.log('token', token)
   if (token != null) {
     config.headers.Authorization = `Bearer ${token}`;
+  }
+  if (store.state.authToken != '') {
+    config.headers.authToken = store.state.authToken
   }
   return config
 }, error => {
@@ -31,26 +34,28 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
   loadinginstace.close()
   return data
 }, error => {
+  console.log(error)
   loadinginstace.close()
   if (error.response) {
     console.log(error.response)
     Message.error({
       message: error.response.data || '加载失败'
     })
-    switch(error.response.status) {
-      case 401 :
-      store.commit('logout')
-      router.push({path: '/'})
+    switch (error.response.status) {
+      case 401:
+        store.commit('cancelAuth')
+        store.commit('logout')
+        router.push({ path: '/' })
     }
   }
   else {
     Message.error({
       message: '加载失败'
     })
-    commit('logout')
-    router.push({path: '/'})
+    store.commit('logout')
+    router.push({ path: '/' })
   }
-  
+
 })
 
 export default axios
