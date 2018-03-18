@@ -192,39 +192,9 @@ export default {
   data() {
     return {
       baseInfo: DISPLAY_INFO,
-      leader: {
-        userId: 2015210405043,
-        name: "林海瑞",
-        userPhone: 123456789
-      },
-      teacher: {
-        userId: 123456789,
-        name: "石兴民",
-        userPhone: 123456789
-      },
-      proInfo: [
-        [
-          {
-            name: "pro1"
-          },
-          {
-            name: "pro2"
-          }
-        ],
-        [
-          {
-            name: "pro3"
-          },
-          {
-            name: "pro4"
-          }
-        ],
-        [
-          {
-            name: "pro5"
-          }
-        ]
-      ],
+      leader: {},
+      teacher: {},
+      proInfo: [],
       teamId: "",
       teamIntro: "",
       editor: ""
@@ -234,14 +204,23 @@ export default {
     InfoDisplayTemp
   },
   mounted() {
-    this.editor = new E("#editor-ele");
-    this.editor.customConfig.onchange = html => {
-      this.teamIntro = html;
-      console.log(html);
-    };
-    this.editor.create();
     this.teamId = this.$route.params.teamId;
-    this.initData();
+    axios
+      .post("/api/auth/edit/teamInfo", { teamId: this.teamId })
+      .then(res => {
+        console.log(res);
+        this.$store.commit("addAuthToken", res.data.authToken);
+        this.editor = new E("#editor-ele");
+        this.editor.customConfig.onchange = html => {
+          this.teamIntro = html;
+          console.log(html);
+        };
+        this.editor.create();
+        this.initData();
+      })
+      .catch(err => {
+        this.$store.commit("clearAuth");
+      });
   },
   methods: {
     initData() {
@@ -303,22 +282,27 @@ export default {
         });
     },
     confirmChange() {
-      let info = utils.displayInfo2MySql(
-        utils.filterName.TEAM,
-        this.baseInfo
-      );
-      info.team_id = this.teamId
-      info.team_introduction = this.teamIntro
-      console.log(info)
-      axios.post('/api/team/change/team', {
-        team: info
-      })
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+      axios
+        .post("/api/auth/edit/teamInfo", { teamId: this.teamId })
+        .then(res => {
+          console.log(res);
+          this.$store.commit("addAuthToken", res.data.authToken);
+          let info = utils.displayInfo2MySql(
+            utils.filterName.TEAM,
+            this.baseInfo
+          );
+          info.team_id = this.teamId;
+          info.team_introduction = this.teamIntro;
+          return axios.post("/api/team/change/team", {
+            team: info
+          });
+        })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          this.$store.commit("clearAuth");
+        });
     },
     getRowCount(arr) {
       return Math.ceil(arr.length / 3);

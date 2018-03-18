@@ -238,7 +238,16 @@ export default {
   },
   mounted() {
     this.teamId = this.$route.params.teamId;
-    this.initData();
+    axios
+      .post("/api/auth/teamInfo", { teamId: this.teamId })
+      .then(res => {
+        console.log(res);
+        this.$store.commit("addAuthToken", res.data.authToken);
+        this.initData();
+      })
+      .catch(err => {
+        this.$store.commit('clearAuth')
+      });
   },
   components: {
     InfoDisplayTemp

@@ -276,7 +276,7 @@ export default {
     },
 
     handleMore(index, row) {
-      this.$router.push({ name: "TeamInfoCheck" });
+      this.$router.push(`/check/teamInfo/${row.teamId}`);
     },
     //        删除按钮事件
     handleDelete(index, row) {
