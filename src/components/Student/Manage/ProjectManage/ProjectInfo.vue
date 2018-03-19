@@ -303,7 +303,6 @@ export default {
     },
     //        异步加载数据
     loadData(filter, pageNum, pageSize) {
-      console.log(filter, pageNum, pageSize);
       axios
         .get(this.url, {
           params: {

@@ -48,78 +48,77 @@
 
 </template>
 <script>
-import axios from 'utils/https'
-  export default {
-    data () {
-      return {
-        info: {}
-      }
-    },
-    mounted() {
-      axios.post('/api/st/baseInfo/myInfo')
-        .then(res => {
-          this.info = res.data.data[0]
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    }
+import axios from "utils/https";
+export default {
+  data() {
+    return {
+      info: {}
+    };
+  },
+  mounted() {
+    axios
+      .post("/api/st/baseInfo/myInfo")
+      .then(res => {
+        this.info = res.data.data[0];
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
+};
 </script>
 <style scoped>
-  .wrapper {
-    width: 85%;
-    margin: 5rem auto;
-    padding: 4rem;
-    border-radius: 1rem;
-    background-color: #e4e4e4;
-  }
+.wrapper {
+  width: 85%;
+  margin: 5rem auto;
+  padding: 4rem;
+  border-radius: 1rem;
+  background-color: #e4e4e4;
+}
 
-  .info-wrapper:first-child {
-    padding-bottom: 3rem;
-    border-bottom: 1px dashed #000;
-    margin-bottom: 3rem;
-  }
+.info-wrapper:first-child {
+  padding-bottom: 3rem;
+  border-bottom: 1px dashed #000;
+  margin-bottom: 3rem;
+}
 
-  .avatar {
-    padding: .3rem;
-    border-radius: 50%;
-    border: 2px dashed #ccc;
-    height: 160px;
-  }
+.avatar {
+  padding: 0.3rem;
+  border-radius: 50%;
+  border: 2px dashed #ccc;
+  height: 160px;
+}
 
-  .detail-info-wrapper,
-  .base-info-wrapper,
-  .operate-wrapper {
-    padding: 40px 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
+.detail-info-wrapper,
+.base-info-wrapper,
+.operate-wrapper {
+  padding: 40px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
-  .base-info-wrapper,
-  .operate-wrapper {
-    height: 160px;
-  }
+.base-info-wrapper,
+.operate-wrapper {
+  height: 160px;
+}
 
-  .detail-info-wrapper {
-    height: 180px;
-  }
+.detail-info-wrapper {
+  height: 180px;
+}
 
-  .name {
-    font-size: 1.3rem;
-  }
+.name {
+  font-size: 1.3rem;
+}
 
-  .edit-link {
-    margin-top: -3rem;
-    font-size: .8rem;
-    color: #4586FF;
-    cursor: pointer;
-  }
+.edit-link {
+  margin-top: -3rem;
+  font-size: 0.8rem;
+  color: #4586ff;
+  cursor: pointer;
+}
 
-
-  .fill-text {
-    color: transparent;
-  }
-
+.fill-text {
+  color: transparent;
+}
 </style>
