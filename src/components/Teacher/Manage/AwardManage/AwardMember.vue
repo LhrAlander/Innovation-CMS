@@ -83,17 +83,7 @@ export default {
   components: { ElButton, FilterBox, InfoAdd },
   data() {
     return {
-      tableData: [
-        {
-          // 表格数据
-          id: 1,
-          awardName: "获奖名称",
-          projectName: "项目名称",
-          userId: "用户名",
-          username: "用户姓名",
-          contact: "联系方式"
-        }
-      ],
+      tableData: [],
       valueLabelMap: {
         // 下拉类型的input的具体数据
         //          role: [{ // 用户类别映射表
@@ -142,7 +132,8 @@ export default {
         // 格式化额外信息映射表
         projectName: "项目名称",
         userId: "用户名",
-        contact: "联系方式"
+        contact: "联系方式",
+        awardTime: "获奖时间",
       },
       //        获取表格数据的地址
       url: "/api/th/award/awards",

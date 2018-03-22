@@ -85,7 +85,7 @@
 
 <script>
 import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp";
-import axios from 'utils/https'
+import axios from "utils/https";
 
 const INPUT = 1;
 const SELECT = 2;
@@ -196,7 +196,16 @@ export default {
     InfoDisplayTemp
   },
   mounted() {
-    this.initData();
+    axios
+      .post("/api/auth/unitInfo", { unitId: this.$route.params.id })
+      .then(res => {
+        console.log(res);
+        this.$store.commit("addAuthToken", res.data.authToken);
+        this.initData();
+      })
+      .catch(err => {
+        this.$store.commit("clearAuth");
+      });
   },
   methods: {
     initData() {
@@ -206,9 +215,9 @@ export default {
           unitId
         })
         .then(res => {
-          res = res.data
+          res = res.data;
           this.baseInfo.forEach(item => {
-            console.log(item.key)
+            console.log(item.key);
             item.value = res.data.unit[item.key];
           });
           this.teamInfo = res.data.teams;
