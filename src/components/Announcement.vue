@@ -5,7 +5,7 @@
       <span class="separate">|</span>
     </el-col>
     <el-col class="announcement-item-col" :span="20">
-      <el-row class="announcement-item" v-for="item in announcement.items">{{item}}</el-row>
+      <el-row class="announcement-item" v-for="item in announcement.items">{{item.title}}</el-row>
     </el-col>
   </el-row>
 </template>

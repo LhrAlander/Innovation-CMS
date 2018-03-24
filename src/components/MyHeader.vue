@@ -26,7 +26,11 @@
 </template>
 
 <script>
-  export default {}
+  export default {
+    mounted() {
+      
+    }
+  }
 </script>
 
 <style scoped>
