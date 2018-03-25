@@ -4,16 +4,18 @@
       <div class="container">
         <el-row>
           <el-col :span="2">
-            <div class="grid-content bg-purple logo-wrapper">
-              <img class="logo" src="../assets/img/logo.png" alt="HZNU">
-            </div>
+            <router-link to='/'>
+              <div class="grid-content bg-purple logo-wrapper">
+                <img class="logo" src="../assets/img/logo.png" alt="HZNU">
+              </div>
+            </router-link>
           </el-col>
-          <el-col :span="3"><router-link to="/"><div class="grid-content bg-purple-light nav-item">项目展示</div></router-link></el-col>
-          <el-col :span="3"><router-link to="/"><div class="grid-content bg-purple nav-item">团队展示</div></router-link></el-col>
+          <el-col :span="3"><router-link to="/projects"><div class="grid-content bg-purple-light nav-item">项目展示</div></router-link></el-col>
+          <el-col :span="3"><router-link to="/teams"><div class="grid-content bg-purple nav-item">团队展示</div></router-link></el-col>
           <el-col :span="3"><router-link to="/"><div class="grid-content bg-purple-light nav-item">最近获奖</div></router-link></el-col>
-          <el-col :span="3"><router-link to="/"><div class="grid-content bg-purple nav-item">最新政策</div></router-link></el-col>
-          <el-col :span="3"><router-link to="/"><div class="grid-content bg-purple-light nav-item">学校文件</div></router-link></el-col>
-          <el-col :span="3"><router-link to="/"><div class="grid-content bg-purple nav-item">通知公告</div></router-link></el-col>
+          <el-col :span="3"><router-link to="/policys"><div class="grid-content bg-purple nav-item">最新政策</div></router-link></el-col>
+          <el-col :span="3"><router-link to="/fileSystems"><div class="grid-content bg-purple-light nav-item">学校文件</div></router-link></el-col>
+          <el-col :span="3"><router-link to="/notifications"><div class="grid-content bg-purple nav-item">通知公告</div></router-link></el-col>
           <el-col :span="4" class="logAndReg">
             <router-link to="/Login">登录</router-link>
             <span class="separate">|</span>
