@@ -6,9 +6,9 @@
         <el-row type="flex" justify="space-between">
           <el-col :span="15">
             <div class="top">
-              最新政策-内容
+              通知公告-内容
             </div>
-            <div class="policyc-article">
+            <div class="notification-article">
               <div class="article-title">国务院关于关中平原城市群发展规划的批复</div>
               <el-row class="article-info"  type="flex" justify="center">
                 <el-col :span="6" v-model="author">作者:{{author}}</el-col>
@@ -28,7 +28,7 @@
           <el-col :span="6">
             <div class="top">
               <img src="../../../static/img/policyc.png" class="right-img"/>
-              最近政策
+              最近通知
             </div>
             <div class="right-bg">
               <div class="item">
@@ -58,7 +58,6 @@ export default {
   components: {
     MyHeader,
     MyFooter,
-   
   },
   data() {
     return {
@@ -92,7 +91,7 @@ export default {
   line-height: 80px;
   border-bottom: 1px solid #5394C5;
 }
-.policyc-article {
+.notifications-article {
   margin-bottom: 100px;
   padding: 0 20px;
   border: 1px solid #cccccc;
