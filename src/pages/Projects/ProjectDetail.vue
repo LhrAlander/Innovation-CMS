@@ -7,32 +7,31 @@
           <el-col :span="15">
             <div class="top">
               项目展示-内容
-              <p v-model="projectTitle">{{projectTitle}}</p>
+              <p>{{projectTitle}}</p>
             </div>
-            <div class="project-msg" v-model="projectIntroduction">
-              {{projectIntroduction}}
+            <div class="project-msg" v-html="projectIntroduction">
             </div>
             <div class="bottom-time">
-              <img src="../../../static/img/policycTime.png">
+              <img src="/static/img/policycTime.png">
               <span>{{projectTime}}</span>
             </div>
           </el-col>
           <el-col :span="6">
             <div class="top">
-              <img src="../../../static/img/policyc.png" class="right-img"/>
+              <img src="/static/img/policyc.png" class="right-img"/>
               最近项目
             </div>
             <div class="right-bg">
               <div class="item">
-                <img src="../../../static/img/right-icon.png"/>
+                <img src="/static/img/right-icon.png"/>
                 <span>Lorem ipsum dolor sit amet</span>
               </div>
               <div class="item">
-                <img src="../../../static/img/right-icon.png"/>
+                <img src="/static/img/right-icon.png"/>
                 <span>Lorem ipsum dolor sit amet</span>
               </div>
               <div class="item">
-                <img src="../../../static/img/right-icon.png"/>
+                <img src="/static/img/right-icon.png"/>
                 <span>Lorem ipsum dolor sit amet</span>
               </div>
             </div>
@@ -46,27 +45,43 @@
 <script>
 import MyHeader from "components/MyHeader";
 import MyFooter from "components/MyFooter";
-
+import axios from '@/utils/https'
 
 export default {
   components: {
     MyHeader,
-    MyFooter,
-   
+    MyFooter
   },
   data() {
     return {
       projectTitle: "标题标题标题标题标题",
-      projectIntroduction: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.",
+      projectIntroduction:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.",
       projectTime: "2018年1月15号  18：00",
-   }
-    
+      url: '/api/front/projects/project',
+      projectId: ''
+    };
   },
   mounted() {
-    
+    this.projectId = this.$route.params.id
+    this.initData();
   },
   methods: {
-  
+    initData() {
+      axios
+        .post(this.url, {
+          projectId: this.projectId
+        })
+        .then(res => {
+          console.log(res);
+          this.projectTitle = res.data.projectName
+          this.projectIntroduction = res.data.projectIntroduction
+          this.projectTime = res.data.projectTime
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }
 };
 </script>
@@ -83,9 +98,9 @@ export default {
 }
 .top {
   margin-top: 15px;
-  border-bottom: 1px solid #5394C5;
+  border-bottom: 1px solid #5394c5;
 }
-.top p{
+.top p {
   margin-top: 15px;
   padding-bottom: 10px;
   font-size: 18px;
@@ -95,7 +110,6 @@ export default {
   margin-top: 20px;
   text-align: left;
   line-height: 20px;
-
 }
 .bottom-time {
   width: 300px;
@@ -132,10 +146,9 @@ export default {
   padding: 0 0 10px 20px;
   text-align: left;
 }
-.item img{
+.item img {
   width: 20px;
   height: 20px;
   padding-right: 5px;
 }
-
 </style>

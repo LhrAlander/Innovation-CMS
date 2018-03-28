@@ -23,7 +23,7 @@ export default [
   //项目详细界面路由
   {
     name: 'ProjectDetail',
-    path: '/projectDetail',
+    path: '/projectDetail/:id',
     component: ProjectDetail,
   },
   {
