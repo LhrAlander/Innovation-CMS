@@ -41,7 +41,7 @@
         <el-col :span="24" class="info-item">
           <div class="item-content">
             <div class="attack-link">
-              <ul>
+              <ul v-if="files.length > 0">
                 <li v-for="file in files">{{ file.fileName }}</li>
               </ul>
             </div>
@@ -55,7 +55,7 @@
 
 <script>
 import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp";
-import axios from "axios";
+import axios from "@/utils/https";
 
 const INPUT = 1;
 const SELECT = 2;

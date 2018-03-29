@@ -34,7 +34,7 @@ export default [
   //政策详细界面路由
   {
     name: 'PolicyDetail',
-    path: '/policysDetail',
+    path: '/policysDetail/:id',
     component: PolicyDetail,
   },
   {
@@ -45,7 +45,7 @@ export default [
   // 文件详情界面路由
   {
     name: 'FileDetail',
-    path: '/fileDetail',
+    path: '/fileDetail/:id',
     component: FileDetail,
   },
   {
@@ -56,7 +56,7 @@ export default [
   //通知公告详情界面路由
   {
     name: 'NotificationDetail',
-    path: '/notificationsDetail',
+    path: '/notificationsDetail/:id',
     component: NotificationDetail,
   },
   {

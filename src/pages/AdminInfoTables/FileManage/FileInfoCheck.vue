@@ -56,7 +56,7 @@
 
 <script>
 import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp";
-import axios from "axios";
+import axios from "@/utils/https";
 
 const INPUT = 1;
 const SELECT = 2;

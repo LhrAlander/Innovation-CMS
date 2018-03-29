@@ -1,10 +1,12 @@
 <template>
   <div class="post-wrapper">
-    <router-link to="/">
+    <router-link :to="policy.url">
       <el-row>
         <el-col :span="24"  class="cnt">
           <i class="iconfont file">&#xe64f;</i>
-          {{policy.title}}
+          <span @click="fileDetail">
+            {{policy.title}}
+          </span>
         </el-col>
       </el-row>
     </router-link>
@@ -16,6 +18,12 @@ import axios from "@/utils/https";
 export default {
   props: {
     policy: Object
+  },
+  methods: {
+    fileDetail() {
+      console.log(this.policy.url)
+      // this.$router.push(this.policy.url)
+    }
   }
 };
 </script>

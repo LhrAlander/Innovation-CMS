@@ -121,7 +121,7 @@ import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDispla
 import E from "wangeditor";
 import api from "@/api/teamApi";
 import * as utils from "@/utils/utils";
-import axios from "axios";
+import axios from "@/utils/https";
 
 const INPUT = 1;
 const SELECT = 2;

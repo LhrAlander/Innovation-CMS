@@ -156,7 +156,7 @@
 <script>
 import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp";
 import projectApi from "@/api/projectApi";
-import axios from "axios";
+import axios from "@/utils/https";
 import * as utils from "@/utils/utils";
 
 const INPUT = 1;

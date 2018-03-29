@@ -66,7 +66,7 @@
 <script>
 import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp";
 import E from "wangeditor";
-import axios from "axios";
+import axios from "@/utils/https";
 import * as utils from "@/utils/utils";
 
 const INPUT = 1;

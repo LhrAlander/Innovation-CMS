@@ -86,7 +86,7 @@
   </div>
 </template>
 <script>
-import axios from "axios";
+import axios from "@/utils/https";
 import FilterBox from "components/Admin/Manage/FilterBox";
 import InfoAdd from "components/Admin/Manage/InfoAdd";
 import * as utils from "utils/utils";

@@ -154,11 +154,17 @@ export default {
       .get("/api/front/index/policys")
       .then(res => {
         this.policys = res.data.data
+        this.policys.forEach(p => {
+          p.url = `/policysDetail/${p.policyId}`
+        })
         return axios.get('/api/front/index/files')
       })
       .then(res => {
         console.log(res)
         this.files = res.data.data
+        this.files.forEach(p => {
+          p.url = `/fileDetail/${p.file_system_id}`
+        })
         return axios.get("/api/front/index/notifications");
       })
       .then(res => {

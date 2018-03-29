@@ -38,10 +38,10 @@
             </el-col>
           </el-row>
 
-          <el-row :gutter="200" class="info-content">
+          <el-row :gutter="200" class="info-content" v-if="regFile.length > 0">
              <el-col :span="24" class="info-item file-item">
               <ul>
-                <li v-for="file in regFile">{{ file.fileName }}</li>
+                <li v-for="file in regFile" :key='file.fileName'>{{ file.fileName }}</li>
               </ul>
             </el-col>
           </el-row>
@@ -60,7 +60,7 @@
           <el-row :gutter="200" class="info-content">
              <el-col :span="24" class="info-item file-item">
               <ul>
-                <li v-for="file in finishFile">{{ file.fileName }}</li>
+                <li v-for="file in finishFile" :key='file.fileName'>{{ file.fileName }}</li>
               </ul>
             </el-col>
           </el-row>
@@ -144,7 +144,7 @@
 
 <script>
 import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp";
-import axios from "axios";
+import axios from "@/utils/https";
 
 const INPUT = 1;
 const SELECT = 2;
