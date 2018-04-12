@@ -69,6 +69,9 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    teamDetail(team) {
+      console.log(team)
     }
   }
 };

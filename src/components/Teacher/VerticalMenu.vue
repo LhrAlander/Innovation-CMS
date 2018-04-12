@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container manage-head">
     <div class="head">
       <img src="../../assets/img/logo.png" alt="杭州师范大学logo" class="logo">
       <div class="welcome-info">

@@ -2,7 +2,9 @@
   <div class="project-content">
     <header>
       <span class="title">{{team.teamName}}</span>
-      <span class="team"> <span class="team-name">更多 >></span></span>
+      <router-link :to='teamUrl'>
+        <span class="team"> <span class="team-name">更多 >></span></span>
+      </router-link>
     </header>
     <main>
       <img src="/static/img/defaultProject.png" alt="team" class='project-img'>
@@ -16,6 +18,11 @@
 export default {
   props: {
     team: Object
+  },
+  computed: {
+    teamUrl: function () {
+      return `/teamdetail/${this.team.teamId}`
+    }
   }
 };
 </script>
@@ -42,6 +49,7 @@ header .title {
 }
 
 header .team {
+  color: #454545;
   padding-top: 2px;
   font-size: 14px;
   display: flex;

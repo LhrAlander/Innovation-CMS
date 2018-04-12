@@ -1,5 +1,5 @@
 <template>
-  <div id="head">
+  <div id="head" class='manage-head'>
     <div class="more">
       <el-menu :default-active="activeIndex" mode="horizontal">
         <el-submenu index="1">
@@ -30,14 +30,5 @@
     float: right;
     margin-right: 10px;
 
-  }
-  .el-menu-item {
-    text-align: center;
-    min-width: auto;
-    color: #2A3F54 !important;
-    background-color: rgba(255,255,255,.5) !important;
-  }
-  .el-submenu .el-menu-item:hover, .el-submenu__title:hover {
-    background-color: rgba(46, 112, 133, .5) !important;
   }
 </style>

@@ -14,7 +14,6 @@ axios.interceptors.request.use(config => {
   // element ui Loading方法
   loadinginstace = Loading.service({ fullscreen: true })
   let token = store.state.token || window.localStorage.getItem('token') || null
-  console.log('token', token)
   if (token != null) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -38,14 +37,19 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
   loadinginstace.close()
   if (error.response) {
     console.log(error.response)
-    Message.error({
-      message: error.response.data || '加载失败'
-    })
     switch (error.response.status) {
       case 401:
+        Message.error({
+          message: '无权限访问'
+        })
         store.commit('cancelAuth')
         store.commit('logout')
         router.push({ path: '/' })
+        break
+      case 500: 
+      Message.error({
+        message: '加载失败'
+      })
     }
   }
   else {

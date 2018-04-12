@@ -1,7 +1,9 @@
 <template>
   <div class="project-content">
     <header>
-      <span class="title">{{project.projectName}}</span>
+      <router-link :to='projectDetail'>
+        <span class="title">{{project.projectName}}</span>
+      </router-link>
       <span class="team"> <img src="/static/img/card.png" alt="card" class="icon icon-card"> <span class="team-name">{{project.teamName}}</span></span>
     </header>
     <main>
@@ -16,6 +18,11 @@
 export default {
   props: {
     project: Object
+  },
+  computed: {
+    projectDetail () {
+      return `/projectdetail/${this.project.projectId}`
+    }
   }
 };
 </script>
@@ -38,6 +45,7 @@ header {
 }
 
 header .title {
+  color: #454545;
   font-size: 16px;
 }
 

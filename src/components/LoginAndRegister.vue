@@ -180,9 +180,10 @@ export default {
       // axios.get('/api/user/users')
         .then(res => {
           console.log(res)
-          this.$store.commit('login', res.data.token)
+          this.$store.commit('login', {token: res.data.token, user: res.data.user})
           if (this.loginForm.isRememberPassword) {
             window.localStorage.setItem('token', res.data.token)
+            window.localStorage.setItem('user', JSON.stringify(res.data.user))
           }
           this.$router.push('/')
         })

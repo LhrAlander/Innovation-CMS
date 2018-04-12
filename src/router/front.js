@@ -67,7 +67,7 @@ export default [
    //团队详细界面路由
    {
     name: 'TeamDetail',
-    path: '/teamDetail',
+    path: '/teamDetail/:id',
     component: TeamDetail,
   },
 ]

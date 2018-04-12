@@ -278,11 +278,13 @@ export default {
     },
     receiveInfo: function(data) {
       if (data) {
+        console.log(data)
         const user = {
           user_id: data.username,
           user_name: data.name,
-          user_identity: this.valueLabelMap.role[parseInt(data.role)].label
+          user_identity: data.role
         };
+        console.log(user)
         this.$store.dispatch('addUserInfo', {
           that: this,
           user

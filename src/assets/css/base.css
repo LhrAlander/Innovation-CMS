@@ -43,19 +43,8 @@ p {
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;}
 
-.el-submenu__title, .el-menu-item {
-  color: #ECF0F1 !important;
-  font-weight: bold;
-}
-.el-submenu .el-menu-item:hover, .el-submenu__title:hover {
-  background-color: #2E7085 !important;
-}
-.el-menu {
-  background-color: transparent !important;
-}
-.more .el-menu{
-  border: none !important;
-}
+
+
 
 /*.el-menu {*/
   /*display: block !important;*/

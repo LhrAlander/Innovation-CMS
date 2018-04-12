@@ -1,5 +1,6 @@
-let login = (state, token) => {
-  state.token = token
+let login = (state, payload) => {
+  state.token = payload.token
+  state.user = payload.user
   state.isLogin = true
 }
 let isLogin = state => {
@@ -11,6 +12,7 @@ let logout = (state) => {
   state.authToken = ''
   state.isLogin = false
   window.localStorage.removeItem('token')
+  window.localStorage.removeItem('user')
 }
 
 let addAuthToken = (state, token) => {
@@ -25,10 +27,18 @@ let setLoginUser = (state, user) => {
   state.user = user
 }
 
+let clearStateLogin = (state) => {
+  state.token = null
+  state.user = null
+  state.isLogin = false
+}
+
 export default {
   login,
   isLogin,
   addAuthToken,
   cancelAuth,
-  setLoginUser
+  setLoginUser,
+  clearStateLogin,
+  logout
 }
