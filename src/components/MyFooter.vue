@@ -2,7 +2,7 @@
     <footer>
       <div class="friend-links">
         <div class="container">
-        <friend-link v-for="item in linkItems" :iconCode="item.iconCode" :itemName="item.itemName" :href="item.href"></friend-link>
+        <friend-link v-for="item in linkItems" :key='item.itemName' :iconCode="item.iconCode" :itemName="item.itemName" :href="item.href"></friend-link>
         </div>
       </div>
       <div class="meta-container">

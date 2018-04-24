@@ -18,8 +18,8 @@
         <span class="info-title">
           <i class="iconfont box">&#xe62c;</i>
           项目基本信息
-          <el-row :gutter="200" class="info-content" v-for="rowIndex in getRowCount(baseInfo)">
-             <el-col :span="baseInfo[getItemIndex(rowIndex, colIndex)].span * 8" class="info-item" v-for="colIndex in 3" v-if="baseInfo[getItemIndex(rowIndex, colIndex)] != null">
+          <el-row :gutter="200" class="info-content" v-for="rowIndex in getRowCount(baseInfo)" :key='rowIndex'>
+             <el-col :span="baseInfo[getItemIndex(rowIndex, colIndex)].span * 8" class="info-item" v-for="colIndex in 3" :key="colIndex" v-if="baseInfo[getItemIndex(rowIndex, colIndex)] != null">
               <span class="item-name">{{ baseInfo[getItemIndex(rowIndex, colIndex)].name }}</span>
               <div class="item-content">
                 <el-input disabled v-model="baseInfo[getItemIndex(rowIndex, colIndex)].value"></el-input>
@@ -129,6 +129,35 @@
               <span class="item-name">手机号</span>
               <div class="item-content">
                  <el-input disabled v-model="teacher.userPhone"></el-input>
+              </div>
+            </el-col>
+          </el-row>
+        </span>
+    </div>
+
+
+    <!--项目成员-->
+    <div class="info-wrapper">
+        <span class="info-title">
+          <i class="iconfont box">&#xe64b;</i>
+          项目成员基本信息展示
+          <el-row :gutter="200" class="info-content" v-for="member in members" :key="member.userId">
+             <el-col :span="8" class="info-item">
+              <span class="item-name">用户名</span>
+              <div class="item-content">
+                <el-input disabled v-model="member.userId"></el-input>
+              </div>
+            </el-col>
+            <el-col :span="8" class="info-item">
+              <span class="item-name">姓名</span>
+              <div class="item-content">
+                <el-input disabled v-model="member.name"></el-input>
+              </div>
+            </el-col>
+            <el-col :span="8" class="info-item">
+              <span class="item-name">手机号</span>
+              <div class="item-content">
+                 <el-input disabled v-model="member.userPhone"></el-input>
               </div>
             </el-col>
           </el-row>
@@ -335,7 +364,24 @@ export default {
         userId: 123456789,
         name: "石兴民",
         userPhone: 123456789
-      }
+      },
+      members: [
+        {
+          userId: 123456789,
+          name: "石兴民",
+          userPhone: 123456789
+        },
+        {
+          userId: 123456789,
+          name: "石兴民",
+          userPhone: 123456789
+        },
+        {
+          userId: 123456789,
+          name: "石兴民",
+          userPhone: 123456789
+        }
+      ]
     };
   },
   components: {
@@ -350,7 +396,7 @@ export default {
         this.initData();
       })
       .catch(err => {
-        this.$store.commit('clearAuth')
+        this.$store.commit("clearAuth");
       });
   },
   methods: {
@@ -375,6 +421,7 @@ export default {
           }
           this.teacher = res.data.teacher;
           this.leader = res.data.leader;
+          this.members = res.data.members
         })
         .catch(err => {
           console.log(err);

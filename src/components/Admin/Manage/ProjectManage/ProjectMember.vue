@@ -3,7 +3,7 @@
     <!--筛选标签区域-->
     <div class="tagBlock">
       <span v-if="!tagEmpty" style="font-weight: bold; font-size: .9rem;">筛选条件</span>
-      <el-tag v-for="(value,key,index) in filter" v-if="value !== ''" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value,valueLabelMap)}})</el-tag>
+      <el-tag v-for="(value,key) in filter" :key='key' v-if="value !== ''" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value,valueLabelMap)}})</el-tag>
     </div>
     <el-button class="addInfo" type="success" size="large" @click="enterAdd">添加信息</el-button>
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
@@ -34,8 +34,9 @@
         width="50"
         :resizable="false">
       </el-table-column>
-      <el-table-column v-for="(value, key, index) in keyFormatMap"
+      <el-table-column v-for="(value, key) in keyFormatMap"
                        :label="value"
+                        :key='key'
                        :prop = "key"
                        :resizable="false">
       </el-table-column>
@@ -73,10 +74,10 @@
   </div>
 </template>
 <script>
-import axios from "utils/https";
-import FilterBox from "components/Admin/Manage/FilterBox";
-import InfoAdd from "components/Admin/Manage/InfoAdd";
-import * as utils from "utils/utils";
+import axios from "@/utils/https";
+import FilterBox from "@/components/Admin/Manage/FilterBox";
+import InfoAdd from "@/components/Admin/Manage/InfoAdd";
+import * as utils from "@/utils/utils";
 export default {
   components: { FilterBox, InfoAdd },
   data() {
@@ -201,9 +202,9 @@ export default {
         joinTime: row.joinTime,
         projectId: row.projectId,
         userId: row.userId,
-        del:false
+        del: false
       };
-      console.log(user)
+      console.log(user);
       if (new Date() - new Date(row.joinTime) < 24 * 60 * 60 * 1000) {
         this.$confirm(
           "该成员在项目时间过短（小于一天），是否删除该成员记录",
@@ -215,16 +216,16 @@ export default {
           }
         )
           .then(() => {
-            console.log('yes', user)
+            console.log("yes", user);
             user.del = true;
             axios
-              .post("/api/project/del/project/user", {user})
+              .post("/api/project/del/project/user", { user })
               .then(res => {})
               .catch(err => {});
           })
           .catch(() => {
             axios
-              .post("/api/project/del/project/user", {user})
+              .post("/api/project/del/project/user", { user })
               .then(res => {
                 console.log(res);
               })
@@ -234,7 +235,7 @@ export default {
           });
       } else {
         axios
-          .post("/api/project/del/project/user", {user})
+          .post("/api/project/del/project/user", { user })
           .then(res => {
             console.log(res);
           })

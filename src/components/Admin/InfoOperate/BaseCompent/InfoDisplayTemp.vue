@@ -3,7 +3,7 @@
   <div>
     <el-input v-if="item.type == INPUT" v-model="item.value" :disabled="item.disabled"></el-input>
     <template v-if="item.type == RADIO">
-      <el-radio v-for="radioItem in item.radioItems" v-model="item.value" :label="radioItem.label">
+      <el-radio v-for="radioItem in item.radioItems" v-model="item.value" :key='radioItem.label' :label="radioItem.label">
         {{ radioItem.value }}
       </el-radio>
     </template>

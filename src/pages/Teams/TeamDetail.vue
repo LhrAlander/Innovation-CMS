@@ -7,7 +7,7 @@
           <el-col :span="15">
             <div class="top">
               团队展示-内容
-              <p v-model="teamTitle">{{team.teamName}}</p>
+              <p>{{team.teamName}}</p>
             </div>
             <div class="team-msg" v-html="team.introduction">
             </div>

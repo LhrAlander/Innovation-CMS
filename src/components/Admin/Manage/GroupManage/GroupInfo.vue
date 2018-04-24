@@ -3,7 +3,7 @@
     <!--筛选标签区域-->
     <div class="tagBlock">
       <span v-if="!tagEmpty" style="font-weight: bold; font-size: .9rem;">筛选条件</span>
-      <el-tag v-for="(value,key,index) in filter" v-if="value !== ''" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value,valueLabelMap)}})</el-tag>
+      <el-tag v-for="(value,key) in filter" :key='key' v-if="value !== ''" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value,valueLabelMap)}})</el-tag>
     </div>
     <el-button class="addInfo" type="success" size="large" @click="enterAdd">添加信息</el-button>
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
@@ -31,7 +31,7 @@
       <el-table-column type="expand">
         <template scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item v-for="(value, key, index) in expandFormatMap" :label="value">
+            <el-form-item v-for="(value, key) in expandFormatMap" :key='key' :label="value">
               <span>{{ props.row[key] }}</span>
             </el-form-item>
           </el-form>
@@ -42,7 +42,8 @@
         width="50"
         :resizable="false">
       </el-table-column>
-      <el-table-column v-for="(value, key, index) in keyFormatMap"
+      <el-table-column v-for="(value, key) in keyFormatMap"
+                       :key='key'
                        :label="value"
                        :prop = "key"
                        :resizable="false">
@@ -82,9 +83,9 @@
 </template>
 <script>
 import axios from "@/utils/https";
-import FilterBox from "components/Admin/Manage/FilterBox";
-import InfoAdd from "components/Admin/Manage/InfoAdd";
-import * as utils from "utils/utils";
+import FilterBox from "@/components/Admin/Manage/FilterBox";
+import InfoAdd from "@/components/Admin/Manage/InfoAdd";
+import * as utils from "@/utils/utils";
 import teamApi from "@/api/teamApi";
 export default {
   components: { FilterBox, InfoAdd },
@@ -239,14 +240,18 @@ export default {
     handleDelete(index, row) {
       let state = row.status == "可用" ? "不可用" : "可用";
       console.log(row);
-      axios.post('/api/team/delete/team', {teamId: row.teamId, payload: {team_state: state}})
+      axios
+        .post("/api/team/delete/team", {
+          teamId: row.teamId,
+          payload: { team_state: state }
+        })
         .then(res => {
-          console.log(res)
-          row.status = state
+          console.log(res);
+          row.status = state;
         })
         .catch(err => {
-          console.log(err)
-        })
+          console.log(err);
+        });
     },
     //        编辑按钮事件
     handleEdit(index, row) {

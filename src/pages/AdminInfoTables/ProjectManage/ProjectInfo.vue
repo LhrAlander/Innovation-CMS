@@ -147,6 +147,47 @@
     </div>
 
 
+    <!--项目成员-->
+    <div class="info-wrapper">
+        <span class="info-title">
+          <i class="iconfont box">&#xe64b;</i>
+          项目成员基本信息展示
+           <el-button type="primary" class="leader-info-check info-detail-check" @click='isAdd=true'>添加成员</el-button>
+          <el-row style="margin-top: 12px" v-if="isAdd">
+            <el-col :span="7" class="info-item">
+              <span class="item-name">用户名</span>
+                <div class="item-content">
+                  <el-input v-model="addUserId"></el-input>
+                </div>
+                <el-button  style="margin-left: 12px" type="success" size="small" @click="confirmAdd">确定添加</el-button>
+                <el-button type="primary" size="small" @click="cancelAdd">取消添加</el-button>
+            </el-col>
+          </el-row>
+          <el-row :gutter="200" class="info-content" v-for="member in members" :key="member.userId">
+             <el-col :span="7" class="info-item">
+              <span class="item-name">用户名</span>
+              <div class="item-content">
+                <el-input disabled v-model="member.userId"></el-input>
+              </div>
+            </el-col>
+            <el-col :span="7" class="info-item">
+              <span class="item-name">姓名</span>
+              <div class="item-content">
+                <el-input disabled v-model="member.name"></el-input>
+              </div>
+            </el-col>
+            <el-col :span="7" class="info-item">
+              <span class="item-name">手机号</span>
+              <div class="item-content">
+                 <el-input disabled v-model="member.userPhone"></el-input>
+              </div>
+            </el-col>
+            <el-col :span="3" class="info-item">
+              <el-button type="danger" @click="deleteMember(member)">删除</el-button>
+            </el-col>
+          </el-row>
+        </span>
+    </div>
 
 
 
@@ -321,6 +362,9 @@ const DISPLAY_INFO = [
 export default {
   data() {
     return {
+      isAdd: false,
+      addUserId: '',
+      teamId: '',
       baseInfo: DISPLAY_INFO,
       regFile: [
         {
@@ -353,7 +397,8 @@ export default {
       fileData: {
         projectId: "",
         type: ""
-      }
+      },
+      members: []
     };
   },
   components: {
@@ -409,6 +454,8 @@ export default {
           }
           this.teacher = res[0].data.teacher;
           this.leader = res[0].data.leader;
+          this.members = res[0].data.members;
+          this.teamId = res[0].data.project.teamId;
 
           // 项目级别
           const levels = res[1].data.data.map(item => {
@@ -513,10 +560,6 @@ export default {
           }
         });
     },
-    downloadRegFiles() {
-      // window.open('localhost:3000/api/download')
-      window.open("http://localhost:3000/api/download");
-    },
     handleRemove(file, fileList) {
     },
     handleChange(file, fileList) {
@@ -601,6 +644,50 @@ export default {
           console.log(err);
         });
       // console.log(new Date(this.baseInfo[8].value).toLocaleDateString());
+    },
+    confirmAdd() {
+      console.log(this.addUserId)
+      let addTime = new Date()
+      addTime = `${addTime.getFullYear()}-${addTime.getMonth() + 1}-${addTime.getDate()}`
+      console.log(addTime)
+      axios.post('/api/project/add/project/user', {
+        user: {
+          project_id: this.$route.params.id,
+          user_id: this.addUserId,
+          add_time: addTime,
+          teamId: this.teamId
+        }
+      })
+      .then(res => {
+        console.log(res)
+        this.isAdd = false
+      })
+      .catch(err => {
+        console.log(err)
+        this.isAdd = false
+      })
+    },
+    cancelAdd() {
+      console.log('cancel')
+      this.addUserId=''
+      this.isAdd = false
+    },
+    deleteMember(member) {
+      console.log(member.userId)
+      axios.post('/api/project/del/project/user', {
+        user: {
+          projectId: this.$route.params.id,
+          userId: member.userId,
+          del: true,
+          teamId: this.teamId
+        }
+      })
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
     }
   }
 };

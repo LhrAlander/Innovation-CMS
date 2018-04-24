@@ -113,11 +113,9 @@
 </template>
 <script>
 import router from "../router/index";
-import ElSwitch from "../../node_modules/element-ui/packages/switch/src/component.vue";
-import axios from 'utils/https'
+import axios from '@/utils/https'
 
 export default {
-  components: { ElSwitch },
   data() {
     return {
       activeName: "login",

@@ -3,22 +3,27 @@
     <!--筛选标签区域-->
     <div class="tagBlock">
       <span v-if="!tagEmpty" style="font-weight: bold; font-size: .9rem;">筛选条件</span>
-      <el-tag v-for="(value,key) in filter"  :key='key' v-if="value !== ''" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value,valueLabelMap)}})</el-tag>
+      <el-tag 
+        v-for="(value,key) in _dataProp.filter" 
+        :key='key' v-if="value !== ''" 
+        class="tag" >
+        {{keyFormater(key)}}({{valueFormater(key,value,valueLabelMap)}})
+      </el-tag>
     </div>
     <el-button class="addInfo" type="success" size="large" @click="enterAdd">添加信息</el-button>
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
     <el-button class="exit-filter" size="large" @click="quitFilter">退出筛选</el-button>
     <!--筛选框-->
     <filter-box :dialogVisible="showFilterBox"
-                :filter="filter"
-                :tmpl = "filterTmpl"
-                :valueLabelMap = "valueLabelMap"
-                :keyFormatMap = "Object.assign({},keyFormatMap,expandFormatMap)"
+                :filter="_dataProp.filter"
+                :tmpl = "_dataProp.filterTmpl"
+                :valueLabelMap = "_dataProp.valueLabelMap"
+                :keyFormatMap = "Object.assign({},_dataProp.keyFormatMap,_dataProp.expandFormatMap)"
                 @sendFilter="receiveFilter"></filter-box>
     <info-add :show="showInfoAdd"
-              :tmpl = "infoAddTmpl"
-              :valueLabelMap = "valueLabelMap"
-              :rules = "infoAddRules"
+              :tmpl = "_dataProp.infoAddTmpl"
+              :valueLabelMap = "_dataProp.valueLabelMap"
+              :rules = "_dataProp.infoAddRules"
               @sendInfo = "receiveInfo"
     ></info-add>
     <!--表格-->
@@ -31,7 +36,7 @@
       <el-table-column type="expand">
         <template scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item v-for="(value, key) in expandFormatMap" :key='key' :label="value">
+            <el-form-item v-for="(value, key) in _dataProp.expandFormatMap" :key='key' :label="value">
               <span>{{ props.row[key] }}</span>
             </el-form-item>
           </el-form>
@@ -42,7 +47,7 @@
         width="50"
         :resizable="false">
       </el-table-column>
-      <el-table-column v-for="(value, key) in keyFormatMap"
+      <el-table-column v-for="(value, key) in _dataProp.keyFormatMap"
                       :key='key'
                       :label="value"
                       :prop = "key"
@@ -88,99 +93,22 @@ import InfoAdd from "@/components/Admin/Manage/InfoAdd";
 import * as utils from "@/utils/utils";
 export default {
   components: { FilterBox, InfoAdd },
+  props: {
+    // valueLabelMap: Object,
+    // keyFormatMap: Object,
+    // expandFormatMap: Object,
+    // infoAddTmpl: Object,
+    // infoAddRules: Object,
+    // url: String,
+    // filterTmpl: Object,
+    // filter: Object,
+    _dataProp: Object,
+    _fnProp: Object
+  },
   data() {
     return {
       tableData: [],
-      valueLabelMap: {
-        name: [],
-        awardLevel: [],
-        awardSecondLevel: []
-      },
-
-      keyFormatMap: {
-        // 格式化标签映射表
-        awardName: "获奖名称",
-        projectName: "项目名称",
-        username: "用户姓名",
-        contact: "联系方式"
-      },
-      expandFormatMap: {
-        // 格式化额外信息映射表
-      },
-      infoAddTmpl: {
-        awardTime: {
-          label: "获奖时间",
-          inputType: 2
-        },
-        name: {
-          label: "获奖名称",
-          inputType: 1 // 0 代表 input
-        },
-        awardLevel: {
-          label: "获奖等级",
-          inputType: 1 // 0 代表 input
-        },
-        awardSecondLevel: {
-          label: "获奖等级",
-          inputType: 1 // 0 代表 input
-        },
-        projectName: {
-          label: "项目名称",
-          inputType: 4 // 0 代表 input
-        },
-        username: {
-          label: "用户名",
-          inputType: 0
-        }
-      },
-      infoAddRules: {
-        name: [{ required: true, message: "请输入获奖名称", trigger: "blur" }],
-        awardLevel: [
-          { required: true, message: "请输入获奖级别", trigger: "blur" }
-        ],
-        awardSecondLevel: [
-          { required: true, message: "请输入获奖等级", trigger: "blur" }
-        ],
-        awardTime: [
-          { required: true, message: "请输入获奖时间", trigger: "blur" }
-        ],
-        username: [
-          { required: true, message: "请输入用户姓名", trigger: "blur" }
-        ]
-      },
-      //        获取表格数据的地址
-      url: "/api/award/users",
-      filterTmpl: {
-        name: {
-          label: "获奖名称",
-          inputType: 1 // 0 代表 input
-        },
-        awardLevel: {
-          label: "获奖等级",
-          inputType: 1 // 0 代表 input
-        },
-        awardSecondLevel: {
-          label: "获奖等级",
-          inputType: 1 // 0 代表 input
-        },
-        projectName: {
-          label: "项目名称",
-          inputType: 0 // 0 代表 input
-        },
-        username: {
-          label: "用户姓名",
-          inputType: 0
-        }
-      },
-      filter: {
-        //搜索条件
-        name: "", //获奖名称
-        awardLevel: "", //获奖等级
-        awardSecondLevel: "", //获奖级别
-        projectName: "", //项目名称
-        username: "" //用户姓名
-      },
-      pageSize: 15, //每页大小
+      pageSize: 10, //每页大小
       currentPage: 1, //当前页
       start: 1, //查询的页码
       totalCount: 30, //返回的记录总数
@@ -198,10 +126,6 @@ export default {
     },
     //        异步加载数据
     loadData(filter, pageNum, pageSize) {
-      if (filter.projectName == "个人") {
-        filter.projectId = "个人";
-        delete filter.projectName;
-      }
       axios
         .get(this.url, {
           params: {
@@ -229,18 +153,12 @@ export default {
       return r;
     },
 
-    handleMore(index, row) {
-      this.$router.push(`/check/studentInfo/${row.userId}`);
-    },
+    handleMore(index, row) {},
     //        删除按钮事件
     handleDelete(index, row) {
       console.log(row);
-      const award = {
-        awardId: row.awardId,
-        userId: row.userId
-      };
       axios
-        .post("/api/award/delete/user", { award })
+        .post("/api/award/delete/award", { awardId: row.awardId })
         .then(res => {
           console.log(res);
         })
@@ -262,37 +180,29 @@ export default {
       this.currentPage = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    async initSelectors() {
-      const res = await this.$store.dispatch("getAwards");
-      const teams = await this.$store.dispatch("getSelectors");
-      this.infoAddTmpl.projectName.options = teams[3];
-      this.infoAddTmpl.projectName.options.push({
-        label: "个人",
-        value: "个人"
-      });
-      this.valueLabelMap.name = res[0].map(i => {
-        return {
-          label: i,
-          value: i
-        };
-      });
-      this.valueLabelMap.awardLevel = res[2].map(i => {
-        return {
-          label: i.identity_name,
-          value: i.identity_name
-        };
-      });
-      this.valueLabelMap.awardSecondLevel = res[1].map(i => {
-        return {
-          label: i.level_name,
-          value: i.level_name
-        };
-      });
-    },
     //        点击筛选触发的事件
     async enterFilter() {
-      if (this.valueLabelMap.name.length < 1) {
-        await this.initSelectors();
+      if (this.valueLabelMap.awardName.length < 1) {
+        const res = await this.$store.dispatch("getAwards");
+        console.log(res);
+        this.valueLabelMap.awardName = res[0].map(i => {
+          return {
+            label: i,
+            value: i
+          };
+        });
+        this.valueLabelMap.awardLevel = res[2].map(i => {
+          return {
+            label: i.identity_name,
+            value: i.identity_name
+          };
+        });
+        this.valueLabelMap.awardSecondLevel = res[1].map(i => {
+          return {
+            label: i.level_name,
+            value: i.level_name
+          };
+        });
         this.showFilterBox = true;
       } else {
         this.showFilterBox = true;
@@ -300,7 +210,9 @@ export default {
     },
     //        接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {
-      if (filter !== undefined) this.filter = filter;
+      if (filter !== undefined) {
+        this.filter = filter;
+      }
       this.showFilterBox = false;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
@@ -317,8 +229,27 @@ export default {
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     enterAdd: async function() {
-      if (this.valueLabelMap.name.length < 1) {
-        await this.initSelectors();
+      if (this.valueLabelMap.awardName.length < 1) {
+        const res = await this.$store.dispatch("getAwards");
+        console.log(res);
+        this.valueLabelMap.awardName = res[0].map(i => {
+          return {
+            label: i,
+            value: i
+          };
+        });
+        this.valueLabelMap.awardLevel = res[2].map(i => {
+          return {
+            label: i.identity_name,
+            value: i.identity_name
+          };
+        });
+        this.valueLabelMap.awardSecondLevel = res[1].map(i => {
+          return {
+            label: i.level_name,
+            value: i.level_name
+          };
+        });
         this.showInfoAdd = true;
       } else {
         this.showInfoAdd = true;
@@ -326,21 +257,14 @@ export default {
     },
     receiveInfo: function(data) {
       if (data) {
-        console.log(data);
         const award = {
-          award: {
-            award_time: data.awardTime,
-            award_name: data.name,
-            award_identity: data.awardLevel,
-            award_level: data.awardSecondLevel
-          },
-          user: {
-            award_project: data.projectName.pop(),
-            user_id: data.username
-          }
+          award_time: data.awardTime,
+          award_name: data.awardName,
+          award_identity: data.awardLevel,
+          award_level: data.awardSecondLevel
         };
         axios
-          .post("/api/award/add/user", { award })
+          .post("/api/award/add/award", { award })
           .then(res => {
             console.log(res);
           })

@@ -11,7 +11,7 @@
 
         <div class="cnt-wrapper">
           <div class="academy-cnt">
-            <div class="display-item department-item" v-for="i in 10">
+            <div class="display-item department-item" v-for="i in 10" :key='i'>
               <span class="item-name department-name">杭州国际服务工程学院</span>
               <div class="icon-wrapper department-icon-wrapper">
                 <div class="icon-cnt">
@@ -34,7 +34,7 @@
 
         <div class="cnt-wrapper">
           <div class="department-cnt">
-            <div class="display-item department-item" v-for="i in 10">
+            <div class="display-item department-item" v-for="i in 10" :key='i'>
               <span class="item-name department-name">杭州国际服务工程学院</span>
               <div class="icon-wrapper department-icon-wrapper">
                 <div class="icon-cnt">
@@ -56,7 +56,7 @@
 
         <div class="cnt-wrapper">
           <div class="major-cnt">
-            <div class="display-item department-item" v-for="i in 10">
+            <div class="display-item department-item" v-for="i in 10" :key='i'>
               <span class="item-name department-name">杭州国际服务工程学院</span>
               <div class="icon-wrapper department-icon-wrapper">
                 <div class="icon-cnt">
@@ -78,7 +78,7 @@
 
         <div class="cnt-wrapper">
           <div class="class-cnt">
-            <div class="display-item department-item" v-for="i in 10">
+            <div class="display-item department-item" v-for="i in 10" :key='i'>
               <span class="item-name department-name">杭州国际服务工程学院</span>
               <div class="icon-wrapper department-icon-wrapper">
                 <div class="icon-cnt">

@@ -3,7 +3,7 @@
     <!--筛选标签区域-->
     <div class="tagBlock">
       <span v-if="!tagEmpty" style="font-weight: bold; font-size: .9rem;">筛选条件</span>
-      <el-tag v-for="(value,key,index) in filter" v-if="value !== ''" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value,valueLabelMap)}})</el-tag>
+      <el-tag v-for="(value,key) in filter" :key='key' v-if="value !== ''" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value,valueLabelMap)}})</el-tag>
     </div>
     <el-button class="addInfo" type="success" size="large" @click="enterAdd">添加信息</el-button>
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
@@ -31,7 +31,7 @@
       <el-table-column type="expand">
         <template scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item v-for="(value, key, index) in expandFormatMap" :label="value">
+            <el-form-item v-for="(value, key) in expandFormatMap" :key='key' :label="value">
               <span>{{ props.row[key] }}</span>
             </el-form-item>
           </el-form>
@@ -42,8 +42,9 @@
         width="50"
         :resizable="false">
       </el-table-column>
-      <el-table-column v-for="(value, key, index) in keyFormatMap"
+      <el-table-column v-for="(value, key) in keyFormatMap"
                        :label="value"
+                       :key='key'
                        :prop = "key"
                        :resizable="false">
       </el-table-column>
@@ -81,13 +82,12 @@
   </div>
 </template>
 <script>
-import axios from "utils/https.js";
-import ElButton from "../../../../../node_modules/element-ui/packages/button/src/button.vue";
+import axios from "@/utils/https.js";
 import FilterBox from "components/Admin/Manage/FilterBox";
 import InfoAdd from "components/Admin/Manage/InfoAdd";
-import * as utils from "utils/utils";
+import * as utils from "@/utils/utils";
 export default {
-  components: { ElButton, FilterBox, InfoAdd },
+  components: { FilterBox, InfoAdd },
   data() {
     return {
       tableData: [],
@@ -100,7 +100,7 @@ export default {
           {
             value: "教师",
             label: "教师"
-          },
+          }
           // {
           //   value: 2,
           //   label: "企业"
@@ -182,7 +182,7 @@ export default {
       showFilterBox: false, // 是否显示筛选框
       tagEmpty: true, //标签是否为空
       showInfoAdd: false // 是否显示信息添加框
-    };
+    }
   },
   mounted: function() {
     // utils.filter2Mysql(utils.filterName.USER, this.filter);
@@ -225,15 +225,16 @@ export default {
     },
     //        删除按钮事件
     handleDelete(index, row) {
-      let state = row.status == '可用' ? '不可用' : '可用'
-      axios.post('/api/user/delUser', {userId: row.username, state})
+      let state = row.status == "可用" ? "不可用" : "可用";
+      axios
+        .post("/api/user/delUser", { userId: row.username, state })
         .then(res => {
-          console.log(res)
-          row.status = state
+          console.log(res);
+          row.status = state;
         })
         .catch(err => {
-          console.log(err)
-        })
+          console.log(err);
+        });
     },
     // 编辑按钮事件
     handleEdit(index, row) {
@@ -278,17 +279,17 @@ export default {
     },
     receiveInfo: function(data) {
       if (data) {
-        console.log(data)
+        console.log(data);
         const user = {
           user_id: data.username,
           user_name: data.name,
           user_identity: data.role
         };
-        console.log(user)
-        this.$store.dispatch('addUserInfo', {
+        console.log(user);
+        this.$store.dispatch("addUserInfo", {
           that: this,
           user
-        })
+        });
       }
       this.showInfoAdd = false;
     }

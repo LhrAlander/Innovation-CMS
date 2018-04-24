@@ -13,7 +13,7 @@
             {{ exists.title }}
           </span>
           <div class="check-box-wrapper">
-            <el-checkbox v-for="category in exists.categories" v-model="category.status" :label="category.label" border></el-checkbox>
+            <el-checkbox v-for="category in exists.categories" v-model="category.status" :key='category.label' :label="category.label" border></el-checkbox>
           </div>
         </el-col>
         <el-col :span="13" :offset="3">
@@ -24,7 +24,7 @@
                 {{ deleteInfo.title }}
               </span>
               <div class="check-box-wrapper">
-                <el-checkbox v-for="category in toDelete" v-model="category.status" :label="category.label" border></el-checkbox>
+                <el-checkbox v-for="category in toDelete" v-model="category.status" :label="category.label" :key='category.label' border></el-checkbox>
               </div>
               <slot name="delBtn"></slot>
             </el-col>
@@ -36,7 +36,7 @@
                 {{ addInfo.title }}
               </span>
               <div class="check-box-wrapper">
-                <el-checkbox v-for="category in toAdd" v-model="category.status" :label="category.label" border></el-checkbox>
+                <el-checkbox v-for="category in toAdd" v-model="category.status" :key='category.label' :label="category.label" border></el-checkbox>
                 <slot name="addOneBtn"></slot>
               </div>
               <slot name="addAllBtn"></slot>

@@ -18,8 +18,8 @@
   </main>
 </template>
 <script>
-import MyHeader from "components/MyHeader";
-import MyFooter from "components/MyFooter";
+import MyHeader from "@/components/MyHeader";
+import MyFooter from "@/components/MyFooter";
 import DisplayTmpl from "@/components/NormalDisplayTmpl";
 import axios from '@/utils/https'
 export default {

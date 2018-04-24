@@ -14,12 +14,16 @@
       </div>
     </div>
 
-    <div class="info-wrapper" v-for="block in displayInfo">
+    <div class="info-wrapper" v-for="block in displayInfo" :key='block'>
         <span class="info-title">
           <i class="iconfont box" v-html="block.iconCode"></i>
           {{ block.infoTitle }}
-          <el-row :gutter="200" class="info-content" v-for="rowIndex in getRowCount(block.items)">
-             <el-col :span="block.items[getItemIndex(rowIndex, colIndex)].span * 8" class="info-item" v-for="colIndex in 3" v-if="block.items[getItemIndex(rowIndex, colIndex)] != null">
+          <el-row :gutter="200" class="info-content" v-for="rowIndex in getRowCount(block.items)" :key="rowIndex">
+             <el-col 
+             :span="block.items[getItemIndex(rowIndex, colIndex)].span * 8" class="info-item" 
+             v-for="colIndex in 3" 
+             :key='colIndex' 
+             v-if="block.items[getItemIndex(rowIndex, colIndex)] != null">
               <span class="item-name">{{ block.items[getItemIndex(rowIndex, colIndex)].name }}</span>
               <div class="item-content">
               <info-display-temp @clickBtn="btnFunc(block.items[getItemIndex(rowIndex, colIndex)])" :item="block.items[getItemIndex(rowIndex, colIndex)]"></info-display-temp>

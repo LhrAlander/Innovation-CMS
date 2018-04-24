@@ -3,7 +3,7 @@
     <!--筛选标签区域-->
     <div class="tagBlock">
       <span v-if="!tagEmpty" style="font-weight: bold; font-size: .9rem;">筛选条件</span>
-      <el-tag v-for="(value,key,index) in filter" v-if="value !== ''" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value,valueLabelMap)}})</el-tag>
+      <el-tag v-for="(value,key) in filter" :key='key' v-if="value !== ''" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value,valueLabelMap)}})</el-tag>
     </div>
     <el-button class="addInfo" type="success" size="large" @click="enterAdd">添加信息</el-button>
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
@@ -31,7 +31,7 @@
       <el-table-column type="expand">
         <template scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item v-for="(value, key, index) in expandFormatMap" :label="value">
+            <el-form-item v-for="(value, key) in expandFormatMap" :key='key' :label="value">
               <span>{{ props.row[key] }}</span>
             </el-form-item>
           </el-form>
@@ -42,10 +42,11 @@
         width="50"
         :resizable="false">
       </el-table-column>
-      <el-table-column v-for="(value, key, index) in keyFormatMap"
-                       :label="value"
-                       :prop = "key"
-                       :resizable="false">
+      <el-table-column v-for="(value, key) in keyFormatMap"
+                      :key='key'
+                      :label="value"
+                      :prop = "key"
+                      :resizable="false">
       </el-table-column>
       <el-table-column
         label="操作"
@@ -82,12 +83,11 @@
 </template>
 <script>
 import axios from "@/utils/https";
-import ElButton from "../../../../../node_modules/element-ui/packages/button/src/button.vue";
-import FilterBox from "components/Admin/Manage/FilterBox";
-import InfoAdd from "components/Admin/Manage/InfoAdd";
-import * as utils from "utils/utils";
+import FilterBox from "@/components/Admin/Manage/FilterBox";
+import InfoAdd from "@/components/Admin/Manage/InfoAdd";
+import * as utils from "@/utils/utils";
 export default {
-  components: { ElButton, FilterBox, InfoAdd },
+  components: { FilterBox, InfoAdd },
   data() {
     return {
       tableData: [],
@@ -102,7 +102,7 @@ export default {
         unitCategory: "单位类别",
         leader: "负责人",
         leaderPhone: "负责人联系方式",
-        status: '状态'
+        status: "状态"
       },
       expandFormatMap: {
         // 格式化额外信息映射表
@@ -216,16 +216,20 @@ export default {
     },
     //        删除按钮事件
     handleDelete(index, row) {
-      console.log(row)
+      console.log(row);
       let state = row.status == "可用" ? "不可用" : "可用";
-      axios.post('/api/dependent/del/dependent', {unitId: row.unitId, payload: {unit_state: state}})
+      axios
+        .post("/api/dependent/del/dependent", {
+          unitId: row.unitId,
+          payload: { unit_state: state }
+        })
         .then(res => {
-          console.log(res)
-          row.status = state
+          console.log(res);
+          row.status = state;
         })
         .catch(err => {
-          console.log(err)
-        })
+          console.log(err);
+        });
     },
     //        编辑按钮事件
     handleEdit(index, row) {
@@ -295,7 +299,7 @@ export default {
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     async enterAdd() {
-        if (this.valueLabelMap.unitName.length < 1) {
+      if (this.valueLabelMap.unitName.length < 1) {
         await this.initSelectors();
         this.showInfoAdd = true;
       } else {
@@ -308,14 +312,15 @@ export default {
           unit_name: data.unitName,
           unit_identity: data.unitCategory,
           unit_principal: data.leaderId
-        }
-        axios.post('/api/dependent/add/dependent', {dependent})
+        };
+        axios
+          .post("/api/dependent/add/dependent", { dependent })
           .then(res => {
-            console.log(res)
+            console.log(res);
           })
           .catch(err => {
-            console.log(err)
-          })
+            console.log(err);
+          });
       }
       this.showInfoAdd = false;
     }
