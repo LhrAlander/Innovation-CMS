@@ -88,8 +88,7 @@ header .title {
   height: 30px;
   line-height: 16px;
   font-size: 13px;
-  overflow: hidden
-  ;
+  overflow: hidden;
 }
 
 

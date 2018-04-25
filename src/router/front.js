@@ -13,6 +13,8 @@ import NotificationDetail from '@/pages/Notifications/NotificationDetail'
 import Team from '@/pages/Teams/Team'
 //团队详细界面
 import TeamDetail from '@/pages/Teams/TeamDetail'
+// 获奖界面
+import Award from '@/pages/Awards/Award'
 
 export default [
   {
@@ -70,4 +72,10 @@ export default [
     path: '/teamDetail/:id',
     component: TeamDetail,
   },
+  // 获奖详细界面路由
+  {
+    name: 'AwardIndex',
+    path: '/awards',
+    component: Award
+  }
 ]

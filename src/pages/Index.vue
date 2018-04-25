@@ -17,19 +17,16 @@
           </div>
         </el-col>
         <el-col :span="7" :offset="2" class="team-show">
-          <h2 class="title title-left">团队展示</h2>
+          <h2 class="title title-left">获奖情况</h2>
           <div class="team-show-wrapper">
-            <el-row v-for="item in 3" :key='item' :gutter="40">
-              <el-col :span="12"><team-display></team-display></el-col>
-              <el-col :span="12"><team-display></team-display></el-col>
-            </el-row>
+            <div class="award-item" v-for="i in awards" :key="i.awardId">{{i.name}}</div>
           </div>
         </el-col>
       </el-row>
 
       <el-row>
         <el-col :span="24">
-          <h2 class="title">获奖情况</h2>
+          <h2 class="title">团队展示</h2>
           <award></award>
           <!--<router-link to="/"><span class="more award-more">更多&nbsp;&gt; </span></router-link>-->
         </el-col>
@@ -87,7 +84,8 @@ export default {
     return {
       announcements: [],
       policys: [],
-      files: []
+      files: [],
+      awards: []
     };
   },
   mounted() {
@@ -106,6 +104,11 @@ export default {
         this.files.forEach(p => {
           p.url = `/fileDetail/${p.file_system_id}`
         })
+        return axios.get('/api/front/awards/awards')
+      })
+      .then(res => {
+        console.log('awards', res)
+        this.awards = res.data
         return axios.get("/api/front/index/notifications");
       })
       .then(res => {
@@ -144,6 +147,10 @@ a {
   color: #000;
 }
 
+.award-item {
+  margin-bottom: 10px;
+}
+
 .container {
   width: 1140px;
   padding: 0 30px;
@@ -157,7 +164,7 @@ a {
 .announcement,
 .team-show {
   height: 500px;
-  marigin: 10px 0;
+  /* marigin: 10px 0; */
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -191,7 +198,7 @@ a {
 }
 
 .team-show-wrapper {
-  padding: 40px 1.5rem;
+  padding: 40px 1rem;
 }
 
 span.more {
