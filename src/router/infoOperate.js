@@ -29,6 +29,9 @@ import ProjectInfoCheck from 'pages/AdminInfoTables/ProjectManage/ProjectInfoChe
 import RecruitmentCheck from 'pages/AdminInfoTables/RecruitmentManage/RecruitmentCheck'
 import Recruitment from 'pages/AdminInfoTables/RecruitmentManage/Recruitment'
 import RecruitmentAdd from 'pages/AdminInfoTables/RecruitmentManage/RecruitmentAdd'
+import RecruitSignUp from 'pages/AdminInfoTables/RecruitSignUp/SignUp'
+import RecruitSignUpCheck from 'pages/AdminInfoTables/RecruitSignUp/SignUpCheck'
+import RecruitSignUpAdd from 'pages/AdminInfoTables/RecruitSignUp/SignUpAdd'
 
 export default [
   // 基本用户信息查看
@@ -193,5 +196,23 @@ export default [
     name: "RecruitmentInfoAdd",
     path: "/add/recruitmentInfo",
     component: RecruitmentAdd
-  }
+  },
+  // 招募报名信息查看
+  {
+    name: "RecruitSignUpInfoCheck",
+    path: "/check/recruitSignUpInfo/:id",
+    component: RecruitSignUpCheck
+  },
+  // 招募报名信息编辑
+  {
+    name: "RecruitSignUpInfoEdit",
+    path: "/edit/recruitSignUpInfo/:id",
+    component: RecruitSignUp
+  },
+  // 增加招募报名信息
+  {
+    name: "RecruitSignUpInfoAdd",
+    path: "/add/recruitSignUpInfo",
+    component: RecruitSignUpAdd
+  },
 ]

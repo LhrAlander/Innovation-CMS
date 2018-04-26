@@ -47,6 +47,18 @@
       </el-row>
 			<el-row :gutter="200" class="info-content">
         <el-col :span="8" class="info-item">
+          <span class="item-name">截止时间</span>
+          <div class="item-content">
+            <el-date-picker
+              v-model="baseInfo.endTime"
+              type="date"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+              placeholder="选择日期">
+            </el-date-picker>
+          </div>
+        </el-col>
+        <el-col :span="8" class="info-item">
           <span class="item-name">状态</span>
           <div class="item-content">
             <el-select v-model="baseInfo.state">
@@ -83,8 +95,6 @@
               :data='uploadData'
               :auto-upload="false">
               <el-button slot="trigger" size="small" type="primary">选取附件</el-button>
-              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-              <el-button style="margin-left: 10px;" size="small" type="danger" @click="deleteAll">删除全部</el-button>
              <div slot="tip" class="el-upload__tip">选择完文件后请手动点击按钮上传</div>
             </el-upload>
           </div>
@@ -113,6 +123,7 @@ export default {
         title: "",
         publishUser: "",
         publishTime: "",
+        endTime: "",
         state: "可用"
       },
       stateOptions: [
@@ -144,22 +155,6 @@ export default {
     InfoDisplayTemp
   },
   methods: {
-    deleteAll() {
-      axios.post("/api/recruitment/delete/files", {
-          files: this.files
-        })
-        .then(res => {
-          console.log("del", res);
-          if (res.status == 200 && res.data.code == 200) {
-            this.files = [];
-          }
-        });
-    },
-    submitUpload() {
-      this.uploadData.id = this.$route.params.id;
-      console.log(this.uploadData);
-      this.$refs.upload.submit();      
-    },
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
@@ -180,6 +175,8 @@ export default {
         })
         .then(res => {
           console.log(res)
+          this.uploadData.id = res.data.id
+          this.$refs.upload.submit(); 
         })
         .catch(err => {
           console.log(err)

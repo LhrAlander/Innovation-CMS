@@ -2,76 +2,51 @@
 <template>
   <div class="admin-check-info-wrapper">
 
-    <h1 class="title">招募信息管理</h1>
+    <h1 class="title">报名信息管理</h1>
 
     <div class="mode-crumb-box">
       <div class="breadcrumb">
         <i class="iconfont">&#xe64f;</i>
-        招募信息管理&nbsp; >&nbsp;招募信息查看
+        报名信息管理&nbsp; >&nbsp;报名信息查看
       </div>
       <div class="btn-wrapper">
-        <el-button type="warning" plain class="modify-mode-btn" @click="confirmChange">确认修改</el-button>
+        <el-button type="warning" plain class="modify-mode-btn" @click="confirmCreate">确认创建</el-button>
       </div>
     </div>
 
     <div class="info-wrapper">
         <span class="info-title">
           <i class="iconfont box">&#xe64f;</i>
-          招募信息
+          报名信息
         </span>
       <el-row :gutter="200" class="info-content">
         <el-col :span="8" class="info-item">
-          <span class="item-name">标题</span>
+          <span class="item-name">招募信息标题</span>
           <div class="item-content">
-            <el-input v-model="baseInfo.title"></el-input>
+            <el-select v-model="recruitmentId"
+							@change="change">
+							<el-option
+							 v-for="item in options"
+							 :key="item.value"
+							 :value="item.value"
+							 :label="item.label"></el-option>
+						</el-select>
           </div>
         </el-col>
 				<el-col :span="8" class="info-item">
-          <span class="item-name">发布者</span>
+          <span class="item-name">报名者</span>
           <div class="item-content">
-            <el-input v-model="baseInfo.publishUser"></el-input>
+            <el-input disabled v-model="userId"></el-input>
           </div>
         </el-col>
 				<el-col :span="8" class="info-item">
-          <span class="item-name">发布时间</span>
+          <span class="item-name">报名时间</span>
           <div class="item-content">
-            <el-date-picker
-              v-model="baseInfo.publishTime"
-              type="date"
-              format="yyyy-MM-dd"
-              value-format="yyyy-MM-dd"
-              placeholder="选择日期">
-            </el-date-picker>
+            <el-input disabled v-model="signUpTime"></el-input>
           </div>
         </el-col>
       </el-row>
-			<el-row :gutter="200" class="info-content">
-        <el-col :span="8" class="info-item">
-          <span class="item-name">截止时间</span>
-          <div class="item-content">
-            <el-date-picker
-              v-model="baseInfo.endTime"
-              type="date"
-              format="yyyy-MM-dd"
-              value-format="yyyy-MM-dd"
-              placeholder="选择日期">
-            </el-date-picker>
-          </div>
-        </el-col>
-        <el-col :span="8" class="info-item">
-          <span class="item-name">状态</span>
-          <div class="item-content">
-            <el-select v-model="baseInfo.state">
-              <el-option
-                v-for="item in stateOptions"
-                :key="item.value"
-                :value="item.value"
-                :label="item.label"></el-option>
-            </el-select>
-          </div>
-        </el-col>
-      </el-row>
-      <span>发布内容简介</span>
+      <span>报名简介</span>
       <el-row :gutter="200" class="info-content less-z-index">
         <el-col :span="24" class="info-item">
           <div class="item-content">
@@ -88,21 +63,19 @@
               class="upload"
               ref="upload"
               name="uploadFile"
-              action="/api/upload/recruitment"
+              action="/api/upload/signup"
               :on-preview="handlePreview"
               :on-remove="handleRemove"
               :file-list="files"
               :data='uploadData'
               :auto-upload="false">
               <el-button slot="trigger" size="small" type="primary">选取附件</el-button>
-              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-              <el-button style="margin-left: 10px;" size="small" type="danger" @click="deleteAll">删除全部</el-button>
-             <div slot="tip" class="el-upload__tip">选择完文件后请手动点击按钮上传</div>
             </el-upload>
           </div>
         </el-col>
       </el-row>
     </div>
+
   </div>
 </template>
 
@@ -121,36 +94,23 @@ const INPUT_AREA = 6;
 export default {
   data() {
     return {
-      baseInfo: {
-        title: "",
-        publishUser: "",
-        publishTime: "",
-        state: "",
-        endTime: ''
-      },
-      stateOptions: [
-        {
-          value: "可用",
-          label: "已发布"
-        },
-        {
-          value: "不可用",
-          label: "未发布"
-        }
-      ],
-      recruitmentInfo: {
+      recruitmentId: "",
+      userId: "",
+      title: "",
+      endTime: "",
+      signUpTime: "",
+      signUpInfo: {
         info: ""
-      },
-      files: [],
-      uploadData: {},
-      editor: "",
+			},
+			uploadData: {},
+      options: []
     };
   },
   mounted() {
     this.editor = new E("#editor-ele");
     this.editor.customConfig.onchange = html => {
-      this.recruitmentInfo.info = html
-    }
+      this.signUpInfo.info = html;
+    };
     this.editor.create();
     this.initData();
   },
@@ -159,34 +119,27 @@ export default {
   },
   methods: {
     initData() {
-      const recruitmentId = this.$route.params.id;
-      console.log(recruitmentId);
+      const user = JSON.parse(window.localStorage.getItem("user"));
+      this.userId = user.userId;
+      let today = new Date();
+      today = `${today.getFullYear()}-${today.getMonth() +
+        1}-${today.getDate()}`;
+      this.signUpTime = today;
       axios
-        .post("/api/recruitment/recruitment", {
-          recruitmentId: recruitmentId
+        .post("/api/st/recruitment/signup/options", {
+          today
         })
         .then(res => {
-          res = res.data;
           console.log(res);
-          if (res.code == 200) {
-            this.recruitmentInfo.info = res.data.introduction;
-            this.editor.txt.html(`<p>${this.recruitmentInfo.info}</p>`);
-            this.files = res.files;
-            this.baseInfo.title = res.data.title;
-            this.baseInfo.publishUser = res.data.publishUser;
-            this.baseInfo.publishTime = res.data.publishTime;
-            this.baseInfo.state = res.data.state;
-            this.baseInfo.endTime = res.data.endTime
-          } else {
-            this.$message.error("不存在该招募信息");
-          }
+          this.options = res.data.data;
         })
         .catch(err => {
-          console.log("err", err);
+          console.log(err);
         });
     },
     deleteAll() {
-      axios.post("/api/recruitment/delete/files", {
+      axios
+        .post("/api/st/recruitment/delete/files", {
           files: this.files
         })
         .then(res => {
@@ -199,7 +152,7 @@ export default {
     submitUpload() {
       this.uploadData.id = this.$route.params.id;
       console.log(this.uploadData);
-      this.$refs.upload.submit();      
+      this.$refs.upload.submit();
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -207,26 +160,30 @@ export default {
     handlePreview(file) {
       console.log(file);
     },
-
-    confirmChange() {
+    confirmCreate() {
+      let today = new Date();
+      today = today.toLocaleString().split(" ")[0];
       let info = {
         id: this.$route.params.id,
-        publish_user: this.baseInfo.publishUser,
-        publish_time: this.baseInfo.publishTime,
-        end_time: this.baseInfo.endTime,
-        title: this.baseInfo.title,
-        introduction: this.recruitmentInfo.info,
-        state: this.baseInfo.state
-      }
-      axios.post("/api/recruitment/change/recruitment", {
-          recruitment: info
+        sign_up_time: today,
+				introduction: this.signUpInfo.info,
+				state: '待审核',
+				user_id: this.userId,
+				recruitment_id: this.recruitmentId
+      };
+      axios
+        .post("/api/st/recruitment/add/signup", {
+          signup: info
         })
         .then(res => {
-          console.log(res)
+					console.log(res);
+					const sign_up_id = res.data.id
+					this.uploadData.id = sign_up_id
+					this.$refs.upload.submit();
         })
         .catch(err => {
-          console.log(err)
-        })
+          console.log(err);
+        });
     }
   }
 };

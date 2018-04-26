@@ -2,12 +2,12 @@
 <template>
   <div class="admin-check-info-wrapper">
 
-    <h1 class="title">招募信息管理</h1>
+    <h1 class="title">报名信息管理</h1>
 
     <div class="mode-crumb-box">
       <div class="breadcrumb">
         <i class="iconfont">&#xe64f;</i>
-        招募信息管理&nbsp; >&nbsp;招募信息查看
+        报名信息管理&nbsp; >&nbsp;报名信息查看
       </div>
       <div class="btn-wrapper">
         <el-button type="warning" plain class="modify-mode-btn" @click="goForEdit">修改信息</el-button>
@@ -17,47 +17,47 @@
     <div class="info-wrapper">
         <span class="info-title">
           <i class="iconfont box">&#xe64f;</i>
-          招募信息
+          报名信息
         </span>
       <el-row :gutter="200" class="info-content">
         <el-col :span="8" class="info-item">
-          <span class="item-name">标题</span>
+          <span class="item-name">招募信息标题</span>
           <div class="item-content">
-            <el-input disabled v-model="baseInfo.title"></el-input>
+            <el-input disabled v-model="title"></el-input>
           </div>
         </el-col>
 				<el-col :span="8" class="info-item">
-          <span class="item-name">发布者</span>
+          <span class="item-name">报名者</span>
           <div class="item-content">
-            <el-input disabled v-model="baseInfo.publishUser"></el-input>
+            <el-input disabled v-model="userId"></el-input>
           </div>
         </el-col>
 				<el-col :span="8" class="info-item">
-          <span class="item-name">发布时间</span>
+          <span class="item-name">截止时间</span>
           <div class="item-content">
-            <el-input disabled v-model="baseInfo.publishTime"></el-input>
+            <el-input disabled v-model="endTime"></el-input>
           </div>
         </el-col>
       </el-row>
 			<el-row :gutter="200" class="info-content">
         <el-col :span="8" class="info-item">
-          <span class="item-name">截止时间</span>
+          <span class="item-name">报名时间</span>
           <div class="item-content">
-            <el-input disabled v-model="baseInfo.endTime"></el-input>
+            <el-input disabled v-model="signUpTime"></el-input>
           </div>
         </el-col>
-        <el-col :span="8" class="info-item">
+				<el-col :span="8" class="info-item">
           <span class="item-name">状态</span>
           <div class="item-content">
-            <el-input disabled v-model="baseInfo.state"></el-input>
+            <el-input disabled v-model="state"></el-input>
           </div>
         </el-col>
       </el-row>
-      <span>发布内容简介</span>
+      <span>报名简介</span>
       <el-row :gutter="200" class="info-content">
         <el-col :span="24" class="info-item">
           <div class="item-content">
-              <div id="notification-info" v-html="recruitmentInfo.info"></div>
+              <div id="notification-info" v-html="signUpInfo.info"></div>
           </div>
         </el-col>
       </el-row>
@@ -93,14 +93,12 @@ const INPUT_AREA = 6;
 export default {
   data() {
     return {
-      baseInfo: {
-				title: 'title',
-				publishUser: 'publishUser',
-				publishTime: '1900-01-01',
-        state: '可用',
-        endTime: '1900-01-01'
-			},
-      recruitmentInfo: {
+			recruitmentId: '',
+			userId: '',
+			title: '',
+			endTime: '',
+			signUpTime: '',
+      signUpInfo: {
         info: ""
       },
       files: []
@@ -114,24 +112,24 @@ export default {
   },
   methods: {
     initData() {
-			const recruitmentId = this.$route.params.id;
-			console.log(recruitmentId)
-      axios
-        .post("/api/recruitment/recruitment", {
-          recruitmentId: recruitmentId
+			const signUpId = this.$route.params.id;
+			console.log(signUpId)
+      axios.post("/api/st/recruitment/signup", {
+          id: signUpId
         })
         .then(res => {
 					res = res.data;
 					console.log(res)
           if (res.code == 200) {
-						this.recruitmentInfo.info = res.data.introduction
+						this.userId = res.data.userId
+						this.endTime = res.data.endTime
+						this.signUpTime = res.data.signUpTime
+						this.title = res.data.title
+						this.state = res.data.state
+						this.signUpInfo.info = res.data.introduction
 						this.files = res.files
-						this.baseInfo.title = res.data.title
-						this.baseInfo.publishUser = res.data.publishUser
-            this.baseInfo.publishTime = res.data.publishTime
-            this.baseInfo.endTime = res.data.endTime
           } else {
-            this.$message.error("不存在该招募信息");
+            this.$message.error("不存在该报名信息");
           }
         })
         .catch(err => {
@@ -164,7 +162,7 @@ export default {
     },
     // 进入编辑模式
     goForEdit() {
-      this.$router.push(`/edit/FileInfo/${this.$route.params.id}`);
+      this.$router.push(`/edit/recruitSignUpInfo/${this.$route.params.id}`);
     }
   }
 };
