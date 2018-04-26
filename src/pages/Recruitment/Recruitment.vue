@@ -2,7 +2,7 @@
   <main>
     <div class="wrapper">
       <my-header></my-header>
-      <display-tmpl class='display-tmpl' :title="title" :content='policys'></display-tmpl>
+      <display-tmpl class='display-tmpl' :title="title" :content='recruitments'></display-tmpl>
       <section class="container pager">
         <el-pagination
           @size-change="handleSizeChange"
@@ -33,9 +33,9 @@ export default {
       currentPage: 1,
       pageSize: 7,
       totalCount: 15,
-      url: "/api/front/policys/policys",
-      policys: [],
-      title: "最新政策"
+      url: "/api/front/recruitments/recruitments",
+      recruitments: [],
+      title: "招募信息"
     };
   },
   mounted() {
@@ -43,21 +43,20 @@ export default {
   },
   methods: {
     initData() {
-      axios
-        .get(this.url, {
-          params: {
-            pageNum: this.currentPage,
-            pageSize: this.pageSize
-          }
-        })
-        .then(res => {
-          console.log(res);
-          this.totalCount = res.data.count;
-          this.policys = res.data.policys;
-        })
-        .catch(err => {
-          console.log(err);
-        });
+			axios.post(this.url, {
+				pageSize: this.pageSize,
+				pageNum: this.currentPage
+			})
+				.then(res => {
+					console.log(res)
+					if (res.status == 200 && res.data.code == 200) {
+						this.recruitments = res.data.data
+						this.totalCount = res.data.count
+					}
+				})
+				.catch(err => {
+					console.log(err)
+				})
     },
     handleCurrentChange(val) {
       this.pageSize = val;

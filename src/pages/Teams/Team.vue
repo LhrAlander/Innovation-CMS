@@ -30,7 +30,7 @@
 import MyHeader from "components/MyHeader";
 import MyFooter from "components/MyFooter";
 import Carousel from "components/Carousel";
-import Team from './components/Team'
+import Team from "./components/Team";
 
 import axios from "@/utils/https";
 export default {
@@ -40,20 +40,20 @@ export default {
     Carousel,
     Team
   },
-  data () {
+  data() {
     return {
       currentPage: 1,
       pageSize: 6,
       totalCount: 0,
-      url: '/api/front/teams/teams',
+      url: "/api/front/teams/teams",
       teams: []
-    }
+    };
   },
-  mounted () {
-    this.initData()
+  mounted() {
+    this.initData();
   },
   methods: {
-    initData () {
+    initData() {
       axios
         .get(this.url, {
           params: {
@@ -63,15 +63,19 @@ export default {
         })
         .then(res => {
           console.log(res);
-          this.totalCount = res.data.count
-          this.teams = res.data.teams
+          this.totalCount = res.data.count;
+          this.teams = res.data.teams;
         })
         .catch(err => {
           console.log(err);
         });
     },
     teamDetail(team) {
-      console.log(team)
+      console.log(team);
+    },
+    handleCurrentChange(val) {
+      this.pageSize = val;
+      this.initData();
     }
   }
 };
@@ -97,8 +101,6 @@ main {
   margin-bottom: 48px;
 }
 
-
-
 .project-content {
   margin: 31px 0;
 }
@@ -114,5 +116,4 @@ main {
   width: 100%;
   height: 220px;
 }
-
 </style>

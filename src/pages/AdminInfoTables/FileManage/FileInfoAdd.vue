@@ -19,8 +19,8 @@
           <i class="iconfont box">&#xe64f;</i>
           文件与制度创建
         </span>
-      <el-row :gutter="200" class="info-content" v-for="rowIndex in getRowCount(baseInfo)">
-        <el-col :span="baseInfo[getItemIndex(rowIndex, colIndex)].span * 8" class="info-item" v-for="colIndex in 3" v-if="baseInfo[getItemIndex(rowIndex, colIndex)] != null">
+      <el-row :gutter="200" class="info-content" v-for="rowIndex in getRowCount(baseInfo)" :key="rowIndex">
+        <el-col :span="baseInfo[getItemIndex(rowIndex, colIndex)].span * 8" class="info-item" v-for="colIndex in 3" :key="colIndex" v-if="baseInfo[getItemIndex(rowIndex, colIndex)] != null">
           <span class="item-name">{{ baseInfo[getItemIndex(rowIndex, colIndex)].name }}</span>
           <div class="item-content">
             <info-display-temp @clickBtn="btnFunc(baseInfo[getItemIndex(rowIndex, colIndex)])" :item="baseInfo[getItemIndex(rowIndex, colIndex)]"></info-display-temp>

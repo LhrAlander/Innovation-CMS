@@ -21,7 +21,7 @@
 import MyHeader from "components/MyHeader";
 import MyFooter from "components/MyFooter";
 import DisplayTmpl from "@/components/NormalDisplayTmpl";
-import axios from '@/utils/https'
+import axios from "@/utils/https";
 export default {
   components: {
     MyHeader,
@@ -35,7 +35,7 @@ export default {
       totalCount: 15,
       url: "/api/front/notifications/notifications",
       notifications: [],
-      title: '通知公告'
+      title: "通知公告"
     };
   },
   mounted() {
@@ -53,11 +53,15 @@ export default {
         .then(res => {
           console.log(res);
           this.totalCount = res.data.count;
-          this.notifications = res.data.notifications
+          this.notifications = res.data.notifications;
         })
         .catch(err => {
           console.log(err);
         });
+    },
+    handleCurrentChange(val) {
+      this.pageSize = val;
+      this.initData();
     }
   }
 };

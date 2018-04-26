@@ -1,13 +1,13 @@
-<!--文件与制度编辑模板-->
+<!--文件与制度查看模板-->
 <template>
   <div class="admin-check-info-wrapper">
 
-    <h1 class="title">文件与制度管理</h1>
+    <h1 class="title">招募信息管理</h1>
 
     <div class="mode-crumb-box">
       <div class="breadcrumb">
         <i class="iconfont">&#xe64f;</i>
-        文件与制度管理&nbsp; >&nbsp;文件与制度修改
+        招募信息管理&nbsp; >&nbsp;招募信息查看
       </div>
       <div class="btn-wrapper">
         <el-button type="warning" plain class="modify-mode-btn" @click="confirmChange">确认修改</el-button>
@@ -17,14 +17,45 @@
     <div class="info-wrapper">
         <span class="info-title">
           <i class="iconfont box">&#xe64f;</i>
-          文件与制度修改
+          招募信息
         </span>
-      <el-row :gutter="200" class="info-content" v-for="rowIndex in getRowCount(baseInfo)" :key='rowIndex'>
-        <el-col :span="baseInfo[getItemIndex(rowIndex, colIndex)].span * 8" class="info-item" v-for="colIndex in 3" :key="colIndex" v-if="baseInfo[getItemIndex(rowIndex, colIndex)] != null">
-          <span class="item-name">{{ baseInfo[getItemIndex(rowIndex, colIndex)].name }}</span>
+      <el-row :gutter="200" class="info-content">
+        <el-col :span="8" class="info-item">
+          <span class="item-name">标题</span>
           <div class="item-content">
-            <info-display-temp @clickBtn="btnFunc(baseInfo[getItemIndex(rowIndex, colIndex)])" :item="baseInfo[getItemIndex(rowIndex, colIndex)]"></info-display-temp>
-            <!--{{ block.items[getItemIndex(rowIndex, colIndex)].value }}-->
+            <el-input v-model="baseInfo.title"></el-input>
+          </div>
+        </el-col>
+				<el-col :span="8" class="info-item">
+          <span class="item-name">发布者</span>
+          <div class="item-content">
+            <el-input v-model="baseInfo.publishUser"></el-input>
+          </div>
+        </el-col>
+				<el-col :span="8" class="info-item">
+          <span class="item-name">发布时间</span>
+          <div class="item-content">
+            <el-date-picker
+              v-model="baseInfo.publishTime"
+              type="date"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+              placeholder="选择日期">
+            </el-date-picker>
+          </div>
+        </el-col>
+      </el-row>
+			<el-row :gutter="200" class="info-content">
+        <el-col :span="8" class="info-item">
+          <span class="item-name">状态</span>
+          <div class="item-content">
+            <el-select v-model="baseInfo.state">
+              <el-option
+                v-for="item in stateOptions"
+                :key="item.value"
+                :value="item.value"
+                :label="item.label"></el-option>
+            </el-select>
           </div>
         </el-col>
       </el-row>
@@ -44,8 +75,8 @@
             <el-upload
               class="upload"
               ref="upload"
-               name="uploadFile"
-              action="/api/upload/fileSystem"
+              name="uploadFile"
+              action="/api/upload/recruitment"
               :on-preview="handlePreview"
               :on-remove="handleRemove"
               :file-list="files"
@@ -60,15 +91,13 @@
         </el-col>
       </el-row>
     </div>
-
   </div>
 </template>
 
 <script>
 import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp";
+import axios from "@/utils/https";
 import E from "wangeditor";
-import axios from "utils/https";
-import * as utils from "@/utils/utils";
 
 const INPUT = 1;
 const SELECT = 2;
@@ -76,127 +105,74 @@ const RADIO = 3;
 const SWITCH = 4;
 const BUTTON = 5;
 const INPUT_AREA = 6;
-const DATE_PICKER = 7;
-const DISPLAY_INFO = [
-  {
-    key: "title",
-    name: "标题",
-    value: "通知1",
-    type: INPUT,
-    span: 1,
-    disabled: false
-  },
-  {
-    key: "fileType",
-    name: "类别",
-    value: "通知",
-    type: SELECT,
-    span: 1,
-    options: [
-      {
-        value: "政策",
-        label: "政策"
-      },
-      {
-        value: "制度",
-        label: "制度"
-      }
-    ],
-    disabled: false
-  },
-  {
-    key: "state",
-    name: "状态",
-    value: "已发布",
-    type: SELECT,
-    span: 1,
-    options: [
-      {
-        value: "可用",
-        label: "已发布"
-      },
-      {
-        value: "不可用",
-        label: "未发布"
-      }
-    ],
-    disabled: false
-  },
-  {
-    key: "publishTime",
-    name: "发布时间",
-    value: "2015-10-1",
-    type: DATE_PICKER,
-    span: 1,
-    disabled: false
-  },
-  {
-    key: "effectiveTime",
-    name: "生效时间",
-    value: "2017-10-1",
-    type: DATE_PICKER,
-    span: 1,
-    disabled: false
-  },
-  {
-    key: "publishUser",
-    name: "发布者",
-    value: "教务处",
-    type: INPUT,
-    span: 1,
-    disabled: false
-  }
-];
 
 export default {
   data() {
     return {
-      baseInfo: DISPLAY_INFO,
-      fileInfo: {
+      baseInfo: {
+        title: "title",
+        publishUser: "publishUser",
+        publishTime: "1900-01-01",
+        state: "可用"
+      },
+      stateOptions: [
+        {
+          value: "可用",
+          label: "已发布"
+        },
+        {
+          value: "不可用",
+          label: "未发布"
+        }
+      ],
+      recruitmentInfo: {
         info: ""
       },
       files: [],
+      uploadData: {},
       editor: "",
-      uploadData: {}
     };
+  },
+  mounted() {
+    this.editor = new E("#editor-ele");
+    this.editor.customConfig.onchange = html => {
+      this.recruitmentInfo.info = html
+    }
+    this.editor.create();
+    this.initData();
   },
   components: {
     InfoDisplayTemp
   },
   methods: {
     initData() {
-      const fileSystemId = this.$route.params.id;
+      const recruitmentId = this.$route.params.id;
+      console.log(recruitmentId);
       axios
-        .post("/api/fileSystem/file", {
-          fileSystemId: fileSystemId
+        .post("/api/recruitment/recruitment", {
+          recruitmentId: recruitmentId
         })
         .then(res => {
           res = res.data;
+          console.log(res);
           if (res.code == 200) {
-            this.baseInfo.forEach(item => {
-              item.value = res.data[item.key];
-            });
-            this.fileInfo.info = res.data.introduction;
-            this.editor.txt.html(`<p>${this.fileInfo.info}</p>`);
-            this.files = res.files || [];
-            console.log(this.files);
+            this.recruitmentInfo.info = res.data.introduction;
+            this.editor.txt.html(`<p>${this.recruitmentInfo.info}</p>`);
+            this.files = res.files;
+            this.baseInfo.title = res.data.title;
+            this.baseInfo.publishUser = res.data.publishUser;
+            this.baseInfo.publishTime = res.data.publishTime;
+            this.baseInfo.state = res.data.state;
           } else {
-            this.$message.error("不存在该通知公告！");
+            this.$message.error("不存在该招募信息");
           }
         })
         .catch(err => {
           console.log("err", err);
         });
     },
-    getRowCount(arr) {
-      return Math.ceil(arr.length / 3);
-    },
-    getItemIndex(rowIndex, colIndex) {
-      return (rowIndex - 1) * 3 + colIndex - 1;
-    },
     deleteAll() {
-      axios
-        .post("/api/fileSystem/delete/files", {
+      axios.post("/api/recruitment/delete/files", {
           files: this.files
         })
         .then(res => {
@@ -207,9 +183,9 @@ export default {
         });
     },
     submitUpload() {
-      this.uploadData.fileSystemId = this.$route.params.id;
+      this.uploadData.id = this.$route.params.id;
       console.log(this.uploadData);
-      this.$refs.upload.submit();
+      this.$refs.upload.submit();      
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -219,40 +195,24 @@ export default {
     },
 
     confirmChange() {
-      let info = {};
-      this.baseInfo.forEach(i => {
-        info[i.key] = i.value;
-      });
-      console.log(info);
-      if ("publishTime" in info) {
-        info.publishTime = new Date(info.publishTime).toLocaleDateString();
+      let info = {
+        id: this.$route.params.id,
+        publish_user: this.baseInfo.publishUser,
+        publish_time: this.baseInfo.publishTime,
+        title: this.baseInfo.title,
+        introduction: this.recruitmentInfo.info,
+        state: this.baseInfo.state
       }
-      if ("effectiveTime" in info) {
-        info.effectiveTime = new Date(info.effectiveTime).toLocaleDateString();
-      }
-      info.introduction = this.fileInfo.info;
-      info.file_system_id = this.$route.params.id;
-      console.log(info);
-      axios
-        .post("/api/fileSystem/change/file", {
-          fileSystem: info
+      axios.post("/api/recruitment/change/recruitment", {
+          recruitment: info
         })
         .then(res => {
-          console.log(res);
+          console.log(res)
         })
         .catch(err => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     }
-  },
-  mounted() {
-    this.editor = new E("#editor-ele");
-    this.editor.customConfig.onchange = html => {
-      this.fileInfo.info = html;
-    };
-
-    this.editor.create();
-    this.initData();
   }
 };
 </script>
@@ -260,6 +220,10 @@ export default {
 <style scoped>
 .less-z-index {
   z-index: 1;
+}
+#notification-info {
+  padding: 1rem;
+  border: 1px solid #ddd;
 }
 .admin-check-info-wrapper {
   /*background-color: #ECF0F1;*/

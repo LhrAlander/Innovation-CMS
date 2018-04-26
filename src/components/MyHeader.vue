@@ -16,7 +16,7 @@
           <el-col :span="3"><router-link to="/policys"><div class="grid-content bg-purple nav-item">最新政策</div></router-link></el-col>
           <el-col :span="2"><router-link to="/fileSystems"><div class="grid-content bg-purple-light nav-item">学校文件</div></router-link></el-col>
           <el-col :span="3"><router-link to="/notifications"><div class="grid-content bg-purple nav-item">通知公告</div></router-link></el-col>
-          <el-col :span="3"><router-link to="/notifications"><div class="grid-content bg-purple nav-item">招募信息</div></router-link></el-col>
+          <el-col :span="3"><router-link to="/recruitments"><div class="grid-content bg-purple nav-item">招募信息</div></router-link></el-col>
           <el-col :span="4" class="logAndReg" v-if="!isLogin">
             <router-link to="/Login">登录</router-link>
             <span class="separate">|</span>

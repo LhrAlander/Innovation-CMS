@@ -26,6 +26,9 @@ import FileInfoAdminCheck from 'pages/AdminInfoTables/FileManage/FileInfoCheck'
 import DependentUnitInfoCheck from 'pages/AdminInfoTables/DependentUnitManage/DependentUnitInfoCheck'
 import TeamInfoCheck from 'pages/AdminInfoTables/TeamManage/TeamInfoCheck'
 import ProjectInfoCheck from 'pages/AdminInfoTables/ProjectManage/ProjectInfoCheck'
+import RecruitmentCheck from 'pages/AdminInfoTables/RecruitmentManage/RecruitmentCheck'
+import Recruitment from 'pages/AdminInfoTables/RecruitmentManage/Recruitment'
+import RecruitmentAdd from 'pages/AdminInfoTables/RecruitmentManage/RecruitmentAdd'
 
 export default [
   // 基本用户信息查看
@@ -172,5 +175,23 @@ export default [
     name: "FileInfoCheck",
     path: "/check/fileInfo/:id",
     component: FileInfoAdminCheck
+  },
+  // 招募信息查看
+  {
+    name: "RecruitmentInfoCheck",
+    path: "/check/recruitmentInfo/:id",
+    component: RecruitmentCheck
+  },
+  // 招募信息编辑
+  {
+    name: "RecruitmentInfoEdit",
+    path: "/edit/recruitmentInfo/:id",
+    component: Recruitment
+  },
+   // 招募制度信息添加
+   {
+    name: "RecruitmentInfoAdd",
+    path: "/add/recruitmentInfo",
+    component: RecruitmentAdd
   }
 ]

@@ -103,6 +103,10 @@ export default {
 			.catch(err => {
 				 console.log(err)
 			})
+		},
+		handleCurrentChange(val) {
+			this.pageSize = val
+			this.initData()
 		}
 	}
 };

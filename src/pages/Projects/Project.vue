@@ -30,7 +30,7 @@
 import MyHeader from "components/MyHeader";
 import MyFooter from "components/MyFooter";
 import Carousel from "components/Carousel";
-import Project from './components/Project'
+import Project from "./components/Project";
 
 import axios from "@/utils/https";
 export default {
@@ -40,20 +40,20 @@ export default {
     Carousel,
     Project
   },
-  data () {
+  data() {
     return {
       currentPage: 1,
       pageSize: 6,
       totalCount: 0,
-      url: '/api/front/projects/projects',
+      url: "/api/front/projects/projects",
       projects: []
-    }
+    };
   },
-  mounted () {
-    this.initData()
+  mounted() {
+    this.initData();
   },
   methods: {
-    initData () {
+    initData() {
       axios
         .get(this.url, {
           params: {
@@ -63,12 +63,16 @@ export default {
         })
         .then(res => {
           console.log(res);
-          this.totalCount = res.data.count
-          this.projects = res.data.projects
+          this.totalCount = res.data.count;
+          this.projects = res.data.projects;
         })
         .catch(err => {
           console.log(err);
         });
+    },
+    handleCurrentChange(val) {
+      this.pageSize = val;
+      this.initData();
     }
   }
 };
@@ -94,8 +98,6 @@ main {
   margin-bottom: 48px;
 }
 
-
-
 .project-content {
   margin: 31px 0;
 }
@@ -111,5 +113,4 @@ main {
   width: 100%;
   height: 220px;
 }
-
 </style>

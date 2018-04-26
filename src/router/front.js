@@ -15,6 +15,8 @@ import Team from '@/pages/Teams/Team'
 import TeamDetail from '@/pages/Teams/TeamDetail'
 // 获奖界面
 import Award from '@/pages/Awards/Award'
+// 招聘几面
+import Recruitment from '@/pages/Recruitment/Recruitment'
 
 export default [
   {
@@ -77,5 +79,11 @@ export default [
     name: 'AwardIndex',
     path: '/awards',
     component: Award
+  },
+  // 招聘详细界面路由
+  {
+    name: 'Recruitment',
+    path: '/recruitments',
+    component: Recruitment
   }
 ]

@@ -2,29 +2,48 @@
 <template>
   <div class="admin-check-info-wrapper">
 
-    <h1 class="title">文件与制度管理</h1>
+    <h1 class="title">招募信息管理</h1>
 
     <div class="mode-crumb-box">
       <div class="breadcrumb">
         <i class="iconfont">&#xe64f;</i>
-        文件与制度管理&nbsp; >&nbsp;文件与制度查看
+        招募信息管理&nbsp; >&nbsp;招募信息查看
       </div>
       <div class="btn-wrapper">
         <el-button type="warning" plain class="modify-mode-btn" @click="goForEdit">修改信息</el-button>
-
       </div>
     </div>
 
     <div class="info-wrapper">
         <span class="info-title">
           <i class="iconfont box">&#xe64f;</i>
-          文件与制度信息
+          招募信息
         </span>
-      <el-row :gutter="200" class="info-content" v-for="rowIndex in getRowCount(baseInfo)" :key="rowIndex">
-        <el-col :span="baseInfo[getItemIndex(rowIndex, colIndex)].span * 8" class="info-item" v-for="colIndex in 3" :key="colIndex" v-if="baseInfo[getItemIndex(rowIndex, colIndex)] != null">
-          <span class="item-name">{{ baseInfo[getItemIndex(rowIndex, colIndex)].name }}</span>
+      <el-row :gutter="200" class="info-content">
+        <el-col :span="8" class="info-item">
+          <span class="item-name">标题</span>
           <div class="item-content">
-            <el-input disabled v-model="baseInfo[getItemIndex(rowIndex, colIndex)].value"></el-input>
+            <el-input disabled v-model="baseInfo.title"></el-input>
+          </div>
+        </el-col>
+				<el-col :span="8" class="info-item">
+          <span class="item-name">发布者</span>
+          <div class="item-content">
+            <el-input disabled v-model="baseInfo.publishUser"></el-input>
+          </div>
+        </el-col>
+				<el-col :span="8" class="info-item">
+          <span class="item-name">发布时间</span>
+          <div class="item-content">
+            <el-input disabled v-model="baseInfo.publishTime"></el-input>
+          </div>
+        </el-col>
+      </el-row>
+			<el-row :gutter="200" class="info-content">
+        <el-col :span="8" class="info-item">
+          <span class="item-name">状态</span>
+          <div class="item-content">
+            <el-input disabled v-model="baseInfo.state"></el-input>
           </div>
         </el-col>
       </el-row>
@@ -32,7 +51,7 @@
       <el-row :gutter="200" class="info-content">
         <el-col :span="24" class="info-item">
           <div class="item-content">
-              <div id="notification-info" v-html="fileInfo.info"></div>
+              <div id="notification-info" v-html="recruitmentInfo.info"></div>
           </div>
         </el-col>
       </el-row>
@@ -43,7 +62,7 @@
           <div class="item-content">
             <div class="attack-link">
               <ul>
-                <li v-for="file in files">{{ file.fileName }}</li>
+                <li v-for="file in files" :key="file.fileName">{{ file.fileName }}</li>
               </ul>
             </div>
           </div>
@@ -64,82 +83,17 @@ const RADIO = 3;
 const SWITCH = 4;
 const BUTTON = 5;
 const INPUT_AREA = 6;
-const DISPLAY_INFO = [
-  {
-    key: "title",
-    name: "标题",
-    value: "通知1",
-    type: INPUT,
-    span: 1,
-    disabled: false
-  },
-  {
-    key: "fileType",
-    name: "类别",
-    value: "通知",
-    type: SELECT,
-    span: 1,
-    options: [
-      {
-        value: "通知",
-        label: "通知"
-      },
-      {
-        value: "公告",
-        label: "公告"
-      }
-    ],
-    disabled: false
-  },
-  {
-    key: "state",
-    name: "状态",
-    value: "已发布",
-    type: SELECT,
-    span: 1,
-    options: [
-      {
-        value: "已发布",
-        label: "已发布"
-      },
-      {
-        value: "未发布",
-        label: "未发布"
-      }
-    ],
-    disabled: false
-  },
-  {
-    key: "publishTime",
-    name: "发布时间",
-    value: "2015-10-1",
-    type: INPUT,
-    span: 1,
-    disabled: true
-  },
-  {
-    key: "effectiveTime",
-    name: "生效时间",
-    value: "2017-10-1",
-    type: INPUT,
-    span: 1,
-    disabled: true
-  },
-  {
-    key: "publishUser",
-    name: "发布者",
-    value: "教务处",
-    type: INPUT,
-    span: 1,
-    disabled: true
-  }
-];
 
 export default {
   data() {
     return {
-      baseInfo: DISPLAY_INFO,
-      fileInfo: {
+      baseInfo: {
+				title: 'title',
+				publishUser: 'publishUser',
+				publishTime: '1900-01-01',
+				state: '可用'
+			},
+      recruitmentInfo: {
         info: ""
       },
       files: []
@@ -153,22 +107,23 @@ export default {
   },
   methods: {
     initData() {
-      const fileSystemId = this.$route.params.id;
+			const recruitmentId = this.$route.params.id;
+			console.log(recruitmentId)
       axios
-        .post("/api/fileSystem/file", {
-          fileSystemId: fileSystemId
+        .post("/api/recruitment/recruitment", {
+          recruitmentId: recruitmentId
         })
         .then(res => {
-          res = res.data;
+					res = res.data;
+					console.log(res)
           if (res.code == 200) {
-            this.baseInfo.forEach(item => {
-              item.value = res.data[item.key];
-            });
-            this.fileInfo.info = res.data.introduction;
-            this.files = res.files || [];
-            console.log(this.files);
+						this.recruitmentInfo.info = res.data.introduction
+						this.files = res.files
+						this.baseInfo.title = res.data.title
+						this.baseInfo.publishUser = res.data.publishUser
+						this.baseInfo.publishTime = res.data.publishTime
           } else {
-            this.$message.error("不存在该通知公告！");
+            this.$message.error("不存在该招募信息");
           }
         })
         .catch(err => {
@@ -186,11 +141,13 @@ export default {
         console.log(this.files[i]);
         let iframe = document.createElement("iframe");
         iframe.style.display = "none";
-        iframe.src =
+        let src =
           "/api/download?filePath=" +
-          this.files[i].filePath +
+          escape(this.files[i].filePath) +
           "&fileName=" +
-          this.files[i].fileName;
+          escape(this.files[i].fileName);
+        console.log(src)
+        iframe.src = src
         iframe.onload = function() {
           document.body.removeChild(iframe);
         };
