@@ -51,7 +51,10 @@ export default {
 					console.log(res)
 					if (res.status == 200 && res.data.code == 200) {
 						this.recruitments = res.data.data
-						this.totalCount = res.data.count
+            this.totalCount = res.data.count
+            this.recruitments.forEach(i => {
+              i.url = `/recruitmentDetail/${i.id}`
+            })
 					}
 				})
 				.catch(err => {

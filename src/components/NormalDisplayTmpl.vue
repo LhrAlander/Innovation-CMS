@@ -4,7 +4,7 @@
       <div class="title">{{title}}</div>
     </header>
     <section class='content-section'>
-      <div v-for="i in content" :key='i' class="content">
+      <div v-for="i in content" :key='i' class="content"  @click="forDetail(i)">
         <div class="item-date">
           <span class="day">{{i.day}}</span>
           <span class="year-month">{{i.yearMonth}}</span>
@@ -24,11 +24,17 @@ export default {
   props: {
     title: String,
     content: Array
+  },
+  methods: {
+    forDetail(i) {
+      this.$router.push(i.url)
+    }
   }
 }
 </script>
 <style lang="css" scoped>
 .container {
+  cursor: pointer;
   width: 1080px;
   padding: 0 30px;
 }

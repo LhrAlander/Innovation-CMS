@@ -54,6 +54,9 @@ export default {
           console.log(res);
           this.totalCount = res.data.count;
           this.files = res.data.files
+          this.files.forEach(i => {
+            i.url = `/fileDetail/${i.id}`
+          })
         })
         .catch(err => {
           console.log(err);

@@ -120,7 +120,7 @@
 import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp";
 import E from "wangeditor";
 import api from "@/api/teamApi";
-import * as utils from "@/utils/utils";
+import utils from "@/utils/utils"
 import axios from "@/utils/https";
 
 const INPUT = 1;

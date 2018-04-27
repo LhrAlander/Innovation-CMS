@@ -1,5 +1,5 @@
 import axios from 'utils/https'
-import * as utils from "@/utils/utils";
+import utils from "@/utils/utils"
 import store from '../store/index'
 
 // 管理员删除一个账号

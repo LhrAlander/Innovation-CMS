@@ -16,9 +16,9 @@
               </el-row>
               <el-row class="article" v-html="article">
               </el-row>
-              <el-row type="flex" justify="space-between">
+              <el-row type="flex" justify="space-between" v-if="files.length > 0">
                 <el-col :span="6" class="article-download">
-                  下载附件
+                  <span @click="downloadFile">下载附件</span> 
                 </el-col>
               </el-row>
             </div>
@@ -51,6 +51,7 @@
 import MyHeader from "components/MyHeader";
 import MyFooter from "components/MyFooter";
 import axios from "@/utils/https";
+import utils from '@/utils/utils'
 
 export default {
   components: {
@@ -62,13 +63,14 @@ export default {
       notificationId: "",
       url: "/api/front/notifications/notification",
       title: '',
-      author: "教务处",
-      uploadTime: "2018年1月9号",
+      author: "",
+      uploadTime: "",
       article: '<h1>暂无政策简介信息</h1>',
       recentPolicyc: [
         "2018.3.22",
         "关于做好2017——2018学年第二学期学位课程警示工作的通知"
-      ]
+      ],
+      files: []
     };
   },
   mounted() {
@@ -83,7 +85,8 @@ export default {
         })
         .then(res => {
           console.log(res);
-          res = res.data
+          this.files = res.data.files
+          res = res.data.notification
           this.title = res.title
           this.author = res.author
           this.article = res.introduction
@@ -92,6 +95,9 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    downloadFile() {
+			utils.downloadFile(this.files)
     }
   }
 };
@@ -143,6 +149,7 @@ export default {
   text-align: left;
 }
 .article-download {
+  cursor: pointer;
   height: 60px;
   line-height: 60px;
   color: #5394c5;

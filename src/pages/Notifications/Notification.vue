@@ -54,6 +54,9 @@ export default {
           console.log(res);
           this.totalCount = res.data.count;
           this.notifications = res.data.notifications;
+          this.notifications.forEach(i => {
+            i.url = `/notificationsDetail/${i.id}`
+          })
         })
         .catch(err => {
           console.log(err);

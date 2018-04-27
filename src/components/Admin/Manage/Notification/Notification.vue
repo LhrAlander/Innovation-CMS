@@ -96,18 +96,12 @@
 import axios from "@/utils/https";
 import FilterBox from "@/components/Admin/Manage/FilterBox";
 import InfoAdd from "@/components/Admin/Manage/InfoAdd";
-import * as utils from "@/utils/utils";
+import utils from "@/utils/utils"
 export default {
   components: { FilterBox, InfoAdd },
   data() {
     return {
-      tableData: [
-        {
-          // 表格数据
-          id: 1,
-          status: "可用"
-        }
-      ],
+      tableData: [],
       valueLabelMap: {
         status: [
           {

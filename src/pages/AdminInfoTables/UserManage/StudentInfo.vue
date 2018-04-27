@@ -30,7 +30,7 @@ import INFO from "@/infoTestData.js";
 import CheckUserInfo from "@/components/Admin/InfoOperate/UserInfo/UserInfoCheck";
 import EditUserInfo from "@/components/Admin/InfoOperate/UserInfo/UserInfoEdit";
 import axios from 'utils/https'
-import * as utils from "@/utils/utils";
+import utils from "@/utils/utils"
 
 export default {
   components: {

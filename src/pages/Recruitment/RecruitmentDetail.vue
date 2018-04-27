@@ -6,13 +6,14 @@
         <el-row type="flex" justify="space-between">
           <el-col :span="15">
             <div class="top">
-              学校文件-内容
+              招募信息-内容
             </div>
-            <div class="file-article">
+            <div class="policyc-article">
               <div class="article-title">{{title}}</div>
               <el-row class="article-info"  type="flex" justify="center">
                 <span>作者:{{author}}</span>
                 <span>上传时间：{{uploadTime}}</span>
+                <span>截止时间：{{endTime}}</span>
               </el-row>
               <el-row class="article" v-html="article">
               </el-row>
@@ -26,7 +27,7 @@
           <el-col :span="6">
             <div class="top">
               <img src="/static/img/policyc.png" class="right-img"/>
-              最近文件
+              招募信息
             </div>
             <div class="right-bg">
               <div class="item">
@@ -50,7 +51,7 @@
 <script>
 import MyHeader from "components/MyHeader";
 import MyFooter from "components/MyFooter";
-import axios from "@/utils/https";
+import axios from '@/utils/https'
 import utils from '@/utils/utils'
 
 
@@ -58,38 +59,47 @@ export default {
   components: {
     MyHeader,
     MyFooter,
+   
   },
   data() {
-    return { 
-      fileId: "",
+    return {
       title: '',
-      url: "/api/front/fileSystems/file",
+      id: '',
+      url: '/api/front/recruitments/recruitment',
       author: "教务处",
-      uploadTime: "2018年1月9号",
-      article: "",
-      recentPolicyc:["2018.3.22","关于做好2017——2018学年第二学期学位课程警示工作的通知"],
-      files: []
+			uploadTime: "2018年1月9号",
+			endTime: '',
+      article: '',
+			recentPolicyc:["2018.3.22","关于做好2017——2018学年第二学期学位课程警示工作的通知"],
+			files: []
    }
     
   },
   mounted() {
-    this.fileId = this.$route.params.id
-    axios.post(this.url, {fileSystemId: this.fileId})
-      .then(res => {
-        console.log(res)
-        this.files = res.data.files
-        res = res.data.file
-        this.author = res.author
-        this.title = res.title
-        this.uploadTime = res.publishTime
-        this.article = res.introduction
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    this.id = this.$route.params.id
+    this.initData()
   },
   methods: {
-     downloadFile() {
+    initData() {
+      axios.post(this.url, {id: this.id})
+        .then(res => {
+          res = res.data
+          console.log(res)
+          this.title = res.recruitment.title
+          this.author = res.recruitment.publishUser
+          this.uploadTime = res.recruitment.publishTime
+          this.endTime = res.recruitment.endTime
+					this.article = res.recruitment.introduction
+					this.files = res.files
+        })
+        .catch(err => {
+          console.log(err)
+        })
+		},
+		getFiles() {
+			console.log('get')
+		},
+		downloadFile() {
 			utils.downloadFile(this.files)
     },
   }
@@ -113,7 +123,7 @@ export default {
   line-height: 80px;
   border-bottom: 1px solid #5394C5;
 }
-.file-article {
+.policyc-article {
   margin-bottom: 100px;
   padding: 0 20px;
   border: 1px solid #cccccc;
@@ -144,9 +154,9 @@ export default {
   text-align: left;
 }
 .article-download {
-  cursor: pointer;
-  height: 60px;
+	cursor: pointer;
   text-align: left;
+  height: 60px;
   line-height: 60px;
   color: #5394C5;
 }

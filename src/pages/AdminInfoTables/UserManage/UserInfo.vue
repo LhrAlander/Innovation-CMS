@@ -31,7 +31,7 @@ import INFO from "@/infoTestData.js";
 import CheckUserInfo from "@/components/Admin/InfoOperate/UserInfo/UserInfoCheck";
 import EditUserInfo from "@/components/Admin/InfoOperate/UserInfo/UserInfoEdit";
 import API from "@/api/userApi";
-import * as utils from "@/utils/utils";
+import utils from "@/utils/utils"
 import axios from "@/utils/https";
 // import { mapActions } from vuex
 

@@ -15,8 +15,10 @@ import Team from '@/pages/Teams/Team'
 import TeamDetail from '@/pages/Teams/TeamDetail'
 // 获奖界面
 import Award from '@/pages/Awards/Award'
-// 招聘几面
+// 招聘界面
 import Recruitment from '@/pages/Recruitment/Recruitment'
+// 招聘详细界面
+import RecruitmentDetail from '@/pages/Recruitment/RecruitmentDetail'
 
 export default [
   {
@@ -85,5 +87,11 @@ export default [
     name: 'Recruitment',
     path: '/recruitments',
     component: Recruitment
+  },
+  // 招聘详细界面路由
+  {
+    name: 'RecruitmentDetail',
+    path: '/recruitmentDetail/:id',
+    component: RecruitmentDetail
   }
 ]

@@ -65,7 +65,7 @@
 import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp";
 import E from "wangeditor";
 import axios from "@/utils/https";
-import * as utils from "@/utils/utils";
+import utils from "@/utils/utils"
 
 const INPUT = 1;
 const SELECT = 2;

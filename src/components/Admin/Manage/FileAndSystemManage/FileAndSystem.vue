@@ -103,44 +103,13 @@
 import axios from "@/utils/https";
 import FilterBox from "@/components/Admin/Manage/FilterBox";
 import InfoAdd from "@/components/Admin/Manage/InfoAdd";
-import * as utils from "@/utils/utils";
+import utils from "@/utils/utils";
 
 export default {
   components: { FilterBox, InfoAdd },
   data() {
     return {
-      tableData: [
-        {
-          // 表格数据
-          id: 1,
-          category: "类型1",
-          title: "标题1",
-          status: "可用",
-          publishTime: "发布时间1",
-          publisherName: "发布者姓名1",
-          effectiveDate: "生效日期1"
-        },
-        {
-          // 表格数据
-          id: 2,
-          category: "类型2",
-          title: "标题2",
-          status: "可用",
-          publishTime: "发布时间2",
-          publisherName: "发布者姓名2",
-          effectiveDate: "生效日期2"
-        },
-        {
-          // 表格数据
-          id: 3,
-          category: "类型3",
-          title: "标题3",
-          status: "可用",
-          publishTime: "发布时间3",
-          publisherName: "发布者姓名3",
-          effectiveDate: "生效日期3"
-        }
-      ],
+      tableData: [],
       valueLabelMap: {
         status: [
           {
@@ -254,7 +223,7 @@ export default {
         publisherName: "", //发布者姓名
         effectiveDate: "" //生效日期
       },
-      pageSize: 15, //每页大小
+      pageSize: 10, //每页大小
       currentPage: 1, //当前页
       start: 1, //查询的页码
       totalCount: 30, //返回的记录总数
@@ -314,8 +283,7 @@ export default {
         file_system_id: row.fileSystemId,
         state: status
       };
-      axios
-        .post("/api/fileSystem/change/file", { fileSystem })
+      axios.post("/api/fileSystem/change/file", { fileSystem })
         .then(res => {
           console.log(res);
           if (res.data.code == 200) {

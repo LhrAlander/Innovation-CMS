@@ -67,7 +67,7 @@
 import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp";
 import E from "wangeditor";
 import axios from "@/utils/https";
-import * as utils from "@/utils/utils";
+import utils from "@/utils/utils"
 
 const INPUT = 1;
 const SELECT = 2;
@@ -86,7 +86,7 @@ const DISPLAY_INFO = [
     disabled: false
   },
   {
-    key: "policyCategory",
+    key: "policyIdentity",
     name: "政策类别",
     value: "国家政策",
     type: SELECT,
@@ -112,7 +112,7 @@ const DISPLAY_INFO = [
     disabled: false
   },
   {
-    key: "policyStatus",
+    key: "state",
     name: "政策状态",
     value: "已发布",
     type: SELECT,
@@ -138,7 +138,7 @@ const DISPLAY_INFO = [
     disabled: false
   },
   {
-    key: "publishPerson",
+    key: "publishUser",
     name: "发布者",
     value: "教务处",
     type: INPUT,
@@ -173,6 +173,7 @@ export default {
       ])
         .then(res => {
           let _res = res[0].data;
+          console.log(_res)
           let category = res[1].data;
           let options = [];
           if (category.code == 200) {
@@ -195,13 +196,12 @@ export default {
             }
             let policy = _res.policy;
             this.baseInfo.forEach(item => {
+              console.log(item)
               item.value = policy[item.key];
               if (item.key == "policyCategory") {
                 item.options = options;
               }
             });
-            console.log("policy", policy);
-            console.log("info", this.baseInfo);
             this.policyInfo.info = policy.policyIntroduction;
             this.editor.txt.html(`<p>${this.policyInfo.info}</p>`);
           } else {
@@ -267,15 +267,19 @@ export default {
       console.log(file);
     },
     confirmChange() {
-      let info = utils.displayInfo2MySql(
-        utils.filterName.POLICY,
-        this.baseInfo
-      );
+      let info = {
+        policy_title: this.baseInfo[0].value,
+        policy_identity: this.baseInfo[1].value,
+        state: this.baseInfo[2].value,
+        publish_time: this.baseInfo[3].value,
+        publish_user: this.baseInfo[4].value
+      }
       if ("publish_time" in info) {
         info.publish_time = new Date(info.publish_time).toLocaleDateString();
       }
       info.policy_introduction = this.policyInfo.info;
       info.policy_id = this.$route.params.id;
+      console.log('change', info)
       axios
         .post("/api/policy/change/policy", {
           policy: info

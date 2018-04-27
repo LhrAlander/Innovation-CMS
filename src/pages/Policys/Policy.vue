@@ -54,6 +54,9 @@ export default {
           console.log(res);
           this.totalCount = res.data.count;
           this.policys = res.data.policys;
+          this.policys.forEach(i => {
+            i.url = `/policysDetail/${i.policyId}`
+          })
         })
         .catch(err => {
           console.log(err);

@@ -142,6 +142,7 @@ function resetObject(object, filterTmpl) {
 
 // 筛选字段映射成数据库字段名
 function filter2Mysql(type, filter) {
+  console.log(type)
   // 映射过程
   const transform = item => {
     console.log('进入映射', filter)
@@ -248,11 +249,32 @@ function displayInfo2MySql(type, displayInfo) {
   }
 }
 
-export {
+function downloadFile(files) {
+  console.log(1)
+  for (let i = 0; i < files.length; i++) {
+    console.log(files[i]);
+    let iframe = document.createElement("iframe");
+    iframe.style.display = "none";
+    let src =
+      "/api/download?filePath=" +
+      escape(files[i].filePath) +
+      "&fileName=" +
+      escape(files[i].fileName);
+    console.log(src)
+    iframe.src = src
+    iframe.onload = function() {
+      document.body.removeChild(iframe);
+    };
+    document.body.appendChild(iframe);
+  }
+}
+
+export default {
   valueFormater,
   resetObject,
   filter2Mysql,
   filterName,
-  displayInfo2MySql
+  displayInfo2MySql,
+  downloadFile
 }
 

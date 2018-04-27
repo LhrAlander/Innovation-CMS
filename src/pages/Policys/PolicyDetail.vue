@@ -16,9 +16,9 @@
               </el-row>
               <el-row class="article" v-html="article">
               </el-row>
-              <el-row>
+              <el-row v-if="files.length > 0">
                 <el-col :span="12" class="article-download">
-                  下载附件
+                  <span @click="downloadFile">下载附件</span> 
                 </el-col>
               </el-row>
             </div>
@@ -51,6 +51,7 @@
 import MyHeader from "components/MyHeader";
 import MyFooter from "components/MyFooter";
 import axios from '@/utils/https'
+import utils from '@/utils/utils'
 
 
 export default {
@@ -67,7 +68,8 @@ export default {
       author: "教务处",
       uploadTime: "2018年1月9号",
       article: '',
-      recentPolicyc:["2018.3.22","关于做好2017——2018学年第二学期学位课程警示工作的通知"]
+      recentPolicyc:["2018.3.22","关于做好2017——2018学年第二学期学位课程警示工作的通知"],
+      files: []
    }
     
   },
@@ -80,7 +82,8 @@ export default {
       axios.post(this.url, {policyId: this.policyId})
         .then(res => {
           console.log(res.data)
-          res = res.data
+          this.files = res.data.files
+          res = res.data.policy
           this.title = res.title
           this.author = res.author
           this.uploadTime = res.publishTime
@@ -89,7 +92,10 @@ export default {
         .catch(err => {
           console.log(err)
         })
-    }
+    },
+    downloadFile() {
+			utils.downloadFile(this.files)
+    },
   }
 };
 </script>
@@ -142,6 +148,7 @@ export default {
   text-align: left;
 }
 .article-download {
+  cursor: pointer;
   text-align: left;
   height: 60px;
   line-height: 60px;
