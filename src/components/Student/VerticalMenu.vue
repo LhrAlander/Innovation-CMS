@@ -65,6 +65,20 @@
           </el-menu-item>
         </router-link>
       </el-submenu>
+
+      <el-submenu index="5">
+        <template slot="title" >
+          <i class="iconfont">&#xe631;</i>
+          <p class="text">报名管理</p>
+          <p class="arrow-right"> > </p>
+        </template>
+
+        <router-link :to="{name: 'StudentSignUpStatus'}">
+          <el-menu-item index="5-1" class="first last">
+            <p class="item-text">报名情况</p>
+          </el-menu-item>
+        </router-link>
+      </el-submenu>
     </el-menu>
   </div>
 </template>

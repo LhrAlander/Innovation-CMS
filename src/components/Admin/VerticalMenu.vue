@@ -188,8 +188,26 @@
         </router-link>
       </el-submenu>
 
+      <el-submenu index="8">
+        <template slot="title" >
+          <i class="iconfont">&#xe9e3;</i>
+          <p class="text">招募信息管理</p>
+          <p class="arrow-right"> > </p>
+        </template>
+        <router-link :to="{name: 'RecruitManage'}">
+          <el-menu-item index="8-1" class="first">
+            <p class="item-text">招募管理</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'SignUpManage'}">
+          <el-menu-item index="8-2" class="last">
+            <p class="item-text">报名管理</p>
+          </el-menu-item>
+        </router-link>
+      </el-submenu>
+
       <router-link :to="{name: 'Notification'}">
-        <el-submenu index="8">
+        <el-submenu index="9">
           <template slot="title" >
             <i class="iconfont">&#xe6a4;</i>
             <p class="text">通知公告管理</p>
@@ -198,13 +216,15 @@
       </router-link>
 
       <router-link :to="{name: 'FileAndSystem'}">
-        <el-submenu index="9">
+        <el-submenu index="10">
           <template slot="title" >
             <i class="iconfont">&#xe64f;</i>
             <p class="text">文件与制度管理</p>
           </template>
         </el-submenu>
       </router-link>
+
+
     </el-menu>
   </div>
 </template>

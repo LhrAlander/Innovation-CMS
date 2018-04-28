@@ -11,6 +11,7 @@ import StudentGroupMember from 'components/Student/Manage/GroupManage/GroupMembe
 
 import StudentAwardMember from 'components/Student/Manage/AwardManage/AwardMember'
 
+import StudentSignUpStatus from 'components/Student/Manage/SignUpManage/SignUpStatus'
 export default [
   {
     'path': '/student',
@@ -75,6 +76,16 @@ export default [
           iconCode: '&#xe631;',
           firstLevel: '获奖管理',
           secondLevel: '获奖成员管理'
+        },
+      },
+      {
+        name: 'StudentSignUpStatus',
+        path: 'StudentSignUpStatus',
+        component: StudentSignUpStatus,
+        meta: {
+          iconCode: '&#xe631;',
+          firstLevel: '报名管理',
+          secondLevel: '报名情况'
         },
       },
     ]

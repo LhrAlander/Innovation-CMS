@@ -27,6 +27,10 @@ import Department from 'components/Admin/Manage/BasicInfoManage/Department'
 import AwardInfo from 'components/Admin/Manage/AwardManage/AwardInfo'
 import AwardMember from 'components/Admin/Manage/AwardManage/AwardMember'
 
+import RecruitManage from 'components/Admin/Manage/RecruitInfoManage/Recruit'
+import SignUpManage from 'components/Admin/Manage/RecruitInfoManage/SignUp'
+
+
 // 管理员查看表单
 
 import LoginAndRegister from 'components/LoginAndRegister'
@@ -202,6 +206,26 @@ export default [
           secondLevel: '获奖成员管理'
         },
       },
+      {
+        name: 'RecruitManage',
+        path: 'RecruitManage',
+        component: RecruitManage,
+        meta: {
+          iconCode: '&#xe631;',
+          firstLevel: '招募信息管理',
+          secondLevel: '招募管理'
+        },
+      },
+      {
+        name: 'SignUpManage',
+        path: 'SignUpManage',
+        component: SignUpManage,
+        meta: {
+          iconCode: '&#xe631;',
+          firstLevel: '招募信息管理',
+          secondLevel: '报名管理'
+        },
+      }
     ]
   }
 ]
