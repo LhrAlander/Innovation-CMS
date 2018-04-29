@@ -85,9 +85,9 @@ export default {
     return {
       visible: this.dialogVisible,
       datePickerOptions: {
-        disabledDate(time) {
-          return time.getTime() > Date.now();
-        }
+        // disabledDate(time) {
+        //   return time.getTime() > Date.now();
+        // }
       }
     };
   },

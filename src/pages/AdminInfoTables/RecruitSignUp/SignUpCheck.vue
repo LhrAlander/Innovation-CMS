@@ -10,7 +10,7 @@
         报名信息管理&nbsp; >&nbsp;报名信息查看
       </div>
       <div class="btn-wrapper">
-        <el-button type="warning" plain class="modify-mode-btn" @click="goForEdit">修改信息</el-button>
+        <el-button type="warning" plain class="modify-mode-btn" @click="goForEdit" v-if="userType != '管理员'">修改信息</el-button>
       </div>
     </div>
 
@@ -93,6 +93,7 @@ const INPUT_AREA = 6;
 export default {
   data() {
     return {
+      userType: '',
 			recruitmentId: '',
 			userId: '',
 			title: '',
@@ -105,6 +106,11 @@ export default {
     };
   },
   mounted() {
+    const user = JSON.parse(window.localStorage.getItem("user"));
+    if (user && user.type=='管理员') {
+      this.userType = '管理员'
+      this.$store.commit("addAuthToken", window.localStorage.getItem('token'));
+    }
     this.initData();
   },
   components: {
