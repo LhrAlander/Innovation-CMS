@@ -30,15 +30,10 @@
               招募信息
             </div>
             <div class="right-bg">
-              <div class="item">
+              <div class="item" v-for="r in recentRecruitments" v-if="r.id != id" :key="r.id" @click="goDetail(r.id)">
                 <img src="/static/img/policycTime.png">
-                <span>{{recentPolicyc[0]}}</span>
-                <p>{{recentPolicyc[1]}}</p>
-              </div>
-               <div class="item">
-                <img src="/static/img/policycTime.png">
-                <span>{{recentPolicyc[0]}}</span>
-                <p>{{recentPolicyc[1]}}</p>
+                <span>{{r.publishTime}}</span>
+                <p>{{r.title}}</p>
               </div>
             </div>
           </el-col>
@@ -51,57 +46,68 @@
 <script>
 import MyHeader from "components/MyHeader";
 import MyFooter from "components/MyFooter";
-import axios from '@/utils/https'
-import utils from '@/utils/utils'
-
+import axios from "@/utils/https";
+import utils from "@/utils/utils";
 
 export default {
   components: {
     MyHeader,
-    MyFooter,
-   
+    MyFooter
   },
   data() {
     return {
-      title: '',
-      id: '',
-      url: '/api/front/recruitments/recruitment',
+      title: "",
+      id: "",
+      url: "/api/front/recruitments/recruitment",
       author: "教务处",
-			uploadTime: "2018年1月9号",
-			endTime: '',
-      article: '',
-			recentPolicyc:["2018.3.22","关于做好2017——2018学年第二学期学位课程警示工作的通知"],
-			files: []
-   }
-    
+      uploadTime: "2018年1月9号",
+      endTime: "",
+      article: "",
+      recentRecruitments: [],
+      files: []
+    };
   },
   mounted() {
-    this.id = this.$route.params.id
-    this.initData()
+    this.initData();
   },
   methods: {
     initData() {
-      axios.post(this.url, {id: this.id})
+      this.id = this.$route.params.id;
+      axios
+        .post(this.url, { id: this.id })
         .then(res => {
-          res = res.data
-          console.log(res)
-          this.title = res.recruitment.title
-          this.author = res.recruitment.publishUser
-          this.uploadTime = res.recruitment.publishTime
-          this.endTime = res.recruitment.endTime
-					this.article = res.recruitment.introduction
-					this.files = res.files
+          res = res.data;
+          console.log(res);
+          this.title = res.recruitment.title;
+          this.author = res.recruitment.publishUser;
+          this.uploadTime = res.recruitment.publishTime;
+          this.endTime = res.recruitment.endTime;
+          this.article = res.recruitment.introduction;
+          this.files = res.files;
+          return axios.get("/api/front/recruitments/side");
+        })
+        .then(res => {
+          this.recentRecruitments = res.data.data;
         })
         .catch(err => {
-          console.log(err)
-        })
-		},
-		getFiles() {
-			console.log('get')
-		},
-		downloadFile() {
-			utils.downloadFile(this.files)
+          console.log(err);
+        });
     },
+    getFiles() {
+      console.log("get");
+    },
+    downloadFile() {
+      utils.downloadFile(this.files);
+    },
+    goDetail(id) {
+      this.$router.push(`/recruitmentDetail/${id}`);
+    }
+  },
+  watch: {
+    $route() {
+      console.log("change");
+      this.initData();
+    }
   }
 };
 </script>
@@ -121,7 +127,7 @@ export default {
 .top {
   height: 80px;
   line-height: 80px;
-  border-bottom: 1px solid #5394C5;
+  border-bottom: 1px solid #5394c5;
 }
 .policyc-article {
   margin-bottom: 100px;
@@ -133,7 +139,7 @@ export default {
 .article-title {
   height: 60px;
   line-height: 60px;
-  color: #5394C5;
+  color: #5394c5;
   font-size: 18px;
 }
 .article-info {
@@ -142,7 +148,7 @@ export default {
   margin-top: -20px;
 }
 .article-info span {
-  margin-right: 2rem
+  margin-right: 2rem;
 }
 .article {
   line-height: 25px;
@@ -154,11 +160,11 @@ export default {
   text-align: left;
 }
 .article-download {
-	cursor: pointer;
+  cursor: pointer;
   text-align: left;
   height: 60px;
   line-height: 60px;
-  color: #5394C5;
+  color: #5394c5;
 }
 .right-img {
   width: 50px;
@@ -173,8 +179,9 @@ export default {
   height: 75%;
 }
 .item {
+  cursor: pointer;
   margin: 0 15px;
-  border-bottom:1px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
   color: #cccccc;
   font-size: 13px;
   padding: 20px 0 5px 0;

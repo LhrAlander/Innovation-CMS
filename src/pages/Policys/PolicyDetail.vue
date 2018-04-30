@@ -25,19 +25,14 @@
           </el-col>
           <el-col :span="6">
             <div class="top">
-              <img src="../../../static/img/policyc.png" class="right-img"/>
+              <img src="/static/img/policyc.png" class="right-img"/>
               最近政策
             </div>
             <div class="right-bg">
-              <div class="item">
-                <img src="../../../static/img/policycTime.png">
-                <span>{{recentPolicyc[0]}}</span>
-                <p>{{recentPolicyc[1]}}</p>
-              </div>
-               <div class="item">
-                <img src="../../../static/img/policycTime.png">
-                <span>{{recentPolicyc[0]}}</span>
-                <p>{{recentPolicyc[1]}}</p>
+              <div class="item" v-for="p in recentPolicys" :key="p.policyId" @click="goDetail(p.policyId)" v-if="p.policyId != policyId">
+                <img src="/static/img/policycTime.png">
+                <span>{{p.publishTime}}</span>
+                <p>{{p.policyTitle}}</p>
               </div>
             </div>
           </el-col>
@@ -50,52 +45,63 @@
 <script>
 import MyHeader from "components/MyHeader";
 import MyFooter from "components/MyFooter";
-import axios from '@/utils/https'
-import utils from '@/utils/utils'
-
+import axios from "@/utils/https";
+import utils from "@/utils/utils";
 
 export default {
   components: {
     MyHeader,
-    MyFooter,
-   
+    MyFooter
   },
   data() {
     return {
-      title: '',
-      policyId: '',
-      url: '/api/front/policys/policy',
+      title: "",
+      policyId: "",
+      url: "/api/front/policys/policy",
       author: "教务处",
       uploadTime: "2018年1月9号",
-      article: '',
-      recentPolicyc:["2018.3.22","关于做好2017——2018学年第二学期学位课程警示工作的通知"],
+      article: "",
+      recentPolicys: [],
       files: []
-   }
-    
+    };
   },
   mounted() {
-    this.policyId = this.$route.params.id
-    this.initData()
+    this.initData();
   },
   methods: {
     initData() {
-      axios.post(this.url, {policyId: this.policyId})
+      this.policyId = this.$route.params.id;
+      axios
+        .post(this.url, { policyId: this.policyId })
         .then(res => {
-          console.log(res.data)
-          this.files = res.data.files
-          res = res.data.policy
-          this.title = res.title
-          this.author = res.author
-          this.uploadTime = res.publishTime
-          this.article = res.introduction
+          console.log(res.data);
+          this.files = res.data.files;
+          res = res.data.policy;
+          this.title = res.title;
+          this.author = res.author;
+          this.uploadTime = res.publishTime;
+          this.article = res.introduction;
+          return axios.get("/api/front/policys/side");
+        })
+        .then(res => {
+          this.recentPolicys = res.data.data;
         })
         .catch(err => {
-          console.log(err)
-        })
+          console.log(err);
+        });
     },
     downloadFile() {
-			utils.downloadFile(this.files)
+      utils.downloadFile(this.files);
     },
+    goDetail(id) {
+      this.$router.push(`/policysDetail/${id}`);
+    }
+  },
+  watch: {
+    $route() {
+      console.log("change");
+      this.initData();
+    }
   }
 };
 </script>
@@ -115,7 +121,7 @@ export default {
 .top {
   height: 80px;
   line-height: 80px;
-  border-bottom: 1px solid #5394C5;
+  border-bottom: 1px solid #5394c5;
 }
 .policyc-article {
   margin-bottom: 100px;
@@ -127,7 +133,7 @@ export default {
 .article-title {
   height: 60px;
   line-height: 60px;
-  color: #5394C5;
+  color: #5394c5;
   font-size: 18px;
 }
 .article-info {
@@ -136,7 +142,7 @@ export default {
   margin-top: -20px;
 }
 .article-info span {
-  margin-right: 2rem
+  margin-right: 2rem;
 }
 .article {
   line-height: 25px;
@@ -152,7 +158,7 @@ export default {
   text-align: left;
   height: 60px;
   line-height: 60px;
-  color: #5394C5;
+  color: #5394c5;
 }
 .right-img {
   width: 50px;
@@ -167,8 +173,9 @@ export default {
   height: 75%;
 }
 .item {
+  cursor: pointer;
   margin: 0 15px;
-  border-bottom:1px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
   color: #cccccc;
   font-size: 13px;
   padding: 20px 0 5px 0;

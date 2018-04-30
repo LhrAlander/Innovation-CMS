@@ -29,15 +29,10 @@
               最近文件
             </div>
             <div class="right-bg">
-              <div class="item">
+              <div class="item" v-for="f in recentFiles" :key="f.fileSystemId" v-if="f.fileSystemId != fileId" @click="goDetail(f.fileSystemId)">
                 <img src="/static/img/policycTime.png">
-                <span>{{recentPolicyc[0]}}</span>
-                <p>{{recentPolicyc[1]}}</p>
-              </div>
-               <div class="item">
-                <img src="/static/img/policycTime.png">
-                <span>{{recentPolicyc[0]}}</span>
-                <p>{{recentPolicyc[1]}}</p>
+                <span>{{f.publishTime}}</span>
+                <p>{{f.title}}</p>
               </div>
             </div>
           </el-col>
@@ -51,47 +46,62 @@
 import MyHeader from "components/MyHeader";
 import MyFooter from "components/MyFooter";
 import axios from "@/utils/https";
-import utils from '@/utils/utils'
-
+import utils from "@/utils/utils";
 
 export default {
   components: {
     MyHeader,
-    MyFooter,
+    MyFooter
   },
   data() {
-    return { 
+    return {
       fileId: "",
-      title: '',
+      title: "",
       url: "/api/front/fileSystems/file",
       author: "教务处",
       uploadTime: "2018年1月9号",
       article: "",
-      recentPolicyc:["2018.3.22","关于做好2017——2018学年第二学期学位课程警示工作的通知"],
+      recentFiles: [],
       files: []
-   }
-    
+    };
   },
   mounted() {
-    this.fileId = this.$route.params.id
-    axios.post(this.url, {fileSystemId: this.fileId})
-      .then(res => {
-        console.log(res)
-        this.files = res.data.files
-        res = res.data.file
-        this.author = res.author
-        this.title = res.title
-        this.uploadTime = res.publishTime
-        this.article = res.introduction
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    this.initData();
   },
   methods: {
-     downloadFile() {
-			utils.downloadFile(this.files)
+    initData() {
+      this.fileId = this.$route.params.id;
+      axios
+        .post(this.url, { fileSystemId: this.fileId })
+        .then(res => {
+          console.log(res);
+          this.files = res.data.files;
+          res = res.data.file;
+          this.author = res.author;
+          this.title = res.title;
+          this.uploadTime = res.publishTime;
+          this.article = res.introduction;
+          return axios.get("/api/front/fileSystems/side");
+        })
+        .then(res => {
+          console.log(res);
+          this.recentFiles = res.data.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
+    downloadFile() {
+      utils.downloadFile(this.files);
+    },
+    goDetail(id) {
+      this.$router.push(`/fileDetail/${id}`);
+    }
+  },
+  watch: {
+    $route() {
+      this.initData();
+    }
   }
 };
 </script>
@@ -111,7 +121,7 @@ export default {
 .top {
   height: 80px;
   line-height: 80px;
-  border-bottom: 1px solid #5394C5;
+  border-bottom: 1px solid #5394c5;
 }
 .file-article {
   margin-bottom: 100px;
@@ -123,7 +133,7 @@ export default {
 .article-title {
   height: 60px;
   line-height: 60px;
-  color: #5394C5;
+  color: #5394c5;
   font-size: 18px;
 }
 .article-info {
@@ -132,7 +142,7 @@ export default {
   margin-top: -20px;
 }
 .article-info span {
-  margin-right: 2rem
+  margin-right: 2rem;
 }
 .article {
   line-height: 25px;
@@ -148,7 +158,7 @@ export default {
   height: 60px;
   text-align: left;
   line-height: 60px;
-  color: #5394C5;
+  color: #5394c5;
 }
 .right-img {
   width: 50px;
@@ -163,8 +173,9 @@ export default {
   height: 75%;
 }
 .item {
+  cursor: pointer;
   margin: 0 15px;
-  border-bottom:1px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
   color: #cccccc;
   font-size: 13px;
   padding: 20px 0 5px 0;

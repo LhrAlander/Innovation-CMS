@@ -29,15 +29,10 @@
               最近通知
             </div>
             <div class="right-bg">
-              <div class="item">
+              <div class="item" v-for="n in recentNotifications" :key="n.notificationId" v-if="n.notificationId != notificationId" @click="goDetail(n.notificationId)">
                 <img src="/static/img/policycTime.png">
-                <span>{{recentPolicyc[0]}}</span>
-                <p>{{recentPolicyc[1]}}</p>
-              </div>
-               <div class="item">
-                <img src="/static/img/policycTime.png">
-                <span>{{recentPolicyc[0]}}</span>
-                <p>{{recentPolicyc[1]}}</p>
+                <span>{{n.publishTime}}</span>
+                <p>{{n.notificationTitle}}</p>
               </div>
             </div>
           </el-col>
@@ -51,7 +46,7 @@
 import MyHeader from "components/MyHeader";
 import MyFooter from "components/MyFooter";
 import axios from "@/utils/https";
-import utils from '@/utils/utils'
+import utils from "@/utils/utils";
 
 export default {
   components: {
@@ -62,42 +57,52 @@ export default {
     return {
       notificationId: "",
       url: "/api/front/notifications/notification",
-      title: '',
+      title: "",
       author: "",
       uploadTime: "",
-      article: '<h1>暂无政策简介信息</h1>',
-      recentPolicyc: [
-        "2018.3.22",
-        "关于做好2017——2018学年第二学期学位课程警示工作的通知"
-      ],
+      article: "<h1>暂无政策简介信息</h1>",
+      recentNotifications: [],
       files: []
     };
   },
   mounted() {
-    this.notificationId = this.$route.params.id;
     this.initData();
   },
   methods: {
     initData() {
+      this.notificationId = this.$route.params.id;
       axios
         .post(this.url, {
           notificationId: this.notificationId
         })
         .then(res => {
           console.log(res);
-          this.files = res.data.files
-          res = res.data.notification
-          this.title = res.title
-          this.author = res.author
-          this.article = res.introduction
-          this.uploadTime = res.publishTime
+          this.files = res.data.files;
+          res = res.data.notification;
+          this.title = res.title;
+          this.author = res.author;
+          this.article = res.introduction;
+          this.uploadTime = res.publishTime;
+          return axios.get("/api/front/notifications/side");
+        })
+        .then(res => {
+          this.recentNotifications = res.data.data;
         })
         .catch(err => {
           console.log(err);
         });
     },
     downloadFile() {
-			utils.downloadFile(this.files)
+      utils.downloadFile(this.files);
+    },
+    goDetail(id) {
+      this.$router.push(`/notificationsDetail/${id}`);
+    }
+  },
+  watch: {
+    $route() {
+      console.log("change");
+      this.initData();
     }
   }
 };
@@ -167,6 +172,7 @@ export default {
   height: 75%;
 }
 .item {
+  cursor: pointer;
   margin: 0 15px;
   border-bottom: 1px solid #cccccc;
   color: #cccccc;

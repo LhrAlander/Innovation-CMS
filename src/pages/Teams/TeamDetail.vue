@@ -39,20 +39,12 @@
           <el-col :span="6">
             <div class="top">
               <img src="../../../static/img/policyc.png" class="right-img"/>
-              最近团队
+              其他团队
             </div>
             <div class="right-bg">
-              <div class="item">
+              <div class="item" v-for="t in sideTeams" :key="t.teamId" v-if="teamId != t.teamId" @click="goDetail(t.teamId)">
                 <img src="/static/img/right-icon.png"/>
-                <span>Lorem ipsum dolor sit amet</span>
-              </div>
-              <div class="item">
-                <img src="/static/img/right-icon.png"/>
-                <span>Lorem ipsum dolor sit amet</span>
-              </div>
-              <div class="item">
-                <img src="/static/img/right-icon.png"/>
-                <span>Lorem ipsum dolor sit amet</span>
+                <span>{{t.teamName}}</span>
               </div>
             </div>
           </el-col>
@@ -65,50 +57,63 @@
 <script>
 import MyHeader from "components/MyHeader";
 import MyFooter from "components/MyFooter";
-import axios from '@/utils/https'
-
+import axios from "@/utils/https";
 
 export default {
   components: {
     MyHeader,
-    MyFooter,
+    MyFooter
   },
   computed: {
     teamStudents: function() {
-      let str = ''
+      let str = "";
       this.team.students.forEach(i => {
         if (str.length > 0) {
-          str += ','
+          str += ",";
         }
-        str += i
-      })
-      return str
+        str += i;
+      });
+      return str;
     }
   },
   data() {
     return {
-      team: '',
-      teamId: '',
-      url: '/api/front/teams/team',
-      teamTitle: "标题标题标题标题标题",
-      teamIntroduction: "（团队简介）Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. ",
-   }
-    
+      team: "",
+      teamId: "",
+      url: "/api/front/teams/team",
+      teamTitle: "",
+      teamIntroduction: "",
+      sideTeams: []
+    };
   },
   mounted() {
-    this.teamId = this.$route.params.id
-    this.initData()
+    this.initData();
   },
   methods: {
     initData() {
-      axios.post(this.url, {teamId: this.teamId})
+      this.teamId = this.$route.params.id;
+      axios
+        .post(this.url, { teamId: this.teamId })
         .then(res => {
-          console.log(res)
-          this.team = res.data
+          console.log(res);
+          this.team = res.data;
+          return axios.get("/api/front/teams/side");
+        })
+        .then(res => {
+          this.sideTeams = res.data.data;
         })
         .catch(err => {
-          console.log(err)
-        })
+          console.log(err);
+        });
+    },
+    goDetail(teamId) {
+      this.$router.push(`/teamdetail/${teamId}`);
+    }
+  },
+  watch: {
+    $route() {
+      console.log("change");
+      this.initData();
     }
   }
 };
@@ -129,9 +134,9 @@ export default {
 }
 .top {
   margin-top: 15px;
-  border-bottom: 1px solid #5394C5;
+  border-bottom: 1px solid #5394c5;
 }
-.top p{
+.top p {
   margin-top: 15px;
   padding-bottom: 10px;
   font-size: 18px;
@@ -148,10 +153,10 @@ export default {
   margin-top: 40px;
   margin-bottom: 100px;
 }
-.team-table table{
+.team-table table {
   width: 600px;
 }
-.team-table table td{ 
+.team-table table td {
   width: 50%;
   height: 40px;
   text-align: center;
@@ -170,16 +175,16 @@ export default {
   height: 75%;
 }
 .item {
+  cursor: pointer;
   display: flex;
   align-items: center;
   height: 30px;
   padding: 0 0 10px 20px;
   text-align: left;
 }
-.item img{
+.item img {
   width: 20px;
   height: 20px;
   padding-right: 5px;
 }
-
 </style>
