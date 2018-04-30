@@ -11,7 +11,7 @@
         </div>
       </el-col>
 
-      <el-col :span="5" :offset="3">
+      <el-col :span="7" :offset="3">
         <div class="base-info-wrapper">
         <span class="info-item">
           学<span class="fill-text">填充</span>号：{{info.user_id}}
