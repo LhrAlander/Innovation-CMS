@@ -18,8 +18,8 @@
         <span class="info-title">
           <i class="iconfont box">&#xe62c;</i>
           依托单位基本信息
-          <el-row :gutter="200" class="info-content" v-for="rowIndex in getRowCount(baseInfo)">
-             <el-col :span="baseInfo[getItemIndex(rowIndex, colIndex)].span * 8" class="info-item" v-for="colIndex in 3" v-if="baseInfo[getItemIndex(rowIndex, colIndex)] != null">
+          <el-row :gutter="200" class="info-content" v-for="rowIndex in getRowCount(baseInfo)" :key="rowIndex">
+             <el-col :span="baseInfo[getItemIndex(rowIndex, colIndex)].span * 8" class="info-item" v-for="colIndex in 3" :key="colIndex" v-if="baseInfo[getItemIndex(rowIndex, colIndex)] != null">
               <span class="item-name">{{ baseInfo[getItemIndex(rowIndex, colIndex)].name }}</span>
               <div class="item-content">
                 <el-input disabled v-model="baseInfo[getItemIndex(rowIndex, colIndex)].value"></el-input>
@@ -63,8 +63,8 @@
         <span class="info-title">
           <i class="iconfont box">&#xe62c;</i>
           依托单位下团队信息
-          <el-row :gutter="200" class="info-content" v-for="teamRow in teamInfo">
-             <el-col :span="12" class="info-item" v-for="team in teamRow">
+          <el-row :gutter="200" class="info-content" v-for="teamRow in teamInfo" :key="teamRow">
+             <el-col :span="12" class="info-item" v-for="team in teamRow" :key="team.name">
               <span class="item-name">团队名称</span>
               <div class="item-content">
                 <el-input disabled v-model="team.name"></el-input>

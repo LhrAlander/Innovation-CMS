@@ -3,7 +3,7 @@
     <!--筛选标签区域-->
     <div class="tagBlock">
       <span v-if="!tagEmpty" style="font-weight: bold; font-size: .9rem;">筛选条件</span>
-      <el-tag v-for="(value,key,index) in filter" v-if="value !== ''" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value,valueLabelMap)}})</el-tag>
+      <el-tag v-for="(value,key) in filter" v-if="value !== ''" :key="value" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value,valueLabelMap)}})</el-tag>
     </div>
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
     <el-button class="exit-filter" size="large" @click="quitFilter">退出筛选</el-button>
@@ -25,7 +25,7 @@
       <el-table-column type="expand">
         <template scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item v-for="(value, key, index) in expandFormatMap" :label="value">
+            <el-form-item v-for="(value, key) in expandFormatMap" :key="value" :label="value">
               <span>{{ props.row[key] }}</span>
             </el-form-item>
           </el-form>
@@ -36,8 +36,9 @@
         width="50"
         :resizable="false">
       </el-table-column>
-      <el-table-column v-for="(value, key, index) in keyFormatMap"
+      <el-table-column v-for="(value, key) in keyFormatMap"
                        :label="value"
+                       :key="value"
                        :prop = "key"
                        :resizable="false">
       </el-table-column>
@@ -76,12 +77,11 @@
 </template>
 <script>
 import axios from "utils/https";
-import ElButton from "../../../../../node_modules/element-ui/packages/button/src/button.vue";
 import FilterBox from "components/Admin/Manage/FilterBox";
 import InfoAdd from "components/Admin/Manage/InfoAdd";
-import * as utils from "utils/utils";
+import utils from '@/utils/utils'
 export default {
-  components: { ElButton, FilterBox, InfoAdd },
+  components: { FilterBox, InfoAdd },
   data() {
     return {
       tableData: [],

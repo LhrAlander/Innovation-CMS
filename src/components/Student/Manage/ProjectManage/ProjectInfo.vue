@@ -3,7 +3,7 @@
     <!--筛选标签区域-->
     <div class="tagBlock">
       <span v-if="!tagEmpty" style="font-weight: bold; font-size: .9rem;">筛选条件</span>
-      <el-tag v-for="(value,key,index) in filter" v-if="value !== ''" class="tag">
+      <el-tag v-for="(value,key) in filter" :key="value" v-if="value !== ''" class="tag">
         {{keyFormater(key)}}({{valueFormater(key, value, valueLabelMap)}})
       </el-tag>
     </div>
@@ -27,7 +27,7 @@
       <el-table-column type="expand">
         <template scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item v-for="(value, key, index) in expandFormatMap" :label="value">
+            <el-form-item v-for="(value, key) in expandFormatMap" :key="value" :label="value">
               <span>{{ props.row[key] }}</span>
             </el-form-item>
           </el-form>
@@ -38,8 +38,9 @@
         width="50"
         :resizable="false">
       </el-table-column>
-      <el-table-column v-for="(value, key, index) in keyFormatMap"
+      <el-table-column v-for="(value, key) in keyFormatMap"
                        :label="value"
+                       :key="value"
                        :prop="key"
                        :resizable="false">
       </el-table-column>
@@ -81,37 +82,18 @@
 </template>
 <script>
 import axios from "utils/https";
-import ElButton from "../../../../../node_modules/element-ui/packages/button/src/button.vue";
 import FilterBox from "components/Admin/Manage/FilterBox";
 import InfoAdd from "components/Admin/Manage/InfoAdd";
-import * as utils from "utils/utils";
+import utils from "utils/utils";
 
 export default {
-  components: { ElButton, FilterBox, InfoAdd },
+  components: { FilterBox, InfoAdd },
   data() {
     return {
       tableData: [],
       valueLabelMap: {
-        projectCategory: [
-          {
-            value: 0,
-            label: "类别0"
-          },
-          {
-            value: 1,
-            label: "类别1"
-          }
-        ],
-        projectLevel: [
-          {
-            value: 0,
-            label: "级别0"
-          },
-          {
-            value: 1,
-            label: "级别1"
-          }
-        ]
+        projectCategory: [],
+        projectLevel: []
       },
 
       keyFormatMap: {
@@ -234,7 +216,7 @@ export default {
         },
         dependentUnit: {
           label: "项目依托单位",
-          inputType: 0
+          inputType: 4
         },
         beginYear: {
           label: "项目开始年份",
@@ -276,6 +258,7 @@ export default {
     };
   },
   mounted: function() {
+    utils.filter2Mysql(utils.filterName.PROJECT, this.filter);
     this.loadData(this.filter, this.currentPage, this.pageSize);
   },
   methods: {
@@ -360,14 +343,27 @@ export default {
       this.currentPage = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    //        点击筛选触发的事件
-    enterFilter() {
-      this.showFilterBox = true;
+    // 点击筛选触发的事件
+    async enterFilter() {
+      if (this.valueLabelMap.projectCategory.length < 1) {
+        let res = await this.$store.dispatch("getSelectors");
+        console.log(res);
+        this.valueLabelMap.projectCategory = res[0];
+        this.valueLabelMap.projectLevel = res[1];
+        this.filterTmpl.dependentUnit.options = res[2];
+        this.infoAddTmpl.dependentUnit.options = res[2];
+        this.showFilterBox = true;
+      } else {
+        this.showFilterBox = true;
+      }
     },
     //        接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {
-      if (filter !== undefined) this.filter = filter;
+      if (filter !== undefined) {
+        this.filter = filter;
+      }
       this.showFilterBox = false;
+      utils.filter2Mysql(utils.filterName.PROJECT, this.filter);
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        标签的key格式化器

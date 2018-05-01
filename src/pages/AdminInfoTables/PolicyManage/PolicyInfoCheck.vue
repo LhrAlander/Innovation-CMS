@@ -19,8 +19,8 @@
           <i class="iconfont box">&#xe62c;</i>
           政策基本信息
         </span>
-      <el-row :gutter="200" class="info-content" v-for="rowIndex in getRowCount(baseInfo)">
-        <el-col :span="baseInfo[getItemIndex(rowIndex, colIndex)].span * 8" class="info-item" v-for="colIndex in 3" v-if="baseInfo[getItemIndex(rowIndex, colIndex)] != null">
+      <el-row :gutter="200" class="info-content" v-for="rowIndex in getRowCount(baseInfo)" :key="rowIndex">
+        <el-col :span="baseInfo[getItemIndex(rowIndex, colIndex)].span * 8" class="info-item" v-for="colIndex in 3" :key="colIndex" v-if="baseInfo[getItemIndex(rowIndex, colIndex)] != null">
           <span class="item-name">{{ baseInfo[getItemIndex(rowIndex, colIndex)].name }}</span>
           <div class="item-content">
             <el-input disabled v-model="baseInfo[getItemIndex(rowIndex, colIndex)].value"></el-input>
@@ -42,7 +42,7 @@
           <div class="item-content">
             <div class="attack-link">
               <ul v-if="files.length > 0">
-                <li v-for="file in files">{{ file.fileName }}</li>
+                <li v-for="file in files" :key="file.fileName">{{ file.fileName }}</li>
               </ul>
             </div>
           </div>

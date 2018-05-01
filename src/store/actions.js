@@ -1,4 +1,4 @@
-import axios from 'utils/https'
+import axios from '@/utils/https'
 import utils from "@/utils/utils"
 import store from '../store/index'
 
@@ -258,7 +258,7 @@ const getSelectors = ({ commit, state }, payload) => {
   return Promise.all([
     axios.get("/api/category/project/categories"),
     axios.get("/api/category/project/levels"),
-    axios.get("api/dependent/choices")
+    axios.get("/api/dependent/choices")
   ])
     .then(res => {
       console.log(res)

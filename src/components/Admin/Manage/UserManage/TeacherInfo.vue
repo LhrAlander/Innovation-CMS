@@ -86,7 +86,7 @@ import axios from "@/utils/https";
 import ElButton from "../../../../../node_modules/element-ui/packages/button/src/button.vue";
 import FilterBox from "components/Admin/Manage/FilterBox";
 import InfoAdd from "components/Admin/Manage/InfoAdd";
-import * as utils from "utils/utils";
+import utils from '@/utils/utils'
 export default {
   components: { ElButton, FilterBox, InfoAdd },
   data() {
