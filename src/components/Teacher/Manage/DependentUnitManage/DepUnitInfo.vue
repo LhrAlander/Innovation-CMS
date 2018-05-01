@@ -92,44 +92,8 @@ export default {
     return {
       tableData: [],
       valueLabelMap: {
-        unitName: [
-          {
-            // 用户类别映射表
-            value: 0,
-            label: "单位0"
-          },
-          {
-            value: 1,
-            label: "单位1"
-          },
-          {
-            value: 2,
-            label: "单位2"
-          },
-          {
-            value: 3,
-            label: "单位3"
-          }
-        ],
-        unitCategory: [
-          {
-            // 用户类别映射表
-            value: 0,
-            label: "类别0"
-          },
-          {
-            value: 1,
-            label: "类别1"
-          },
-          {
-            value: 2,
-            label: "类别2"
-          },
-          {
-            value: 3,
-            label: "类别3"
-          }
-        ]
+        unitName: [],
+        unitCategory: []
       },
 
       keyFormatMap: {
@@ -177,22 +141,12 @@ export default {
         unitCategory: {
           label: "单位类别",
           inputType: 1 // 0 代表 input
-        },
-        leader: {
-          label: "负责人",
-          inputType: 0
-        },
-        leaderId: {
-          label: "负责人用户名(学号)",
-          inputType: 0 // 0 代表 input
         }
       },
       filter: {
         //搜索条件
         unitName: "", //单位名称
         unitCategory: "", //单位类别
-        leader: "", //负责人
-        leaderId: "" //负责人用户名(学号)
       },
       pageSize: 10, //每页大小
       currentPage: 1, //当前页
@@ -269,9 +223,38 @@ export default {
       this.currentPage = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    // 点击筛选触发的事件
-    enterFilter() {
-      this.showFilterBox = true;
+    initSelectors() {
+      axios
+        .get("/api/dependent/choices")
+        .then(res => {
+          this.valueLabelMap.unitName = res.data.data.map(i => {
+            return {
+              label: i.unitName,
+              value: i.unitName
+            };
+          });
+          return axios.get("/api/category/dependent/categories");
+        })
+        .then(res => {
+          this.valueLabelMap.unitCategory = res.data.data.map(i => {
+            return {
+              value: i.identity_name,
+              label: i.identity_name
+            };
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+     //        点击筛选触发的事件
+    async enterFilter() {
+      if (this.valueLabelMap.unitName.length < 1) {
+        await this.initSelectors();
+        this.showFilterBox = true;
+      } else {
+        this.showFilterBox = true;
+      }
     },
     // 接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {

@@ -30,12 +30,21 @@
             <el-input v-model="info.user_mail"></el-input>
           </div>
         </div>
+        
         <div class="info-item">
           <div class="key">
             手机号码：
           </div>
           <div class="value">
             <el-input v-model="info.user_phone"></el-input>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="key">
+            密<span class="fill-text">填充</span>码：
+          </div>
+          <div class="value">
+            <el-input type="password" v-model="info.user_pwd"></el-input>
           </div>
         </div>
         <div class="info-item">
@@ -71,6 +80,7 @@ export default {
       .then(res => {
         console.log(res);
         this.info = res.data.data[0];
+        this.info.user_pwd = '123456'
       })
       .catch(err => {
         console.log(err);
@@ -81,7 +91,8 @@ export default {
       let user = {
         user_id: this.info.user_id,
         user_phone: this.info.user_phone,
-        user_mail: this.info.user_mail
+        user_mail: this.info.user_mail,
+        user_pwd: this.info.user_pwd
       }
       axios.post('/api/st/baseInfo/change/info', {
         user

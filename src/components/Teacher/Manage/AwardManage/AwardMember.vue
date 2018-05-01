@@ -85,40 +85,9 @@ export default {
     return {
       tableData: [],
       valueLabelMap: {
-        // 下拉类型的input的具体数据
-        //          role: [{ // 用户类别映射表
-        //            value: 0,
-        //            label: '全部'
-        //          }, {
-        //            value: 1,
-        //            label: '学生'
-        //          }, {
-        //            value: 2,
-        //            label: '老师'
-        //          }, {
-        //            value: 3,
-        //            label: '企业'
-        //          }],
-        awardLevel: [
-          {
-            value: 0,
-            label: "级别0"
-          },
-          {
-            value: 1,
-            label: "级别1"
-          }
-        ],
-        awardCategory: [
-          {
-            value: 0,
-            label: "类别0"
-          },
-          {
-            value: 1,
-            label: "类别1"
-          }
-        ]
+        name: [],
+        awardLevel: [],
+        awardSecondLevel: []
       },
 
       keyFormatMap: {
@@ -142,21 +111,21 @@ export default {
           label: "用户姓名",
           inputType: 0
         },
-        awardName: {
+       name: {
           label: "获奖名称",
-          inputType: 0 // 0 代表 input
-        },
-        awardCategory: {
-          label: "获奖类别",
-          inputType: 1
+          inputType: 1 // 0 代表 input
         },
         awardLevel: {
-          label: "获奖级别",
+          label: "获奖等级",
+          inputType: 1 // 0 代表 input
+        },
+        awardSecondLevel: {
+          label: "获奖等级",
           inputType: 1 // 0 代表 input
         },
         projectName: {
           label: "项目名称",
-          inputType: 0
+          inputType: 0 // 0 代表 input
         },
         userId: {
           label: "用户名",
@@ -166,9 +135,9 @@ export default {
       filter: {
         //搜索条件
         username: "", //用户姓名
-        awardName: "", //获奖名称
-        awardCategory: "", // 获奖类别
-        awardLevel: "", // 获奖级别
+        name: "", //获奖名称
+        awardLevel: "", //获奖等级
+        awardSecondLevel: "", //获奖级别
         projectName: "", //项目名称
         userId: "" //用户名
       },
@@ -244,9 +213,36 @@ export default {
       this.currentPage = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    //        点击筛选触发的事件
-    enterFilter() {
-      this.showFilterBox = true;
+    async initSelectors() {
+      const res = await this.$store.dispatch("getAwards");
+      const teams = await this.$store.dispatch("getSelectors");
+      this.valueLabelMap.name = res[0].map(i => {
+        return {
+          label: i,
+          value: i
+        };
+      });
+      this.valueLabelMap.awardLevel = res[2].map(i => {
+        return {
+          label: i.identity_name,
+          value: i.identity_name
+        };
+      });
+      this.valueLabelMap.awardSecondLevel = res[1].map(i => {
+        return {
+          label: i.level_name,
+          value: i.level_name
+        };
+      });
+    },
+     //        点击筛选触发的事件
+    async enterFilter() {
+      if (this.valueLabelMap.name.length < 1) {
+        await this.initSelectors();
+        this.showFilterBox = true;
+      } else {
+        this.showFilterBox = true;
+      }
     },
     //        接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {

@@ -89,47 +89,10 @@ export default {
   components: { FilterBox, InfoAdd },
   data() {
     return {
-      tableData: [
-        {
-          // 表格数据
-          id: 1
-        }
-      ],
+      tableData: [],
       valueLabelMap: {
-        // 下拉类型的input的具体数据
-        //          role: [{ // 用户类别映射表
-        //            value: 0,
-        //            label: '全部'
-        //          }, {
-        //            value: 1,
-        //            label: '学生'
-        //          }, {
-        //            value: 2,
-        //            label: '老师'
-        //          }, {
-        //            value: 3,
-        //            label: '企业'
-        //          }],
-        projectCategory: [
-          {
-            value: 0,
-            label: "类别0"
-          },
-          {
-            value: 1,
-            label: "类别1"
-          }
-        ],
-        projectLevel: [
-          {
-            value: 0,
-            label: "级别0"
-          },
-          {
-            value: 1,
-            label: "级别1"
-          }
-        ]
+        projectCategory: [],
+        projectLevel: []
       },
 
       keyFormatMap: {
@@ -238,21 +201,13 @@ export default {
           label: "项目级别",
           inputType: 1
         },
-        guideTeacher: {
-          label: "指导老师",
-          inputType: 0
-        },
         applyYear: {
           label: "项目申请年份",
           inputType: 3
         },
-        projectId: {
-          label: "项目编号",
-          inputType: 0
-        },
         dependentUnit: {
           label: "项目依托单位",
-          inputType: 0
+          inputType: 4
         },
         beginYear: {
           label: "项目开始年份",
@@ -265,10 +220,6 @@ export default {
         principalName: {
           label: "项目负责人用户名",
           inputType: 0
-        },
-        guideTeacherName: {
-          label: "指导老师用户名",
-          inputType: 0
         }
       },
       filter: {
@@ -276,14 +227,11 @@ export default {
         projectName: "", //项目名称
         projectCategory: "", //项目类别
         projectLevel: "", //项目级别
-        guideTeacher: "", //指导老师
-        projectId: "", //项目编号
         dependentUnit: "", //项目依托单位
         applyYear: "", //项目申请年份
         beginYear: "", //项目开始年份
         deadlineYear: "", //项目截至年份
         principalName: "", //项目负责人用户名
-        guideTeacherName: "" //指导老师用户名
       },
       pageSize: 10, //每页大小
       currentPage: 1, //当前页
@@ -302,7 +250,6 @@ export default {
     },
     // 异步加载数据
     loadData(filter, pageNum, pageSize) {
-      console.log(filter, pageNum, pageSize);
       axios
         .get(this.url, {
           params: {
@@ -360,13 +307,24 @@ export default {
       this.currentPage = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    //        点击筛选触发的事件
-    enterFilter() {
-      this.showFilterBox = true;
+   // 点击筛选触发的事件
+    async enterFilter() {
+      if (this.valueLabelMap.projectCategory.length < 1) {
+        let res = await this.$store.dispatch("getSelectors");
+        this.valueLabelMap.projectCategory = res[0];
+        this.valueLabelMap.projectLevel = res[1];
+        this.filterTmpl.dependentUnit.options = res[2];
+        this.infoAddTmpl.dependentUnit.options = res[2];
+        this.showFilterBox = true;
+      } else {
+        this.showFilterBox = true;
+      }
     },
     //        接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {
-      if (filter !== undefined) this.filter = filter;
+      if (filter !== undefined) {
+        this.filter = filter;
+      }
       this.showFilterBox = false;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },

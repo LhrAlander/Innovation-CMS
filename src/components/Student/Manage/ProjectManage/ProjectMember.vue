@@ -141,40 +141,7 @@ export default {
         }
       ],
       valueLabelMap: {
-        projectName: [
-          {
-            value: "project1",
-            label: "项目1"
-          },
-          {
-            value: "project2",
-            label: "项目2"
-          },
-          {
-            value: "project3",
-            label: "项目3"
-          },
-          {
-            value: "project4",
-            label: "项目4"
-          },
-          {
-            value: "project5",
-            label: "项目5"
-          },
-          {
-            value: "project6",
-            label: "项目6"
-          },
-          {
-            value: "project7",
-            label: "项目7"
-          },
-          {
-            value: "project8",
-            label: "项目8"
-          }
-        ]
+        projectName: []
       },
 
       keyFormatMap: {
@@ -297,17 +264,17 @@ export default {
     handleEdit(index, row) {
       console.log(index, row);
     },
-    //        单页大小改变回调事件
+    // 单页大小改变回调事件
     handleSizeChange(val) {
       this.pageSize = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    //        当前页改变回调事件
+    // 当前页改变回调事件
     handleCurrentChange(val) {
       this.currentPage = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    //        点击筛选触发的事件
+    // 点击筛选触发的事件
     async enterFilter() {
       if (
         !(

@@ -164,7 +164,7 @@ export default {
     },
     // 进入编辑模式
     goForEdit() {
-      this.$router.push(`/edit/FileInfo/${this.$route.params.id}`);
+      this.$router.push(`/edit/recruitmentInfo/${this.$route.params.id}`);
     }
   }
 };

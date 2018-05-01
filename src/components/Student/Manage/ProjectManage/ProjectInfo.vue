@@ -210,10 +210,6 @@ export default {
           label: "项目申请年份",
           inputType: 3
         },
-        projectId: {
-          label: "项目编号",
-          inputType: 0
-        },
         dependentUnit: {
           label: "项目依托单位",
           inputType: 4
@@ -249,7 +245,7 @@ export default {
         principalName: "", //项目负责人用户名
         guideTeacherName: "" //指导老师用户名
       },
-      pageSize: 15, //每页大小
+      pageSize: 10, //每页大小
       currentPage: 1, //当前页
       start: 1, //查询的页码
       totalCount: 30, //返回的记录总数

@@ -140,54 +140,7 @@ export default {
         }
       ],
       valueLabelMap: {
-        // 下拉类型的input的具体数据
-        //          role: [{ // 用户类别映射表
-        //            value: 0,
-        //            label: '全部'
-        //          }, {
-        //            value: 1,
-        //            label: '学生'
-        //          }, {
-        //            value: 2,
-        //            label: '老师'
-        //          }, {
-        //            value: 3,
-        //            label: '企业'
-        //          }],
-        projectName: [
-          {
-            value: "project1",
-            label: "项目1"
-          },
-          {
-            value: "project2",
-            label: "项目2"
-          },
-          {
-            value: "project3",
-            label: "项目3"
-          },
-          {
-            value: "project4",
-            label: "项目4"
-          },
-          {
-            value: "project5",
-            label: "项目5"
-          },
-          {
-            value: "project6",
-            label: "项目6"
-          },
-          {
-            value: "project7",
-            label: "项目7"
-          },
-          {
-            value: "project8",
-            label: "项目8"
-          }
-        ]
+        projectName: []
       },
 
       keyFormatMap: {
@@ -322,8 +275,17 @@ export default {
       this.currentPage = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    //        点击筛选触发的事件
-    enterFilter() {
+    // 点击筛选触发的事件
+    async enterFilter() {
+      if (
+        !(
+          "options" in this.filterTmpl.projectName &&
+          this.filterTmpl.projectName.options.length > 0
+        )
+      ) {
+        let res = await this.$store.dispatch("getSelectors");
+        this.filterTmpl.projectName.options = res[3];
+      }
       this.showFilterBox = true;
     },
     //        接收子组件filterbox传递的筛选条件数据

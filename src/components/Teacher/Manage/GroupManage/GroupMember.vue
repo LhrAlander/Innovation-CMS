@@ -112,40 +112,7 @@ export default {
           ]
         }
       ],
-      valueLabelMap: {
-        // 下拉类型的input的具体数据
-        //          role: [{ // 用户类别映射表
-        //            value: 0,
-        //            label: '全部'
-        //          }, {
-        //            value: 1,
-        //            label: '学生'
-        //          }, {
-        //            value: 2,
-        //            label: '老师'
-        //          }, {
-        //            value: 3,
-        //            label: '企业'
-        //          }],
-        groupName: [
-          {
-            value: "group1",
-            label: "团队1"
-          },
-          {
-            value: "group2",
-            label: "团队2"
-          },
-          {
-            value: "group3",
-            label: "团队3"
-          },
-          {
-            value: "group4",
-            label: "团队4"
-          }
-        ]
-      },
+      valueLabelMap: {},
 
       keyFormatMap: {
         // 格式化标签映射表
@@ -189,7 +156,7 @@ export default {
       //        获取表格数据的地址
       url: "/api/th/team/users",
       filterTmpl: {
-        groupName: {
+        teamId: {
           label: "团队名称",
           inputType: 4 // 0 代表 input
         },
@@ -204,7 +171,7 @@ export default {
       },
       filter: {
         //搜索条件
-        groupName: "", //项目名称
+        teamId: "", //项目名称
         userId: "", //用户名
         username: "" //用户姓名
       },
@@ -284,9 +251,15 @@ export default {
       this.currentPage = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    //        点击筛选触发的事件
-    enterFilter() {
-      this.showFilterBox = true;
+     // 点击筛选触发的事件
+    async enterFilter() {
+      if (!("options" in this.filterTmpl.teamId)) {
+        let res = await this.$store.dispatch("getSelectors");
+        this.filterTmpl.teamId.options = res[2];
+        this.showFilterBox = true;
+      } else {
+        this.showFilterBox = true;
+      }
     },
     //        接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {
