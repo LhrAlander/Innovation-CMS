@@ -269,7 +269,7 @@ export default {
     },
     //        编辑按钮事件
     handleEdit(index, row) {
-      // this.$router.push({ name: "NotificationInfoEdit" });
+      this.$router.push(`/edit/recruitmentInfo/${row.id}`);
     },
     //        单页大小改变回调事件
     handleSizeChange(val) {

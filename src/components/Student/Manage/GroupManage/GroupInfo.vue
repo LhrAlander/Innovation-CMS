@@ -86,42 +86,8 @@ export default {
     return {
       tableData: [],
       valueLabelMap: {
-        groupName: [
-          {
-            value: 0,
-            label: "团队0"
-          },
-          {
-            value: 1,
-            label: "团队1"
-          },
-          {
-            value: 2,
-            label: "团队2"
-          },
-          {
-            value: 3,
-            label: "团队3"
-          }
-        ],
-        dependentUnit: [
-          {
-            value: 0,
-            label: "依托单位0"
-          },
-          {
-            value: 1,
-            label: "依托单位1"
-          },
-          {
-            value: 2,
-            label: "依托单位2"
-          },
-          {
-            value: 3,
-            label: "依托单位3"
-          }
-        ]
+        unitId: [],
+        teamId: []
       },
 
       keyFormatMap: {
@@ -140,48 +106,12 @@ export default {
         teacherPhone: "指导老师手机号",
         teacherId: "指导老师用户名"
       },
-      infoAddTmpl: {
-        dependentUnit: {
-          label: "所在依托单位",
-          inputType: 1 // 0 代表 input
-        },
-        groupName: {
-          label: "团队名称",
-          inputType: 0 // 0 代表 input
-        },
-        leaderId: {
-          label: "负责人用户名(学号)",
-          inputType: 0
-        },
-        teacherId: {
-          label: "指导老师用户名",
-          inputType: 0
-        }
-      },
-      infoAddRules: {
-        dependentUnit: [
-          { required: true, message: "请输入依托单位", trigger: "blur" }
-        ],
-        groupName: [
-          { required: true, message: "请输入团队名称", trigger: "blur" }
-        ],
-        leaderId: [
-          {
-            required: true,
-            message: "请输入负责人用户名(学号)",
-            trigger: "blur"
-          }
-        ],
-        teacherId: [
-          { required: true, message: "请输入指导老师用户名", trigger: "blur" }
-        ]
-      },
       //        获取表格数据的地址
       url: "/api/st/team/teams",
       filterTmpl: {
-        groupName: {
+        teamId: {
           label: "团队名称",
-          inputType: 1 // 0 代表 input
+          inputType: 4 // 0 代表 input
         },
         leaderName: {
           label: "负责人姓名",
@@ -191,7 +121,7 @@ export default {
           label: "指导老师",
           inputType: 0
         },
-        dependentUnit: {
+        unitId: {
           label: "所在依托单位",
           inputType: 1 // 0 代表 input
         },
@@ -206,7 +136,7 @@ export default {
       },
       filter: {
         //搜索条件
-        groupName: "", //团队名称
+        teamId: "", //团队名称
         leaderName: "", //团队负责人姓名
         teacher: "", //指导老师
         dependentUnit: "", //所在依托单位
@@ -249,6 +179,9 @@ export default {
     },
     //        异步加载数据
     loadData(filter, pageNum, pageSize) {
+      if ("teamId" in filter && filter.teamId instanceof Array) {
+        filter.teamId = filter.teamId.pop();
+      }
       axios
         .get(this.url, {
           params: {
@@ -305,9 +238,22 @@ export default {
       this.currentPage = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    //        点击筛选触发的事件
-    enterFilter() {
-      this.showFilterBox = true;
+    // 点击筛选触发的事件
+    async enterFilter() {
+      if (!("options" in this.filterTmpl.teamId)) {
+        let res = await this.$store.dispatch("getSelectors");
+        this.valueLabelMap.unitId = res[2].map(i => {
+          return {
+            label: i.label,
+            value: i.value
+          };
+        });
+        console.log(this.valueLabelMap.unitId);
+        this.filterTmpl.teamId.options = res[2];
+        this.showFilterBox = true;
+      } else {
+        this.showFilterBox = true;
+      }
     },
     //        接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {

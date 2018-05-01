@@ -52,7 +52,7 @@
             :auto-upload="false">
             <el-button slot="trigger" size="small" type="primary">选取附件</el-button>
             <!-- <el-button style="margin-left: 10px;" size="small" type="danger" @click="deleteAll">删除全部</el-button> -->
-            <div slot="tip" class="el-upload__tip">选择完文件后请手动点击按钮上传</div>
+            <div slot="tip" class="el-upload__tip">点击确认创建按钮后自动上传</div>
           </el-upload>
         </el-col>
       </el-row>
@@ -183,6 +183,7 @@ export default {
             this.uploadData.notificationId = notificationId;
             console.log(notificationId);
             this.$refs.upload.submit();
+            this.$router.push('/admin/Notification')
           }
         })
         .catch(err => {

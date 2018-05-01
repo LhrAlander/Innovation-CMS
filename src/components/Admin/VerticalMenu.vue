@@ -4,7 +4,7 @@
       <img src="../../assets/img/logo.png" alt="杭州师范大学logo" class="logo">
       <div class="welcome-info">
         <p>welcome</p>
-        <p>{{admin.name}}</p>
+        <p>{{user.name}}</p>
       </div>
     </div>
     <el-menu default-active="1-4-1" class="el-menu-vertical" @open="handleOpen" @close="handleClose" :collapse="true">
@@ -219,10 +219,14 @@
 export default {
   data() {
     return {
-      admin: {
+      user: {
         name: "yhcj"
       }
     };
+  },
+  mounted() {
+    const user = JSON.parse(window.localStorage.getItem("user"))
+    this.user.name = user.username
   },
   methods: {
     handleOpen(key, keyPath) {

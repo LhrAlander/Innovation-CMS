@@ -83,12 +83,11 @@
 </template>
 <script>
 import axios from "@/utils/https";
-import ElButton from "../../../../../node_modules/element-ui/packages/button/src/button.vue";
 import FilterBox from "components/Admin/Manage/FilterBox";
 import InfoAdd from "components/Admin/Manage/InfoAdd";
-import utils from '@/utils/utils'
+import utils from "@/utils/utils";
 export default {
-  components: { ElButton, FilterBox, InfoAdd },
+  components: { FilterBox, InfoAdd },
   data() {
     return {
       tableData: [],
@@ -254,7 +253,7 @@ export default {
     },
     //        编辑按钮事件
     handleEdit(index, row) {
-      this.$router.push("/edit/teacherInfo/1");
+      this.$router.push("/edit/teacherInfo/" + row.teacherId);
     },
     //        单页大小改变回调事件
     handleSizeChange(val) {

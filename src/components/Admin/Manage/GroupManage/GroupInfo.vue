@@ -255,7 +255,7 @@ export default {
     },
     //        编辑按钮事件
     handleEdit(index, row) {
-      console.log(index, row);
+      this.$router.push(`/edit/TeamInfo/${row.teamId}`)
     },
     //        单页大小改变回调事件
     handleSizeChange(val) {
@@ -267,7 +267,7 @@ export default {
       this.currentPage = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    //        点击筛选触发的事件
+    // 点击筛选触发的事件
     async enterFilter() {
       if (!("options" in this.filterTmpl.teamId)) {
         let res = await this.$store.dispatch("getSelectors");

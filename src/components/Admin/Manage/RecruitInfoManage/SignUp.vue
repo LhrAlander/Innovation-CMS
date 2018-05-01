@@ -247,12 +247,12 @@ export default {
     handleMore(index, row) {
       console.log(index, row);
       //        this.$router.push(`/check/notificationInfo/${row.notificationId}`);
-      this.$router.push(`/check/recruitSignUpInfo/${row.id}`)
+      this.$router.push(`/check/recruitSignUpInfo/${row.id}`);
     },
 
     //        编辑按钮事件
     handleEdit(index, row) {
-      // this.$router.push({ name: "NotificationInfoEdit" });
+      this.$router.push(`/edit/recruitSignUpInfo/${row.id}`);
     },
     //        单页大小改变回调事件
     handleSizeChange(val) {
@@ -269,35 +269,36 @@ export default {
       let signup = {
         id: row.id,
         state: "审核中"
-      }
-      this.updateSignup(signup)
+      };
+      this.updateSignup(signup);
     },
     handleSuccess(index, row) {
       this.tableData[index].state = "审核成功";
       let signup = {
         id: row.id,
         state: "审核成功"
-      }
-      this.updateSignup(signup)
+      };
+      this.updateSignup(signup);
     },
     handleFailed(index, row) {
       this.tableData[index].state = "审核失败";
       let signup = {
         id: row.id,
         state: "审核失败"
-      }
-      this.updateSignup(signup)
+      };
+      this.updateSignup(signup);
     },
     updateSignup(signup) {
-      axios.post('/api/recruitment/change/signup', {
-        info: signup
-      })
+      axios
+        .post("/api/recruitment/change/signup", {
+          info: signup
+        })
         .then(res => {
-          console.log(res)
+          console.log(res);
         })
         .catch(err => {
-          console.log(err)
-        })
+          console.log(err);
+        });
     },
     //        点击筛选触发的事件
     enterFilter() {

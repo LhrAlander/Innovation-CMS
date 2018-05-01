@@ -142,20 +142,18 @@ function resetObject(object, filterTmpl) {
 
 // 筛选字段映射成数据库字段名
 function filter2Mysql(type, filter) {
-  console.log(type)
   // 映射过程
   const transform = item => {
-    console.log('进入映射', filter)
-
     for (let key in filter) {
       let value = String.trim(filter[key])
-      console.log(key + ': ' + value)
+      console.log('ddd', key, value)
       if (value && value != null && value != '' && value != undefined) {
         let _key = item[key] || key
         filter[_key] = value
       }
       delete filter[key]
     }
+    console.log('complete', filter)
   }
   switch (type) {
     case filterName.USER:

@@ -26,7 +26,7 @@
              v-if="block.items[getItemIndex(rowIndex, colIndex)] != null">
               <span class="item-name">{{ block.items[getItemIndex(rowIndex, colIndex)].name }}</span>
               <div class="item-content">
-              <info-display-temp @clickBtn="btnFunc(block.items[getItemIndex(rowIndex, colIndex)])" :item="block.items[getItemIndex(rowIndex, colIndex)]"></info-display-temp>
+              <info-display-temp @clickBtn="btnFunc(block.items[getItemIndex(rowIndex, colIndex)])" :item="block.items[getItemIndex(rowIndex, colIndex)]" @selectChange='selectChange'></info-display-temp>
                 <!--{{ block.items[getItemIndex(rowIndex, colIndex)].value }}-->
               </div>
             </el-col>
@@ -40,6 +40,7 @@
 
 <script>
 import InfoDisplayTemp from "../BaseCompent/InfoDisplayTemp";
+import axios from "@/utils/https";
 
 const INPUT = 1;
 const SELECT = 2;
@@ -53,10 +54,106 @@ export default {
     breadCrumbs: Object,
     displayInfo: Array
   },
+  data() {
+    return {
+      selectedAcademy: "",
+      selectedMajor: "",
+      data: []
+    };
+  },
   components: {
     InfoDisplayTemp
   },
+  mounted() {
+    if (this.title == "学生信息查看") {
+      axios
+        .get("/api/baseInfo/academys")
+        .then(res => {
+          this.data = res.data.data;
+          this.selectedAcademy = this.displayInfo[1].items[0].value
+          this.selectedMajor = this.displayInfo[1].items[1].value;
+          this.changeAcademyOptions()
+          this.changeMajorOptions()
+          this.changeClassOptions()
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  },
   methods: {
+    changeAcademyOptions() {
+      let options = this.data.map(a => {
+        return {
+          label: a.academy,
+          value: a.academy
+        }
+      })
+      this.displayInfo[1].items[0].options = options
+    },
+    changeMajorOptions() {
+      let majors = this.nMajor()
+      this.displayInfo[1].items[1].options = majors.map(m => {
+        return {
+          label: m,
+          value: m
+        }
+      })
+    },
+    changeClassOptions() {
+      let classes = this.nClass()
+      this.displayInfo[1].items[2].options = classes.map(c => {
+        return {
+          label: c,
+          value: c
+        }
+      })
+    },
+    nMajor() {
+      let majors = [];
+      for (let i = 0; i < this.data.length; i++) {
+        let academy = this.data[i];
+        if (academy.academy == this.selectedAcademy) {
+          majors = academy.majors.map(m => {
+            return m.major;
+          });
+        }
+      }
+      return majors;
+    },
+    nClass() {
+      let classes = [];
+      for (let i = 0; i < this.data.length; i++) {
+        let academy = this.data[i];
+        let majors = [];
+        if (academy.academy == this.selectedAcademy) {
+          majors = academy.majors;
+          for (let j = 0; j < majors.length; j++) {
+            if (this.selectedMajor == majors[j].major) {
+              classes = majors[j].classes.map(c => {
+                return c.class;
+              });
+            }
+          }
+        }
+      }
+      return classes;
+    },
+    selectChange(value) {
+      if (value.name == '学院') {
+        this.selectedAcademy = value.value
+        this.changeMajorOptions()
+        this.displayInfo[1].items[1].value = this.displayInfo[1].items[1].options[0].value
+        this.displayInfo[1].items[2].value = this.displayInfo[1].items[2].options[0].value
+        this.selectedMajor = this.displayInfo[1].items[1].value
+        this.changeClassOptions()
+      }
+      if (value.name == '专业') {
+        this.selectedMajor = value.value
+        this.changeClassOptions()
+        this.displayInfo[1].items[2].value = this.displayInfo[1].items[2].options[0].value
+      }
+    },
     getRowCount(arr) {
       return Math.ceil(arr.length / 3);
     },

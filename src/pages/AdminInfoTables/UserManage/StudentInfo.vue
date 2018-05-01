@@ -79,6 +79,17 @@ export default {
         INFO.adminCheckInfo.studentAttachInfo.users[0].attachInfo
       );
       console.log(this.displayInfo)
+      
+       axios
+        .get("/api/baseInfo/academys")
+        .then(res => {
+          this.data = res.data.data;
+          this.selectedAcademy = a || this.data[0].academy;
+          this.selectedMajor = m || this.data[0].majors[0].major;
+        })
+        .catch(err => {
+          console.log(err);
+        });
       axios.post('/api/student/student', {
         userId: this.userId
       })

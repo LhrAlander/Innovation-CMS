@@ -28,7 +28,7 @@
               <span class="item-name">{{ block.items[getItemIndex(rowIndex, colIndex)].name }}</span>
 
               <div class="item-content">
-                <el-input disabled v-html="block.items[getItemIndex(rowIndex, colIndex)].value"></el-input>
+                <el-input disabled v-model="block.items[getItemIndex(rowIndex, colIndex)].value"></el-input>
               </div>
             </el-col>
           </el-row>

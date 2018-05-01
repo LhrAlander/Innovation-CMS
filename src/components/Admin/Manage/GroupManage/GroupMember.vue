@@ -56,11 +56,6 @@
           </el-button>
           <el-button
             size="small"
-            class="edit-btn"
-            @click="handleEdit(scope.$index, scope.row)">编辑
-          </el-button>
-          <el-button
-            size="small"
             type="danger"
             @click="handleDelete(scope.$index, scope.row)">删除
           </el-button>
@@ -203,9 +198,6 @@ export default {
     //        异步加载数据
     loadData(filter, pageNum, pageSize) {
       console.log(filter, pageNum, pageSize);
-      if ("teamId" in filter && filter.teamId instanceof Array) {
-        filter.teamId = filter.teamId.pop();
-      }
       axios
         .get(this.url, {
           params: {
@@ -298,7 +290,7 @@ export default {
       this.currentPage = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    //        点击筛选触发的事件
+    // 点击筛选触发的事件
     async enterFilter() {
       if (!("options" in this.filterTmpl.teamId)) {
         let res = await this.$store.dispatch("getSelectors");

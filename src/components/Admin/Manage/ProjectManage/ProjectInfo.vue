@@ -331,7 +331,7 @@ export default {
     },
     //        编辑按钮事件
     handleEdit(index, row) {
-      this.$router.push({ name: "ProjectInfoEdit" });
+      this.$router.push(`/edit/ProjectInfo/${row.projectId}`);
     },
     //        单页大小改变回调事件
     handleSizeChange(val) {
@@ -406,7 +406,6 @@ export default {
           start_year: data.beginYear,
           finish_year: data.deadlineYear
         }
-        console.log(project)
         axios.post('/api/project/add/project', {project})
           .then(res => {
             console.log(res)

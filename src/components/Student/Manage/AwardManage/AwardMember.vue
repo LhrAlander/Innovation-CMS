@@ -76,36 +76,17 @@
 </template>
 <script>
 import axios from "utils/https";
-import ElButton from "../../../../../node_modules/element-ui/packages/button/src/button.vue";
 import FilterBox from "components/Admin/Manage/FilterBox";
-import InfoAdd from "components/Admin/Manage/InfoAdd";
 import utils from "@/utils/utils";
 export default {
-  components: { ElButton, FilterBox, InfoAdd },
+  components: { FilterBox },
   data() {
     return {
       tableData: [],
       valueLabelMap: {
-        awardLevel: [
-          {
-            value: 0,
-            label: "级别0"
-          },
-          {
-            value: 1,
-            label: "级别1"
-          }
-        ],
-        awardCategory: [
-          {
-            value: 0,
-            label: "类别0"
-          },
-          {
-            value: 1,
-            label: "类别1"
-          }
-        ]
+        name: [],
+        awardLevel: [],
+        awardSecondLevel: []
       },
 
       keyFormatMap: {
@@ -121,41 +102,31 @@ export default {
       //        获取表格数据的地址
       url: "/api/st/award/awards",
       filterTmpl: {
-        username: {
-          label: "用户姓名",
-          inputType: 0
-        },
-        awardName: {
+        name: {
           label: "获奖名称",
-          inputType: 0 // 0 代表 input
-        },
-        awardCategory: {
-          label: "获奖类别",
-          inputType: 1
+          inputType: 1 // 0 代表 input
         },
         awardLevel: {
-          label: "获奖级别",
+          label: "获奖等级",
+          inputType: 1 // 0 代表 input
+        },
+        awardSecondLevel: {
+          label: "获奖等级",
           inputType: 1 // 0 代表 input
         },
         projectName: {
           label: "项目名称",
-          inputType: 0
-        },
-        userId: {
-          label: "用户名",
           inputType: 0 // 0 代表 input
-        }
+        },
       },
       filter: {
         //搜索条件
-        username: "", //用户姓名
-        awardName: "", //获奖名称
-        awardCategory: "", // 获奖类别
-        awardLevel: "", // 获奖级别
-        projectName: "", //项目名称
-        userId: "" //用户名
+        name: "", //获奖名称
+        awardLevel: "", //获奖等级
+        awardSecondLevel: "", //获奖级别
+        projectName: "" //项目名称
       },
-      pageSize: 15, //每页大小
+      pageSize: 10, //每页大小
       currentPage: 1, //当前页
       start: 1, //查询的页码
       totalCount: 30, //返回的记录总数
@@ -181,7 +152,7 @@ export default {
           }
         })
         .then(res => {
-          console.log(res)
+          console.log(res);
           this.tableData = [];
           this.tableData = res.data.data;
           this.totalCount = res.data.count;
@@ -227,12 +198,40 @@ export default {
       this.currentPage = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
+    async initSelectors() {
+      const res = await this.$store.dispatch("getAwards");
+      const teams = await this.$store.dispatch("getSelectors");
+      this.valueLabelMap.name = res[0].map(i => {
+        return {
+          label: i,
+          value: i
+        };
+      });
+      this.valueLabelMap.awardLevel = res[2].map(i => {
+        return {
+          label: i.identity_name,
+          value: i.identity_name
+        };
+      });
+      this.valueLabelMap.awardSecondLevel = res[1].map(i => {
+        return {
+          label: i.level_name,
+          value: i.level_name
+        };
+      });
+    },
     //        点击筛选触发的事件
-    enterFilter() {
-      this.showFilterBox = true;
+    async enterFilter() {
+      if (this.valueLabelMap.name.length < 1) {
+        await this.initSelectors();
+        this.showFilterBox = true;
+      } else {
+        this.showFilterBox = true;
+      }
     },
     //        接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {
+      console.log("filter");
       if (filter !== undefined) this.filter = filter;
       this.showFilterBox = false;
       this.loadData(this.filter, this.currentPage, this.pageSize);
@@ -248,19 +247,6 @@ export default {
     quitFilter: function() {
       this.filter = this.resetObject(this.filter, this.filterTmpl);
       this.loadData(this.filter, this.currentPage, this.pageSize);
-    },
-    receiveInfo: function(data) {
-      if (data) {
-        axios.post("", { data: data }, { emulateJson: true }).then(
-          function(res) {
-            this.loadData(this.filter, this.currentPage, this.pageSize);
-          },
-          function() {
-            console.log("failed");
-          }
-        );
-      }
-      this.showInfoAdd = false;
     }
   },
   watch: {

@@ -54,81 +54,78 @@
     </el-dialog>
 </template>
 <script>
-  import ElDialog from "../../../../node_modules/element-ui/packages/dialog/src/component.vue";
-  import ElForm from "../../../../node_modules/element-ui/packages/form/src/form.vue";
-  import ElFormItem from "../../../../node_modules/element-ui/packages/form/src/form-item.vue";
-  import ElCol from "element-ui/packages/col/src/col";
-
-  export default {
-    props: ["dialogVisible","filter","tmpl","valueLabelMap", "keyFormatMap","options"],
-    data() {
-      return {
-        visible: this.dialogVisible,
-        datePickerOptions: {
-          disabledDate(time) {
-            return time.getTime() > Date.now();
-          },
+export default {
+  props: [
+    "dialogVisible",
+    "filter",
+    "tmpl",
+    "valueLabelMap",
+    "keyFormatMap",
+    "options"
+  ],
+  data() {
+    return {
+      visible: this.dialogVisible,
+      datePickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now();
         }
       }
+    };
+  },
+  computed: {},
+  methods: {
+    handleCancel() {
+      this.$emit("sendFilter");
+      this.visible = false;
     },
-    computed: {
+    handleDetermine() {
+      this.$emit("sendFilter", this.filter);
+      this.visible = false;
     },
-    methods: {
-      handleCancel() {
-        this.$emit("sendFilter");
-        this.visible = false;
-      },
-      handleDetermine() {
-        this.$emit("sendFilter", this.filter);
-        this.visible = false;
-      },
-//      isInput: function (type) { // 如果在valueLabelMap中没有type类，则type为input类型
-//        return this.valueLabelMap[type] === undefined;
-//      },
-      placeholderFilter: function(type, label) {
-        var str = '';
-        switch (type) {
-          case 0:
-            str = "请输入";
-            break;
-          case 1:
-            str = "请选择";
-            break;
-          default:
-        }
-        str = str + label;
-        return str;
+    //      isInput: function (type) { // 如果在valueLabelMap中没有type类，则type为input类型
+    //        return this.valueLabelMap[type] === undefined;
+    //      },
+    placeholderFilter: function(type, label) {
+      var str = "";
+      switch (type) {
+        case 0:
+          str = "请输入";
+          break;
+        case 1:
+          str = "请选择";
+          break;
+        default:
       }
-    },
-    components: {
-      ElCol,
-      ElFormItem,
-      ElForm,
-      ElDialog},
-    watch: {
-      dialogVisible(val) {
-        this.visible = val;
-      }
-    },
+      str = str + label;
+      return str;
+    }
+  },
+  watch: {
+    dialogVisible(val) {
+      this.visible = val;
+    }
   }
+};
 </script>
 <style scoped>
-  .col {
-    margin-bottom: 10px;
-  }
-  .filter-input, .filter-select {
-    width: 50%;
-    margin-left: 2%;
-    margin-top: 1%;
-  }
-  .el-dialog {
-  }
-  .footer {
-    display: block;
-  }
+.col {
+  margin-bottom: 10px;
+}
+.filter-input,
+.filter-select {
+  width: 50%;
+  margin-left: 2%;
+  margin-top: 1%;
+}
+.el-dialog {
+}
+.footer {
+  display: block;
+}
 </style>
 <style>
-  .el-dialog {
-    padding-bottom: 40px;
-  }
+.el-dialog {
+  padding-bottom: 40px;
+}
 </style>

@@ -59,10 +59,6 @@
             @click="handleMore(scope.$index, scope.row)">更多</el-button>
           <el-button
             size="small"
-            class="edit-btn"
-            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button
-            size="small"
             type="danger"
             @click="handleDelete(scope.$index, scope.row)">删除</el-button>
         </template>
@@ -214,10 +210,9 @@ export default {
     handleMore(index, row) {},
     //        删除按钮事件
     handleDelete(index, row) {
-      console.log(row)
       axios.post('/api/award/delete/award', {awardId: row.awardId})
         .then(res => {
-          console.log(res)
+          this.loadData(this.filter, this.currentPage, this.pageSize);
         })
         .catch(err => {
           console.log(err)

@@ -67,11 +67,6 @@
     </el-dialog>
 </template>
 <script>
-import ElDialog from "../../../../node_modules/element-ui/packages/dialog/src/component.vue";
-import ElForm from "../../../../node_modules/element-ui/packages/form/src/form.vue";
-import ElFormItem from "../../../../node_modules/element-ui/packages/form/src/form-item.vue";
-import ElCol from "element-ui/packages/col/src/col";
-
 export default {
   props: [
     "dialogVisible",
@@ -94,10 +89,11 @@ export default {
   computed: {},
   methods: {
     handleCancel() {
-      // this.$emit("sendFilter");
+      this.$emit("sendFilter");
       this.visible = false;
     },
     handleDetermine() {
+      console.log('zai filter', this.filter)
       this.$emit("sendFilter", this.filter);
       this.visible = false;
     },
@@ -115,24 +111,18 @@ export default {
       str = str + label;
       return str;
     },
-    handleSelectChange () {
-      console.log('change')
-      this.$emit('inputChange', arguments[0], arguments[1])
+    handleSelectChange() {
+      console.log("change");
+      this.$emit("inputChange", arguments[0], arguments[1]);
     },
     handleClear(res) {
-      console.log('clear')
-      this.$emit('inputClear', res.label)
+      console.log("clear");
+      this.$emit("inputClear", res.label);
     }
-  },
-  components: {
-    ElCol,
-    ElFormItem,
-    ElForm,
-    ElDialog
   },
   watch: {
     dialogVisible(val) {
-      console.log('筛选框可见状态改变',val)
+      console.log("筛选框可见状态改变", val);
       this.visible = val;
     }
   }

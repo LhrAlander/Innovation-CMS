@@ -166,7 +166,7 @@ export default {
         leader: "", //负责人
         leaderId: "" //负责人用户名(学号)
       },
-      pageSize: 15, //每页大小
+      pageSize: 10, //每页大小
       currentPage: 1, //当前页
       start: 1, //查询的页码
       totalCount: 30, //返回的记录总数
@@ -233,7 +233,7 @@ export default {
     },
     //        编辑按钮事件
     handleEdit(index, row) {
-      this.$router.push({ name: "DependentUnitInfoEdit" });
+      this.$router.push(`/edit/depUnitInfo/${row.unitId}`);
     },
     //        单页大小改变回调事件
     handleSizeChange(val) {

@@ -112,6 +112,16 @@ export default {
             value: "不可用",
             label: "未发布"
           }
+        ],
+        category: [
+          {
+            value: "通知",
+            label: "通知"
+          },
+          {
+            value: "公告",
+            label: "公告"
+          }
         ]
       },
 
@@ -129,7 +139,7 @@ export default {
       infoAddTmpl: {
         category: {
           label: "类型",
-          inputType: 0 // 0 代表 input
+          inputType: 1 // 0 代表 input
         },
         title: {
           label: "标题",
@@ -168,7 +178,7 @@ export default {
       filterTmpl: {
         category: {
           label: "类型",
-          inputType: 0 // 0 代表 input
+          inputType: 1 // 0 代表 input
         },
         title: {
           label: "标题",
@@ -205,8 +215,6 @@ export default {
     };
   },
   mounted: function() {
-    utils.filter2Mysql(utils.filterName.NOTIFICATION, this.filter);
-    console.log(this.filter, this.currentPage, this.pageSize);
     this.loadData(this.filter, this.currentPage, this.pageSize);
   },
   methods: {
@@ -277,7 +285,7 @@ export default {
     },
     //        编辑按钮事件
     handleEdit(index, row) {
-      this.$router.push({ name: "NotificationInfoEdit" });
+      this.$router.push(`/edit/notificationInfo/${row.notificationId}`);
     },
     //        单页大小改变回调事件
     handleSizeChange(val) {
@@ -299,7 +307,6 @@ export default {
         this.filter = filter;
       }
       this.showFilterBox = false;
-      utils.filter2Mysql(utils.filterName.NOTIFICATION, this.filter);
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        标签的key格式化器

@@ -51,12 +51,10 @@
             :data='uploadData'
             :auto-upload="false">
             <el-button slot="trigger" size="small" type="primary">选取附件</el-button>
-            <!-- <el-button style="margin-left: 10px;" size="small" type="danger" @click="deleteAll">删除全部</el-button> -->
-            <div slot="tip" class="el-upload__tip">选择完文件后请手动点击按钮上传</div>
+            <div slot="tip" class="el-upload__tip">点击确认创建按钮后自动上传</div>
           </el-upload>
         </el-col>
       </el-row>
-      <!--<el-button type="primary">添加附件</el-button>-->
     </div>
 
   </div>
@@ -193,6 +191,7 @@ export default {
             this.uploadData.fileSystemId = fileSystemId;
             console.log(fileSystemId);
             this.$refs.upload.submit();
+            this.$router.push('/admin/FileAndSystem')
           }
         })
         .catch(err => {

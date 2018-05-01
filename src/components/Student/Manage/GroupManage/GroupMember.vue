@@ -105,26 +105,7 @@ export default {
           ]
         }
       ],
-      valueLabelMap: {
-        groupName: [
-          {
-            value: "group1",
-            label: "团队1"
-          },
-          {
-            value: "group2",
-            label: "团队2"
-          },
-          {
-            value: "group3",
-            label: "团队3"
-          },
-          {
-            value: "group4",
-            label: "团队4"
-          }
-        ]
-      },
+      valueLabelMap: {},
 
       keyFormatMap: {
         // 格式化标签映射表
@@ -137,38 +118,10 @@ export default {
       expandFormatMap: {
         // 格式化额外信息映射表
       },
-      infoAddTmpl: {
-        groupName: {
-          label: "团队名称",
-          inputType: 4 // 0 代表 input
-        },
-        userId: {
-          label: "用户名",
-          inputType: 0 // 0 代表 input
-        },
-        joinTime: {
-          label: "加入时间",
-          inputType: 2
-        }
-      },
-      infoAddRules: {
-        //          groupName: [
-        //            {required: true, message: '请输入团队名称', trigger: 'blur'}
-        //          ],
-        //          leaderName: [
-        //            {required: true, message: '请输入依托单位', trigger: 'blur'}
-        //          ],
-        //          leaderId: [
-        //            {required: true, message: '请输入负责人用户名(学号)', trigger: 'blur'}
-        //          ],
-        //          teacherId: [
-        //            {required: true, message: '请输入指导老师用户名', trigger: 'blur'}
-        //          ],
-      },
       //        获取表格数据的地址
       url: "/api/st/team/users",
       filterTmpl: {
-        groupName: {
+        teamId: {
           label: "团队名称",
           inputType: 4 // 0 代表 input
         },
@@ -183,7 +136,7 @@ export default {
       },
       filter: {
         //搜索条件
-        groupName: "", //项目名称
+        teamId: "", //项目名称
         userId: "", //用户名
         username: "" //用户姓名
       },
@@ -263,9 +216,15 @@ export default {
       this.currentPage = val;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
-    //        点击筛选触发的事件
-    enterFilter() {
-      this.showFilterBox = true;
+    // 点击筛选触发的事件
+    async enterFilter() {
+      if (!("options" in this.filterTmpl.teamId)) {
+        let res = await this.$store.dispatch("getSelectors");
+        this.filterTmpl.teamId.options = res[2];
+        this.showFilterBox = true;
+      } else {
+        this.showFilterBox = true;
+      }
     },
     //        接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {

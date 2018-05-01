@@ -123,12 +123,12 @@ export default {
         ],
         category: [
           {
-            value: 0,
-            label: "类型一"
+            value: "文件",
+            label: "文件"
           },
           {
-            value: 1,
-            label: "类型二"
+            value: "制度",
+            label: "制度"
           }
         ]
       },
@@ -233,8 +233,6 @@ export default {
     };
   },
   mounted: function() {
-    utils.filter2Mysql(utils.filterName.FILE_SYSTEM, this.filter);
-    console.log(this.filter, this.currentPage, this.pageSize);
     this.loadData(this.filter, this.currentPage, this.pageSize);
   },
   methods: {
@@ -246,6 +244,7 @@ export default {
     },
     // 异步加载数据
     loadData(filter, pageNum, pageSize) {
+      console.log(filter)
       axios
         .get(this.url, {
           params: {
@@ -278,7 +277,6 @@ export default {
     },
     handlePublic(index, row) {
       let status = row.status === "可用" ? "不可用" : "可用";
-      console.log(row);
       let fileSystem = {
         file_system_id: row.fileSystemId,
         state: status
@@ -309,7 +307,7 @@ export default {
     },
     //        编辑按钮事件
     handleEdit(index, row) {
-      this.$router.push({ name: "FileInfoEdit" });
+      this.$router.push(`/edit/fileInfo/${row.fileSystemId}`);
     },
     //        单页大小改变回调事件
     handleSizeChange(val) {
@@ -331,7 +329,6 @@ export default {
         this.filter = filter;
       }
       this.showFilterBox = false;
-      utils.filter2Mysql(utils.filterName.FILE_SYSTEM, this.filter);
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        标签的key格式化器

@@ -308,7 +308,16 @@ export default {
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        点击筛选触发的事件
-    enterFilter() {
+    async enterFilter() {
+      if (
+        !(
+          "options" in this.filterTmpl.projectName &&
+          this.filterTmpl.projectName.options.length > 0
+        )
+      ) {
+        let res = await this.$store.dispatch("getSelectors");
+        this.filterTmpl.projectName.options = res[3];
+      }
       this.showFilterBox = true;
     },
     //        接收子组件filterbox传递的筛选条件数据

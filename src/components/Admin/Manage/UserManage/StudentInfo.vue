@@ -222,10 +222,14 @@ export default {
           }
         })
         .then(res => {
-          console.log(res);
           this.tableData = [];
           this.tableData = res.data.data;
           this.totalCount = res.data.count;
+        })
+        .then(res => {
+          this.data = res.data.data;
+          this.selectedAcademy = a || this.data[0].academy;
+          this.selectedMajor = m || this.data[0].majors[0].major;
         })
         .catch(err => {
           console.log(err);
@@ -259,7 +263,7 @@ export default {
     },
     // 编辑按钮事件
     handleEdit(index, row) {
-      this.$router.push("/edit/studentInfo/1");
+      this.$router.push("/edit/studentInfo/" + row.studentId);
     },
     // 单页大小改变回调事件
     handleSizeChange(val) {
