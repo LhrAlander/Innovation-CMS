@@ -35,32 +35,7 @@ export default {
       exists: {
         iconCode: "&#xe631;",
         title: "已有获奖级别",
-        categories: [
-          {
-            label: "一等奖",
-            status: TODLETE
-          },
-          {
-            label: "二等奖",
-            status: TODLETE
-          },
-          {
-            label: "三等奖",
-            status: TODLETE
-          },
-          {
-            label: "金奖",
-            status: TODLETE
-          },
-          {
-            label: "银奖",
-            status: TODLETE
-          },
-          {
-            label: "参与奖",
-            status: TODLETE
-          }
-        ]
+        categories: []
       },
       deleteInfo: {
         iconCode: "&#xe604;",
@@ -108,7 +83,7 @@ export default {
         });
     },
     addOne() {
-      this.$prompt("请输入邮箱", "提示", {
+      this.$prompt("请输入类别", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消"
       })
@@ -236,11 +211,11 @@ export default {
         }
       })
         .then(() => {
-          let message = "添加类别失败";
+          let message = "删除类别失败";
           let type = "error";
           if (success) {
             type = "success";
-            message = "添加成功!";
+            message = "删除成功!";
             delItems.forEach(item => {
               let index = this.exists.categories.indexOf(item);
               console.log(index);

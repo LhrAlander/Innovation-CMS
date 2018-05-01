@@ -102,7 +102,7 @@ export default {
         });
     },
     addOne() {
-      this.$prompt("请输入邮箱", "提示", {
+      this.$prompt("请输入类别", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消"
       })
@@ -230,11 +230,11 @@ export default {
         }
       })
         .then(() => {
-          let message = "添加类别失败";
+          let message = "删除类别失败";
           let type = "error";
           if (success) {
             type = "success";
-            message = "添加成功!";
+            message = "删除成功!";
             delItems.forEach(item => {
               let index = this.exists.categories.indexOf(item);
               console.log(index);
