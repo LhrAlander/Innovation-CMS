@@ -8,7 +8,6 @@
           <span class="title">学院</span>
           <i class="iconfont arrow">&#xe863;</i>
         </div>
-
         <div class="cnt-wrapper">
           <div class="academy-cnt">
             <div class="display-item department-item" v-for="a in this.data" :key='a.academy' :class="{active: a.academy == selectedAcademy}" @click="selectAcademy(a)">
@@ -23,7 +22,6 @@
             <el-button class="add-btn" type="success" size="mini" @click='addAcademy'>添加</el-button>
           </div>
         </div>
-
       </el-col>
       <!--专业展示-->
       <el-col :span="8" class="display-block major">
@@ -31,7 +29,6 @@
           <span class="title">专业</span>
           <i class="iconfont arrow">&#xe863;</i>
         </div>
-
         <div class="cnt-wrapper">
           <div class="major-cnt">
             <div class="display-item department-item" v-for="m in nMajor" :key='m' :class="{active: m == selectedMajor}" @click="selectedMajor = m">
@@ -53,7 +50,6 @@
           <span class="title">班级</span>
           <i class="iconfont arrow">&#xe863;</i>
         </div>
-
         <div class="cnt-wrapper">
           <div class="class-cnt">
             <div class="display-item department-item" v-for="c in nClass" :key='c'>
@@ -70,8 +66,6 @@
       </el-col>
     </el-row>
   </div>
-
-
 </template>
 <script>
 import axios from "@/utils/https";
@@ -85,7 +79,7 @@ export default {
     };
   },
   mounted() {
-    this.initData(), this.changeHeight();
+    this.initData()
   },
   methods: {
     initData(a, m) {
@@ -95,6 +89,10 @@ export default {
           this.data = res.data.data;
           this.selectedAcademy = a || this.data[0].academy;
           this.selectedMajor = m || this.data[0].majors[0].major;
+          this.$nextTick(function () {
+            let wrapper = this.$refs.wrapper
+            this.$emit('changeHeight', wrapper.getBoundingClientRect())
+          })
         })
         .catch(err => {
           console.log(err);

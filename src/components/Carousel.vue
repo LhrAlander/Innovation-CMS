@@ -1,7 +1,13 @@
 <template>
   <el-carousel :interval="5000" arrow="outside" indicatorPosition="none">
-    <el-carousel-item v-for="item in 4" :key="item">
-      <h3>{{ item }}</h3>
+    <el-carousel-item>
+      <img src="/static/img/carousel1.jpg" alt="carousel1">
+    </el-carousel-item>
+    <el-carousel-item>
+      <img src="/static/img/carousel2.jpg" alt="carousel1">
+    </el-carousel-item>
+    <el-carousel-item>
+      <img src="/static/img/carousel3.jpg" alt="carousel1">
     </el-carousel-item>
   </el-carousel>
 </template>
@@ -14,19 +20,9 @@
   .el-carousel {
     width: 100%;
   }
-  .el-carousel__item h3 {
-    color: #475669;
-    font-size: 18px;
-    opacity: 0.75;
-    line-height: 300px;
-    margin: 0;
+  .el-carousel__item img {
+    width: 100%;
+    height: 100%;
   }
 
-  .el-carousel__item:nth-child(2n) {
-    background-color: #99a9bf;
-  }
-
-  .el-carousel__item:nth-child(2n+1) {
-    background-color: #d3dce6;
-  }
 </style>

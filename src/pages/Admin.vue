@@ -2,8 +2,8 @@
   <div class="container">
     <admin-head></admin-head>
     <div class="wrap">
-      <vertical-menu ref="left"></vertical-menu>
-      <AdminContent ref="right"></AdminContent>
+      <vertical-menu ref="left" :hight=height></vertical-menu>
+      <AdminContent ref="right" @changeHeight='changeHeight'></AdminContent>
     </div>
   </div>
 </template>
@@ -18,11 +18,18 @@ export default {
     AdminHead,
     AdminContent
   },
+  data() {
+    return {
+      height: 0
+    }
+  },
   methods: {
-    changeHeight() {
+    changeHeight(value) {
       const left = this.$refs.left
       const right = this.$refs.right
-      console.log(right.getBoundingClientRect)
+      let height = value.height
+      this.height = height
+      left.changeHeight(height)
     }
   }
 };

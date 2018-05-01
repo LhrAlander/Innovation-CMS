@@ -1,5 +1,5 @@
 <template>
-  <div class="container manage-head">
+  <div class="container manage-head" ref="lContainer">
     <div class="head">
       <img src="../../assets/img/logo.png" alt="杭州师范大学logo" class="logo">
       <div class="welcome-info">
@@ -217,6 +217,10 @@
 </template>
 <script>
 export default {
+  props: {
+    height: String
+  },
+
   data() {
     return {
       user: {
@@ -234,6 +238,11 @@ export default {
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
+    },
+    changeHeight(h) {
+      const lContainer = this.$refs.lContainer
+      console.log(lContainer)
+      lContainer.style.height = `${h}px`
     }
   }
 };

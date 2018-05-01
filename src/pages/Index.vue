@@ -23,7 +23,6 @@
           </div>
         </el-col>
       </el-row>
-
       <el-row>
         <el-col :span="24">
           <h2 class="title">团队展示</h2>
