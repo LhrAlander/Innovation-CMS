@@ -95,7 +95,7 @@
         </template>
         <router-link :to="{name: 'GroupInfo'}">
           <el-menu-item index="4-1" class="first">
-            <p class="item-text">团队基本信息管理</p>
+            <p class="item-text">团队信息管理</p>
           </el-menu-item>
         </router-link>
         <router-link :to="{name: 'GroupCategory'}">

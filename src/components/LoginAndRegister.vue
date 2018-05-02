@@ -61,47 +61,44 @@
             <el-form-item label="手机号">
               <el-input v-model="registerForm.tele"></el-input>
             </el-form-item>
-            <el-form-item label="验证码">
-              <el-input v-model="registerForm.verifyCode"></el-input>
-            </el-form-item>
             <el-form-item label="邮箱">
               <el-input v-model="registerForm.email"></el-input>
             </el-form-item>
             <el-form-item label="学院">
-              <el-select v-model="registerForm.institute" placeholder="请选择">
+              <el-select v-model="registerForm.institute" placeholder="请选择" @change="changeAcademy">
                 <el-option
-                  v-for="item in instituteOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  v-for="item in data"
+                  :key="item.academy"
+                  :label="item.academy"
+                  :value="item.academy">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="专业">
-              <el-select v-model="registerForm.major" placeholder="请选择">
+              <el-select v-model="registerForm.major" placeholder="请选择" @change="changeMajor">
                 <el-option
-                  v-for="item in majorOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  v-for="item in nMajor"
+                  :key="item"
+                  :label="item"
+                  :value="item">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="班级">
               <el-select v-model="registerForm.clazz" placeholder="请选择">
                 <el-option
-                  v-for="item in clazzOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  v-for="item in nClass"
+                  :key="item"
+                  :label="item"
+                  :value="item">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="设置密码">
-              <el-input v-model="registerForm.password"></el-input>
+              <el-input type="password" v-model="registerForm.password"></el-input>
             </el-form-item>
             <el-form-item label="确认密码">
-              <el-input v-model="registerForm.re_password"></el-input>
+              <el-input type="password" v-model="registerForm.re_password"></el-input>
             </el-form-item>
           </el-form>
           <el-button type="primary" style="width: 100%; font-size: 15px; margin-bottom: 15px;"
@@ -113,11 +110,15 @@
 </template>
 <script>
 import router from "../router/index";
-import axios from '@/utils/https'
+import axios from "@/utils/https";
 
 export default {
   data() {
     return {
+      data: [],
+      selectedAcademy: "",
+      selectedMajor: "",
+      selectedClass: "",
       activeName: "login",
 
       loginForm: {
@@ -133,64 +134,149 @@ export default {
         name: "",
         gender: "",
         tele: "",
-        verifyCode: "",
         email: "",
         institute: "",
         major: "",
         clazz: "",
         password: "",
         re_password: ""
-      },
-      instituteOptions: [
-        {
-          value: "aaa",
-          label: "啊啊啊学院"
-        }
-      ],
-      majorOptions: [
-        {
-          value: "bbb",
-          label: "不不不专业"
-        }
-      ],
-      clazzOptions: [
-        {
-          value: "ccc",
-          label: "擦擦擦班级"
-        }
-      ]
+      }
     };
   },
   mounted: function() {
-    // 根据路由信息来决定是登录还是注册
     this.activeName = this.$route.name;
-    //        console.log(this.$route)
+    this.initOptions();
   },
   methods: {
+    initOptions() {
+      axios
+        .get("/api/front/index/academys")
+        .then(res => {
+          this.data = res.data.data;
+          this.selectedAcademy = a || this.data[0].academy;
+          this.selectedMajor = m || this.data[0].majors[0].major;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    changeAcademy(v) {
+      this.selectedAcademy = v;
+    },
+    changeMajor(v) {
+      this.selectedMajor = v;
+    },
     handleClick(tab, event) {
-      //          console.log(tab, event)
       router.push({ path: tab.name });
     },
     handleLogin() {
       //TODO
       console.log(this.loginForm);
-      axios.post('/api/login', {user: this.loginForm})
-      // axios.get('/api/user/users')
+      axios
+        .post("/api/login", { user: this.loginForm })
+        // axios.get('/api/user/users')
         .then(res => {
-          console.log(res)
-          this.$store.commit('login', {token: res.data.token, user: res.data.user})
+          console.log(res);
+          this.$store.commit("login", {
+            token: res.data.token,
+            user: res.data.user
+          });
           if (this.loginForm.isRememberPassword) {
-            window.localStorage.setItem('token', res.data.token)
-            window.localStorage.setItem('user', JSON.stringify(res.data.user))
+            window.localStorage.setItem("token", res.data.token);
+            window.localStorage.setItem("user", JSON.stringify(res.data.user));
           }
-          this.$router.push('/')
+          this.$router.push("/");
         })
         .catch(err => {
-          console.log(err)
-        })
+          console.log(err);
+        });
     },
     handleRegister() {
       //TODO
+      for (let k in this.registerForm) {
+        let v = this.registerForm[k];
+        if (k == 'gender') {
+          continue
+        }
+        if (!v || v == undefined ) {
+          this.$message.error("请填写全部信息！");
+          return;
+        }
+      }
+      if (this.registerForm.password != this.registerForm.re_password) {
+        this.$message.error("两次密码填写不一致！");
+        return;
+      }
+      let sex = this.registerForm.gender ? "男" : "女";
+      let i = this.registerForm;
+      let user = {
+        user_id: i.studentId,
+        user_name: i.name,
+        user_pwd: i.password,
+        user_sex: sex,
+        user_mail: i.email,
+        user_phone: i.tele,
+        account_state: "可用",
+        user_identity: "学生"
+      };
+      let student = {
+        user_id: i.studentId,
+        user_name: i.name,
+        student_academy: i.institute,
+        student_major: i.major,
+        student_class: i.clazz
+      };
+      axios
+        .post("/api/front/index/reg", {
+          user,
+          student
+        })
+        .then(res => {
+          console.log(res)
+          if (res.data.code != 200) {
+            this.$message.error(res.data.msg);
+          } else {
+            this.$message({
+            type: "success",
+            message: "注册成功!"
+          });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  },
+  computed: {
+    nMajor() {
+      let majors = [];
+      for (let i = 0; i < this.data.length; i++) {
+        let academy = this.data[i];
+        if (academy.academy == this.selectedAcademy) {
+          majors = academy.majors.map(m => {
+            return m.major;
+          });
+        }
+      }
+      return majors;
+    },
+    nClass() {
+      let classes = [];
+      for (let i = 0; i < this.data.length; i++) {
+        let academy = this.data[i];
+        let majors = [];
+        if (academy.academy == this.selectedAcademy) {
+          majors = academy.majors;
+          for (let j = 0; j < majors.length; j++) {
+            if (this.selectedMajor == majors[j].major) {
+              classes = majors[j].classes.map(c => {
+                return c.class;
+              });
+            }
+          }
+        }
+      }
+      return classes;
     }
   }
 };

@@ -12,7 +12,8 @@
   text-align: center;
   min-width: auto;
   color: #2A3F54;
-  background-color: rgba(255,255,255,.5);
+  padding: 15px 10px;
+  height: auto;
 }
 
 .manage-head .el-submenu .el-menu-item:hover, 
@@ -51,4 +52,20 @@
 
 .header-menu .el-submenu.is-active .el-submenu__title {
   border: none;
+}
+
+.edit-btn:hover,
+.exit-filter:hover,
+.el-button.filter:hover {
+  color: #ecf0f1;
+}
+.edit-btn:hover {
+  background-color: #5cb85c;
+}
+.exit-filter:hover {
+  background-color: #f19500;
+}
+
+.el-button.filter:hover {
+  background-color: #9b59b6;
 }

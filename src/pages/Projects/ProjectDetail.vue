@@ -22,17 +22,9 @@
               最近项目
             </div>
             <div class="right-bg">
-              <div class="item">
+              <div class="item" v-for="p in recentProjects" :key="p.projectId" @click="goDetail(p.projectId)" v-if="p.projectId != projectId">
                 <img src="/static/img/right-icon.png"/>
-                <span>Lorem ipsum dolor sit amet</span>
-              </div>
-              <div class="item">
-                <img src="/static/img/right-icon.png"/>
-                <span>Lorem ipsum dolor sit amet</span>
-              </div>
-              <div class="item">
-                <img src="/static/img/right-icon.png"/>
-                <span>Lorem ipsum dolor sit amet</span>
+                <span>{{p.projectTiltle}}</span>
               </div>
             </div>
           </el-col>
@@ -45,7 +37,7 @@
 <script>
 import MyHeader from "components/MyHeader";
 import MyFooter from "components/MyFooter";
-import axios from '@/utils/https'
+import axios from "@/utils/https";
 
 export default {
   components: {
@@ -55,31 +47,44 @@ export default {
   data() {
     return {
       projectTitle: "",
-      projectIntroduction: '',
+      projectIntroduction: "",
       projectTime: "",
-      url: '/api/front/projects/project',
-      projectId: ''
+      url: "/api/front/projects/project",
+      projectId: "",
+      recentProjects: []
     };
   },
   mounted() {
-    this.projectId = this.$route.params.id
     this.initData();
   },
   methods: {
     initData() {
+      this.projectId = this.$route.params.id;
       axios
         .post(this.url, {
           projectId: this.projectId
         })
         .then(res => {
           console.log(res);
-          this.projectTitle = res.data.projectName
-          this.projectIntroduction = res.data.projectIntroduction
-          this.projectTime = res.data.projectTime
+          this.projectTitle = res.data.projectName;
+          this.projectIntroduction = res.data.projectIntroduction;
+          this.projectTime = res.data.projectTime;
+          return axios.get("/api/front/projects/side");
+        })
+        .then(res => {
+          this.recentProjects = res.data.data;
         })
         .catch(err => {
           console.log(err);
         });
+    },
+    goDetail(id) {
+      this.$router.push(`/projectdetail/${id}`);
+    },
+    watch: {
+      $route() {
+        this.initData();
+      }
     }
   }
 };

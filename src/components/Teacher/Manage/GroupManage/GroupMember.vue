@@ -181,7 +181,7 @@ export default {
       totalCount: 30, //返回的记录总数
       showFilterBox: false, // 是否显示筛选框
       tagEmpty: true //标签是否为空
-    };
+    }
   },
   mounted: function() {
     this.loadData(this.filter, this.currentPage, this.pageSize);
