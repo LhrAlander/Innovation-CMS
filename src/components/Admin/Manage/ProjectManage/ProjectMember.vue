@@ -73,7 +73,7 @@
 import axios from "@/utils/https";
 import FilterBox from "@/components/Admin/Manage/FilterBox";
 import InfoAdd from "@/components/Admin/Manage/InfoAdd";
-import utils from "@/utils/utils"
+import utils from "@/utils/utils";
 export default {
   components: { FilterBox, InfoAdd },
   data() {
@@ -198,47 +198,33 @@ export default {
         joinTime: row.joinTime,
         projectId: row.projectId,
         userId: row.userId,
-        del: false
+        teamId: row.teamId,
+        del: true
       };
       console.log(user);
-      if (new Date() - new Date(row.joinTime) < 24 * 60 * 60 * 1000) {
-        this.$confirm(
-          "该成员在项目时间过短（小于一天），是否删除该成员记录",
-          "提示",
-          {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning"
-          }
-        )
-          .then(() => {
-            console.log("yes", user);
-            user.del = true;
-            axios
-              .post("/api/project/del/project/user", { user })
-              .then(res => {})
-              .catch(err => {});
-          })
-          .catch(() => {
-            axios
-              .post("/api/project/del/project/user", { user })
-              .then(res => {
-                console.log(res);
-              })
-              .catch(err => {
-                console.log(err);
-              });
-          });
-      } else {
-        axios
-          .post("/api/project/del/project/user", { user })
-          .then(res => {
-            console.log(res);
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      }
+      this.$confirm(
+        "是否删除该成员记录",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }
+      )
+        .then(() => {
+          console.log("yes", user);
+          user.del = true;
+          axios
+            .post("/api/project/del/project/user", { user })
+            .then(res => {
+              this.loadData(this.filter, this.currentPage, this.pageSize);
+            })
+            .catch(err => {});
+        })
+        .catch(() => {
+          console.log("catch");
+          this.$message.info("取消删除");
+        });
     },
     //        编辑按钮事件
     handleEdit(index, row) {

@@ -64,13 +64,12 @@
 </template>
 <script>
 import axios from "utils/https";
-import ElButton from "../../../../../node_modules/element-ui/packages/button/src/button.vue";
 import FilterBox from "components/Admin/Manage/FilterBox";
 import InfoAdd from "components/Admin/Manage/InfoAdd";
 import utils from '@/utils/utils'
 
 export default {
-  components: { ElButton, FilterBox, InfoAdd },
+  components: { FilterBox, InfoAdd },
   data() {
     return {
       userId: '',
@@ -191,16 +190,33 @@ export default {
     },
     //        删除按钮事件
     handleDelete(index, row) {
-      var array = [];
-      array.push(row.id);
-      axios.post("", { array: array }, { emulateJson: true }).then(
-        function(res) {
-          this.loadData(this.filter, this.currentPage, this.pageSize);
-        },
-        function() {
-          console.log("failed");
-        }
-      );
+      console.log(row);
+      let user = {
+        team_id: row.teamId,
+        add_time: row.joinTime,
+        user_id: row.userId,
+        del: true
+      };
+        this.$confirm(
+          "是否删除该成员记录",
+          "提示",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          }
+        )
+          .then(() => {
+            console.log("yes", user);
+            user.del = true;
+            axios
+              .post("/api/team/del/team/user", { user })
+              .then(res => {})
+              .catch(err => {});
+          })
+          .catch(() => {
+            this.$message.info('取消删除')
+          });
     },
     //        编辑按钮事件
     handleEdit(index, row) {

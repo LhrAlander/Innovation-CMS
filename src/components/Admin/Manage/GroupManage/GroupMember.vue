@@ -235,11 +235,10 @@ export default {
         team_id: row.teamId,
         add_time: row.joinTime,
         user_id: row.userId,
-        del: false
+        del: true
       };
-      if (new Date() - new Date(row.joinTime) < 24 * 60 * 60 * 1000) {
         this.$confirm(
-          "该成员在团队时间过短（小于一天），是否删除该成员记录",
+          "是否删除该成员记录",
           "提示",
           {
             confirmButtonText: "确定",
@@ -256,25 +255,8 @@ export default {
               .catch(err => {});
           })
           .catch(() => {
-            axios
-              .post("/api/team/del/team/user", { user })
-              .then(res => {
-                console.log(res);
-              })
-              .catch(err => {
-                console.log(err);
-              });
+            this.$message.info('取消删除')
           });
-      } else {
-        axios
-          .post("/api/team/del/team/user", { user })
-          .then(res => {
-            console.log(res);
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      }
     },
     //        编辑按钮事件
     handleEdit(index, row) {

@@ -42,16 +42,6 @@
         <template scope="scope">
           <el-button
             size="small"
-            type="primary"
-            @click="handleMore(scope.$index, scope.row)">更多
-          </el-button>
-          <el-button
-            size="small"
-            class="edit-btn"
-            @click="handleEdit(scope.$index, scope.row)">编辑
-          </el-button>
-          <el-button
-            size="small"
             type="danger"
             @click="handleDelete(scope.$index, scope.row)">删除
           </el-button>
@@ -226,16 +216,34 @@ export default {
     },
     //        删除按钮事件
     handleDelete(index, row) {
-      var array = [];
-      array.push(row.id);
-      axios.post("", { array: array }, { emulateJson: true }).then(
-        function(res) {
-          this.loadData(this.filter, this.currentPage, this.pageSize);
-        },
-        function() {
-          console.log("failed");
-        }
-      );
+      console.log('row', row);
+      let user = {
+        team_id: row.teamId,
+        add_time: row.joinTime,
+        user_id: row.userId,
+        del: true
+      };
+        this.$confirm(
+          "是否删除该成员记录",
+          "提示",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          }
+        )
+          .then(() => {
+            user.del = true;
+            axios
+              .post("/api/team/del/team/user", { user })
+              .then(res => {
+                this.loadData(this.filter, this.currentPage, this.pageSize);
+              })
+              .catch(err => {});
+          })
+          .catch(() => {
+            this.$message.info('取消删除')
+          });
     },
     //        编辑按钮事件
     handleEdit(index, row) {

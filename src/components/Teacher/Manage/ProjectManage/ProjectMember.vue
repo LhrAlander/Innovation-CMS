@@ -249,17 +249,38 @@ export default {
       this.$router.push("/check/studentInfo/1");
     },
     //        删除按钮事件
-    handleDelete(index, row) {
-      var array = [];
-      array.push(row.id);
-      axios.post("", { array: array }, { emulateJson: true }).then(
-        function(res) {
-          this.loadData(this.filter, this.currentPage, this.pageSize);
-        },
-        function() {
-          console.log("failed");
-        }
-      );
+     handleDelete(index, row) {
+      let user = {
+        joinTime: row.joinTime,
+        projectId: row.projectId,
+        userId: row.userId,
+        teamId: row.teamId,
+        del: true
+      };
+      console.log(user);
+        this.$confirm(
+          "是否删除该成员记录",
+          "提示",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          }
+        )
+          .then(() => {
+            console.log("yes", user);
+            user.del = true;
+            axios
+              .post("/api/project/del/project/user", { user })
+              .then(res => {
+                this.loadData(this.filter, this.currentPage, this.pageSize);
+              })
+              .catch(err => {});
+          })
+          .catch(() => {
+            console.log('catch')
+            this.$message.info('取消删除')
+          });
     },
     //        编辑按钮事件
     handleEdit(index, row) {
