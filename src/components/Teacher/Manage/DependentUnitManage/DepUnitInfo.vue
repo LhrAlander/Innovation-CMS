@@ -5,7 +5,6 @@
       <span v-if="!tagEmpty" style="font-weight: bold; font-size: .9rem;">筛选条件</span>
       <el-tag v-for="(value,key) in filter" :key="value" v-if="value !== ''" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value,valueLabelMap)}})</el-tag>
     </div>
-    <el-button class="addInfo" type="success" size="large" @click="enterAdd">添加信息</el-button>
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
     <el-button class="exit-filter" size="large" @click="quitFilter">退出筛选</el-button>
     <!--筛选框-->
@@ -211,7 +210,7 @@ export default {
     },
     // 编辑按钮事件
     handleEdit(index, row) {
-      this.$router.push({ name: "DependentUnitInfoEdit" });
+      this.$router.push(`/edit/depUnitInfo/${row.unitId}`);
     },
     // 单页大小改变回调事件
     handleSizeChange(val) {
