@@ -57,8 +57,3 @@ p {
   background: #ffeeaa52 !important;
 }
 
-.container {
-  height: auto !important;
-  padding-bottom: 20px;
-  min-height: 100% !important;
-}
