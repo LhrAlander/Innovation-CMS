@@ -332,7 +332,7 @@ export default {
         axios
           .post("/api/team/add/team", { team })
           .then(res => {
-            console.log(res);
+            this.loadData(this.filter, this.currentPage, this.pageSize);
           })
           .catch(err => {
             console.log(err);

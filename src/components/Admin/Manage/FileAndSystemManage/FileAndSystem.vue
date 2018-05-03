@@ -294,16 +294,23 @@ export default {
     },
     //        删除按钮事件
     handleDelete(index, row) {
-      var array = [];
-      array.push(row.id);
-      axios.post("", { array: array }, { emulateJson: true }).then(
-        function(res) {
-          this.loadData(this.filter, this.currentPage, this.pageSize);
-        },
-        function() {
-          console.log("failed");
-        }
-      );
+      let fileSystem = {
+        id: row.fileSystemId,
+      };
+      axios.post("/api/fileSystem/del/fileSystem", { fileSystem })
+        .then(res => {
+          console.log(res);
+          if (res.data.code == 200) {
+            this.$message({
+              type: "success",
+              message: "删除成功"
+            });
+            this.loadData(this.filter, this.currentPage, this.pageSize);
+          }
+        })
+        .catch(err => {
+          this.$message.error('删除失败，请与管理员联系')
+        });
     },
     //        编辑按钮事件
     handleEdit(index, row) {

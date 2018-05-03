@@ -6,8 +6,8 @@
       :breadCrumbs="breadCrumbs"
       :displayInfo="displayInfo">
       <template slot="header-btn-wrapper">
-        <el-button type="primary"  class="modify-mode-btn" @click="goToEditMode">编辑用户信息</el-button>
-        <el-button type="danger"  class="modify-mode-btn" @click="delUser">删除该用户</el-button>
+        <el-button type="primary"  class="modify-mode-btn"  v-if="userType == '管理员' || loginUserId == userId" @click="goToEditMode">编辑用户信息</el-button>
+        <el-button type="danger"  class="modify-mode-btn" @click="delUser" v-if="userType == '管理员'">删除该用户</el-button>
       </template>
     </check-user-info>
 
@@ -42,6 +42,7 @@ export default {
   },
   data() {
     return {
+      userType: '',
       title: "用户基本信息查看",
       breadCrumbs: {
         iconCode: "&#xe6a0;",
@@ -50,11 +51,14 @@ export default {
       },
       displayInfo: [],
       checkMode: true,
-      userId: ''
+      userId: '',
+      loginUserId: ''
     };
   },
   mounted() {
     this.flushRoute();
+    this.userType = this.$store.state.user.type || JSON.parse(window.localStorage.getItem('user')).type
+      this.loginUserId = this.$store.state.user.userId || JSON.parse(window.localStorage.getItem('user')).userId
   },
   watch: {
     $route() {

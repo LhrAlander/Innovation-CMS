@@ -40,11 +40,11 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
     switch (error.response.status) {
       case 401:
         Message.error({
-          message: '无权限访问'
+          message: error.response.data || '无权限访问'
         })
         store.commit('cancelAuth')
         store.commit('logout')
-        router.push({ path: '/' })
+        router.push({ path: '/login' })
         break
       case 500: 
       Message.error({

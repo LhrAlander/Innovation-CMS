@@ -54,11 +54,7 @@
           <el-button
             size="small"
             class="edit-btn"
-            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button
-            size="small"
-            type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            @click="handleEdit(scope.$index, scope.row)" v-if="userId == scope.row.leaderId">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -84,6 +80,7 @@ export default {
   components: { FilterBox, InfoAdd },
   data() {
     return {
+      userId: '',
       tableData: [],
       valueLabelMap: {
         unitId: [],
@@ -152,6 +149,7 @@ export default {
     };
   },
   mounted: function() {
+     this.userId = this.$store.state.user.userId || JSON.parse(window.localStorage.getItem('user')).userId
     this.loadData(this.filter, this.currentPage, this.pageSize);
   },
   methods: {

@@ -256,16 +256,23 @@ export default {
     },
     //        删除按钮事件
     handleDelete(index, row) {
-      var array = [];
-      array.push(row.id);
-      axios.post("", { array: array }, { emulateJson: true }).then(
-        function(res) {
-          this.loadData(this.filter, this.currentPage, this.pageSize);
-        },
-        function() {
-          console.log("failed");
-        }
-      );
+      let recruitment = {
+        id: row.id
+      };
+      axios
+        .post("/api/recruitment/del/recruitment", { recruitment })
+        .then(res => {
+          if (res.data.code == 200) {
+            this.$message({
+              type: "success",
+              message: "删除成功"
+            });
+            this.loadData(this.filter, this.currentPage, this.pageSize);
+          }
+        })
+        .catch(err => {
+          this.$message.error('删除失败，请与管理员联系')
+        });
     },
     //        编辑按钮事件
     handleEdit(index, row) {
@@ -290,7 +297,7 @@ export default {
       if (filter !== undefined) {
         this.filter = filter;
       }
-      console.log(this.filter)
+      console.log(this.filter);
       this.showFilterBox = false;
       this.loadData(this.filter, this.currentPage, this.pageSize);
     },
@@ -308,7 +315,7 @@ export default {
     },
     enterAdd: function() {
       //        this.showInfoAdd = true;
-      this.$router.push('/add/recruitmentInfo');
+      this.$router.push("/add/recruitmentInfo");
     },
     receiveInfo: function(data) {
       if (data) {

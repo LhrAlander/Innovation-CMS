@@ -60,7 +60,7 @@ export default {
       },
       addInfo: {
         iconCode: "&#xe607;",
-        title: "添加团队类别"
+        title: "添加项目级别"
       },
       addCategories: []
     };
@@ -100,7 +100,7 @@ export default {
         });
     },
     addOne() {
-      this.$prompt("请输入类别", "提示", {
+      this.$prompt("请输入项目级别", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消"
       })
@@ -122,7 +122,7 @@ export default {
       });
       this.addCategories = effective;
 
-      this.$confirm("是否确认添加分类?", "提示", {
+      this.$confirm("是否确认添加项目级别?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         closeOnClickModal: false,

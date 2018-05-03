@@ -90,19 +90,18 @@
 import axios from "@/utils/https";
 import FilterBox from "@/components/Admin/Manage/FilterBox";
 import InfoAdd from "@/components/Admin/Manage/InfoAdd";
-import utils from "@/utils/utils"
+import utils from "@/utils/utils";
 
 export default {
   components: { FilterBox, InfoAdd },
   data() {
     var cascaderVal = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请选择依托单位'))
+      if (value === "") {
+        callback(new Error("请选择依托单位"));
+      } else {
+        callback();
       }
-      else {
-        callback()
-      }
-    }
+    };
     return {
       tableData: [],
       valueLabelMap: {
@@ -171,7 +170,7 @@ export default {
           inputType: 0
         }
       },
-      
+
       infoAddRules: {
         projectName: [
           { required: true, message: "请输入项目名称", trigger: "blur" }
@@ -282,8 +281,8 @@ export default {
     },
     //        异步加载数据
     loadData(filter, pageNum, pageSize) {
-      if ('team_id' in filter) {
-        filter.team_id = filter.team_id.split(',')[1]
+      if ("team_id" in filter) {
+        filter.team_id = filter.team_id.split(",")[1];
       }
       axios
         .get(this.url, {
@@ -318,16 +317,20 @@ export default {
     },
     //        删除按钮事件
     handleDelete(index, row) {
-     let state = row.status == '可用' ? '不可用' : '可用'
-     console.log(row)
-     axios.post('/api/project/delete/project', {projectId: row.projectId, project_status: state})
-      .then(res => {
-        console.log(res)
-        row.status = state
-      })
-      .catch(err => {
-        console.log(err)
-      })
+      let state = row.status == "可用" ? "不可用" : "可用";
+      console.log(row);
+      axios
+        .post("/api/project/delete/project", {
+          projectId: row.projectId,
+          project_status: state
+        })
+        .then(res => {
+          console.log(res);
+          row.status = state;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     //        编辑按钮事件
     handleEdit(index, row) {
@@ -346,7 +349,7 @@ export default {
     // 点击筛选触发的事件
     async enterFilter() {
       if (this.valueLabelMap.projectCategory.length < 1) {
-       let res = await this.$store.dispatch("getSelectors");
+        let res = await this.$store.dispatch("getSelectors");
         console.log(res);
         this.valueLabelMap.projectCategory = res[0];
         this.valueLabelMap.projectLevel = res[1];
@@ -381,21 +384,20 @@ export default {
     },
     enterAdd: async function() {
       if (this.valueLabelMap.projectCategory.length < 1) {
-       let res = await this.$store.dispatch("getSelectors");
+        let res = await this.$store.dispatch("getSelectors");
         console.log(res);
         this.valueLabelMap.projectCategory = res[0];
         this.valueLabelMap.projectLevel = res[1];
         this.filterTmpl.dependentUnit.options = res[2];
         this.infoAddTmpl.dependentUnit.options = res[2];
-      } 
+      }
       this.showInfoAdd = true;
     },
     receiveInfo: function(data) {
       if (data) {
-        console.log(data)
         const project = {
           project_id: data.projectId,
-          project_status: '可用',
+          project_status: "可用",
           project_name: data.projectName,
           project_identity: data.projectCategory,
           project_level: data.projectLevel,
@@ -405,14 +407,15 @@ export default {
           register_year: data.applyYear,
           start_year: data.beginYear,
           finish_year: data.deadlineYear
-        }
-        axios.post('/api/project/add/project', {project})
+        };
+        axios
+          .post("/api/project/add/project", { project })
           .then(res => {
-            console.log(res)
+            this.loadData(this.filter, this.currentPage, this.pageSize);
           })
           .catch(err => {
-            console.log(err)
-          })
+            console.log(err);
+          });
       }
       this.showInfoAdd = false;
     }

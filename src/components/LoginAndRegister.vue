@@ -170,11 +170,8 @@ export default {
       router.push({ path: tab.name });
     },
     handleLogin() {
-      //TODO
-      console.log(this.loginForm);
       axios
         .post("/api/login", { user: this.loginForm })
-        // axios.get('/api/user/users')
         .then(res => {
           console.log(res);
           this.$store.commit("login", {
@@ -185,7 +182,7 @@ export default {
             window.localStorage.setItem("token", res.data.token);
             window.localStorage.setItem("user", JSON.stringify(res.data.user));
           }
-          this.$router.push("/");
+          this.$router.push('/')
         })
         .catch(err => {
           console.log(err);
@@ -195,10 +192,10 @@ export default {
       //TODO
       for (let k in this.registerForm) {
         let v = this.registerForm[k];
-        if (k == 'gender') {
-          continue
+        if (k == "gender") {
+          continue;
         }
-        if (!v || v == undefined ) {
+        if (!v || v == undefined) {
           this.$message.error("请填写全部信息！");
           return;
         }
@@ -232,14 +229,14 @@ export default {
           student
         })
         .then(res => {
-          console.log(res)
+          console.log(res);
           if (res.data.code != 200) {
             this.$message.error(res.data.msg);
           } else {
             this.$message({
-            type: "success",
-            message: "注册成功!"
-          });
+              type: "success",
+              message: "注册成功!"
+            });
           }
         })
         .catch(err => {

@@ -73,7 +73,8 @@ export default {
     },
   },
   mounted() {
-    if (!this.$store.isLogin) {
+    console.log(this.$store.state.isLogin)
+    if (!this.$store.state.isLogin) {
       this.$store.commit("clearStateLogin");
       const token = window.localStorage.getItem("token");
       const user = JSON.parse(window.localStorage.getItem("user"));

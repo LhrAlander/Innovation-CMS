@@ -56,7 +56,7 @@ export default {
       },
       addInfo: {
         iconCode: "&#xe607;",
-        title: "添加团队类别"
+        title: "添加依托单位类别"
       },
       addCategories: []
     };

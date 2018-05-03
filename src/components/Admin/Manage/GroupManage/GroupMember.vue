@@ -251,7 +251,9 @@ export default {
             user.del = true;
             axios
               .post("/api/team/del/team/user", { user })
-              .then(res => {})
+              .then(res => {
+                this.loadData(this.filter, this.currentPage, this.pageSize);
+              })
               .catch(err => {});
           })
           .catch(() => {
@@ -341,6 +343,7 @@ export default {
           .post("/api/team/add/team/user", { user })
           .then(res => {
             console.log(res);
+            this.loadData(this.filter, this.currentPage, this.pageSize);
           })
           .catch(err => {
             console.log(err);

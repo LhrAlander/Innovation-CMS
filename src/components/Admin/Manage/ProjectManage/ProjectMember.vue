@@ -317,7 +317,7 @@ export default {
         axios
           .post("/api/project/add/project/user", { user })
           .then(res => {
-            console.log(res);
+            this.loadData(this.filter, this.currentPage, this.pageSize);
           })
           .catch(err => {
             console.log(err);

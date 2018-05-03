@@ -193,7 +193,7 @@ export default {
           academy
         })
         .then(res => {
-          console.log(res);
+          this.initData();
         })
         .catch(err => {
           console.log(err);

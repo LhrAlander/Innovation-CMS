@@ -57,12 +57,7 @@
           <el-button
             size="small"
             class="edit-btn"
-            @click="handleEdit(scope.$index, scope.row)">编辑
-          </el-button>
-          <el-button
-            size="small"
-            type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除
+            @click="handleEdit(scope.$index, scope.row)" v-if="userId == scope.row.studentName">编辑
           </el-button>
         </template>
       </el-table-column>
@@ -90,6 +85,7 @@ export default {
   components: { FilterBox, InfoAdd },
   data() {
     return {
+      userId: '',
       tableData: [],
       valueLabelMap: {
         projectCategory: [],
@@ -254,6 +250,7 @@ export default {
     };
   },
   mounted: function() {
+    this.userId = this.$store.state.user.userId || JSON.parse(window.localStorage.getItem('user')).userId
     utils.filter2Mysql(utils.filterName.PROJECT, this.filter);
     this.loadData(this.filter, this.currentPage, this.pageSize);
   },
@@ -327,7 +324,7 @@ export default {
     },
     //        编辑按钮事件
     handleEdit(index, row) {
-      this.$router.push({ name: "ProjectInfoEdit" });
+      this.$router.push(`/edit/projectinfo/${row.projectId}`);
     },
     //        单页大小改变回调事件
     handleSizeChange(val) {

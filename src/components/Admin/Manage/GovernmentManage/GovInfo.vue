@@ -96,7 +96,7 @@
 import axios from "@/utils/https";
 import FilterBox from "@/components/Admin/Manage/FilterBox";
 import InfoAdd from "@/components/Admin/Manage/InfoAdd";
-import utils from "@/utils/utils"
+import utils from "@/utils/utils";
 
 export default {
   components: { FilterBox, InfoAdd },
@@ -221,35 +221,44 @@ export default {
       this.$router.push(`/check/policyinfo/${policyId}`);
     },
     handlePublic(index, row) {
-      console.log(row)
-      let status = row.status === '可用' ? '不可用' : '可用'
+      console.log(row);
+      let status = row.status === "可用" ? "不可用" : "可用";
       let policy = {
         policy_id: row.policyId,
         state: status
-      }
-      axios.post('/api/policy/change/policy', {policy})
+      };
+      axios
+        .post("/api/policy/change/policy", { policy })
         .then(res => {
-          console.log(res)
+          console.log(res);
           if (res.data.code == 200) {
-            row.status = status
+            row.status = status;
           }
         })
         .catch(err => {
-          console.log(err)
-        })
+          console.log(err);
+        });
     },
     //        删除按钮事件
     handleDelete(index, row) {
-      var array = [];
-      array.push(row.id);
-      axios.post("", { array: array }, { emulateJson: true }).then(
-        function(res) {
-          this.loadData(this.filter, this.currentPage, this.pageSize);
-        },
-        function() {
-          console.log("failed");
-        }
-      );
+      let policy = {
+        policy_id: row.policyId
+      };
+      axios
+        .post("/api/policy/del/policy", { policy })
+        .then(res => {
+          console.log(res);
+          if (res.data.code == 200) {
+            this.$message({
+              type: "success",
+              message: "删除成功"
+            });
+            this.loadData(this.filter, this.currentPage, this.pageSize);
+          }
+        })
+        .catch(err => {
+          this.$message.error('删除失败，请与管理员联系')
+        });
     },
     // 编辑按钮事件
     handleEdit(index, row) {

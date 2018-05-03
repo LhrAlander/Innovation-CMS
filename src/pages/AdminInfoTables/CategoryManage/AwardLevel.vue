@@ -43,7 +43,7 @@ export default {
       },
       addInfo: {
         iconCode: "&#xe607;",
-        title: "添加团队类别"
+        title: "添加获奖级别"
       },
       addCategories: []
     };
@@ -83,7 +83,7 @@ export default {
         });
     },
     addOne() {
-      this.$prompt("请输入类别", "提示", {
+      this.$prompt("请输入获奖级别", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消"
       })

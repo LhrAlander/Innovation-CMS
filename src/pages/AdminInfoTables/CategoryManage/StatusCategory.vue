@@ -53,7 +53,7 @@ export default {
       },
       addInfo: {
         iconCode: "&#xe607;",
-        title: "添加学院"
+        title: "添加状态"
       },
       addCategories: []
     };

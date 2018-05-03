@@ -4,7 +4,7 @@
       <img src="../assets/img/logoTitle.png" alt="">
     </el-col>
     <el-col :span="18" class="content">
-      <div class="cnt-wrapper">
+      <div class="cnt-wrapper" @click="goDetail">
         <h5 class="title">{{team.teamName}}</h5>
         <p class="introduce" v-html="htmlStr"></p>
         <!--<p class="meta"><i class="iconfont calendar">&#xe6eb;</i>2017/10/17</p>-->
@@ -17,6 +17,11 @@
 export default {
   props: {
     team: Object
+  },
+  methods: {
+    goDetail() {
+      this.$router.push(`/teamdetail/${this.team.teamId}`)
+    }
   },
   computed: {
     htmlStr () {
@@ -52,6 +57,7 @@ img {
 .cnt-wrapper {
   height: 100%;
   border-bottom: 1px solid #000;
+  cursor: pointer;
 }
 
 h5.title {
