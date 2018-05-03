@@ -340,6 +340,12 @@ export default {
           .post("/api/award/add/user", { award })
           .then(res => {
             console.log(res);
+            if (res.data.code == 500) {
+              this.$message.error('没有该获奖信息')
+            }
+            else {
+              this.loadData(this.filter, this.currentPage, this.pageSize);
+            }
           })
           .catch(err => {
             console.log(err);
