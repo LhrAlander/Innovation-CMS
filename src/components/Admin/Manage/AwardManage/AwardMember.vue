@@ -113,7 +113,7 @@ export default {
           inputType: 1 // 0 代表 input
         },
         awardLevel: {
-          label: "获奖等级",
+          label: "获奖级别",
           inputType: 1 // 0 代表 input
         },
         awardSecondLevel: {
@@ -152,7 +152,7 @@ export default {
           inputType: 1 // 0 代表 input
         },
         awardLevel: {
-          label: "获奖等级",
+          label: "获奖级别",
           inputType: 1 // 0 代表 input
         },
         awardSecondLevel: {
