@@ -24,7 +24,7 @@
             <div class="right-bg">
               <div class="item" v-for="p in recentProjects" :key="p.projectId" @click="goDetail(p.projectId)" v-if="p.projectId != projectId">
                 <img src="/static/img/right-icon.png"/>
-                <span>{{p.projectTiltle}}</span>
+                <span>{{p.projectName}}</span>
               </div>
             </div>
           </el-col>
@@ -60,6 +60,7 @@ export default {
   methods: {
     initData() {
       this.projectId = this.$route.params.id;
+      console.log("init", this.projectId);
       axios
         .post(this.url, {
           projectId: this.projectId
@@ -80,11 +81,11 @@ export default {
     },
     goDetail(id) {
       this.$router.push(`/projectdetail/${id}`);
-    },
-    watch: {
-      $route() {
-        this.initData();
-      }
+    }
+  },
+  watch: {
+    $route() {
+      this.initData();
     }
   }
 };
@@ -145,6 +146,7 @@ export default {
 }
 .item {
   display: flex;
+  cursor: pointer;
   align-items: center;
   height: 30px;
   padding: 0 0 10px 20px;
