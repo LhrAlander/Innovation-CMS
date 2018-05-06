@@ -54,6 +54,7 @@ export default {
         case '学生':
           router='/student'
           break;
+        case'企业':
         case '教师':
           router='/teacher'
           break;
