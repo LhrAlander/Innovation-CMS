@@ -211,6 +211,7 @@ const changeCompanyInfo = ({ commit, state }, payload) => {
   delete info.companyAddress
   Promise.all([axios.post('/api/user/changeUser', { user: info }), axios.post('/api/company/change/company', { company })])
     .then(res => {
+      console.log(res)
       if (res.every(item => {
         return item.status == 200 && item.data.code == 200
       })) {

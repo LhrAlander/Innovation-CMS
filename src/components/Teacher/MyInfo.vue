@@ -33,14 +33,17 @@
       <el-col :span="4" :offset="5">
         <div class="detail-info-wrapper">
           <span class="info-item">性<span class="fill-text">填充</span>别：{{info.user_sex}}</span>
-          <span class="info-item">学<span class="fill-text">填充</span>历：{{info.teacher_degree}}</span>
-          <span class="info-item">学<span class="fill-text">填充</span>位：{{info.teacher_bachelor}}</span>
+          <span class="info-item" v-if="type == '教师'">学<span class="fill-text">填充</span>历：{{info.teacher_degree}}</span>
+          <span class="info-item" v-if="type == '教师'">学<span class="fill-text">填充</span>位：{{info.teacher_bachelor}}</span>
+          <span class="info-item" v-if="type == '企业'">企业电话：{{info.company_phone}}</span>
+          <span class="info-item" v-if="type == '企业'">负责人员：{{info.company_principal}}</span>
         </div>
       </el-col>
 
-      <el-col :span="5" :offset="3">
+      <el-col :span="10" :offset="3">
         <div class="detail-info-wrapper">
-          <span class="info-item">专<span class="fill-text">填充</span>业：{{info.teacher_major}}</span>
+          <span class="info-item" v-if="type == '教师'">专<span class="fill-text">填充</span>业：{{info.teacher_major}}</span>
+          <span class="info-item" v-if="type == '企业'">企业地址：{{info.company_address}}</span>
           <span class="info-item">用户状态：{{info.account_state}}</span>
         </div>
       </el-col>
@@ -53,10 +56,14 @@ import axios from "utils/https";
 export default {
   data() {
     return {
-      info: {}
+      info: {},
+      type: ''
     };
   },
   mounted() {
+    let user =  JSON.parse(window.localStorage.getItem('user')) || this.$store.state.user
+    console.log('u', user)
+    this.type = user.type
     axios
       .post("/api/th/baseInfo/myInfo")
       .then(res => {

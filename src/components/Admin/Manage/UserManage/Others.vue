@@ -85,7 +85,7 @@
 import axios from "@/utils/https";
 import FilterBox from "components/Admin/Manage/FilterBox";
 import InfoAdd from "components/Admin/Manage/InfoAdd";
-import utils from '@/utils/utils'
+import utils from "@/utils/utils";
 export default {
   components: { FilterBox, InfoAdd },
   data() {
@@ -293,7 +293,7 @@ export default {
         axios
           .post("/api/company/add/company", { user })
           .then(res => {
-            console.log(res);
+            this.loadData(this.filter, this.currentPage, this.pageSize);
           })
           .catch(err => {
             console.log(err);

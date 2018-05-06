@@ -87,8 +87,8 @@ export default {
                     label: "教师"
                   },
                   {
-                    value: "管理员",
-                    label: "管理员"
+                    value: "企业",
+                    label: "企业"
                   }
                 ],
                 span: 1
@@ -117,140 +117,27 @@ export default {
               {
                 key: 'teacherBachelor',
                 name: '学历',
-                value: '本科',
-                type: SELECT,
-                options: [
-                  {
-                    value: "本科",
-                    label: "本科"
-                  },
-                  {
-                    value: "硕士",
-                    label: "硕士"
-                  },
-                  {
-                    value: "博士",
-                    label: "博士"
-                  }
-                ],
+                value: '',
+                type: INPUT,
                 span: 1
               },
               {
                 key: 'teacherDegree',
                 name: '学位',
-                value: 'A',
-                type: SELECT,
-                options: [
-                  {
-                    value: "A",
-                    label: "A"
-                  },
-                  {
-                    value: "B",
-                    label: "B"
-                  },
-                  {
-                    value: "C",
-                    label: "C"
-                  }
-                ],
+                value: '',
+                type: INPUT,
                 span: 1
               },
               {
                 key: 'teacherMajor',
                 name: '专业',
-                value: '专业1',
-                type: SELECT,
-                options: [
-                  {
-                    value: "专业1",
-                    label: "专业1"
-                  },
-                  {
-                    value: "专业2",
-                    label: "专业2"
-                  },
-                  {
-                    value: "专业3",
-                    label: "专业3"
-                  }
-                ],
+                value: '',
+                type: INPUT,
                 span: 1
               }
             ]
           }
-        },
-        {
-          attachInfo: {
-            infoTitle: "教师附加信息",
-            iconCode: '&#xe64b;',
-            items: [
-              {
-                key: 'teacherBachelor',
-                name: '学历',
-                value: '博士',
-                type: SELECT,
-                options: [
-                  {
-                    value: "本科",
-                    label: "本科"
-                  },
-                  {
-                    value: "硕士",
-                    label: "硕士"
-                  },
-                  {
-                    value: "博士",
-                    label: "博士"
-                  }
-                ],
-                span: 1
-              },
-              {
-                key: 'teacherDegree',
-                name: '学位',
-                value: 'B',
-                type: SELECT,
-                options: [
-                  {
-                    value: "A",
-                    label: "A"
-                  },
-                  {
-                    value: "B",
-                    label: "B"
-                  },
-                  {
-                    value: "C",
-                    label: "C"
-                  }
-                ],
-                span: 1
-              },
-              {
-                key: 'teacherMajor',
-                name: '专业',
-                value: '专业3',
-                type: SELECT,
-                options: [
-                  {
-                    value: "专业1",
-                    label: "专业1"
-                  },
-                  {
-                    value: "专业2",
-                    label: "专业2"
-                  },
-                  {
-                    value: "专业3",
-                    label: "专业3"
-                  }
-                ],
-                span: 1
-              }
-            ]
-          }
-        },
+        }
       ]
     },
     companyAttachInfo: {
@@ -263,63 +150,27 @@ export default {
               {
                 key: 'companyName',
                 name: '企业名称',
-                value: 'companyName',
+                value: '',
                 type: INPUT,
                 span: 1
               },
               {
                 key: 'companyPhone',
                 name: '企业电话',
-                value: '123456',
+                value: '',
                 type: INPUT,
                 span: 1
               },
               {
                 key: 'companyPrincipal',
                 name: '企业负责人',
-                value: '张三',
+                value: '',
                 type: INPUT
               },
               {
                 key: 'companyAddress',
                 name: '具体地址',
-                value: '浙江省杭州市余杭区海曙路58号',
-                type: INPUT,
-                span: 2
-              },
-            ]
-          }
-        },
-        {
-          attachInfo: {
-            infoTitle: "企业附加信息",
-            iconCode: "&#xe603;",
-            items: [
-              {
-                key: 'companyName',
-                name: '企业名称',
-                value: 'companyName1',
-                type: INPUT,
-                span: 1
-              },
-              {
-                key: 'companyPhone',
-                name: '企业电话',
-                value: '123456',
-                type: INPUT,
-                span: 1
-              },
-              {
-                key: 'companyPrincipal',
-                name: '企业负责人',
-                value: '李四',
-                type: INPUT,
-                span: 1
-              },
-              {
-                key: 'companyAddress',
-                name: '具体地址',
-                value: '浙江省杭州市余杭区海曙路58号',
+                value: '',
                 type: INPUT,
                 span: 2
               },
@@ -338,128 +189,25 @@ export default {
               {
                 key: 'studentAcademy',
                 name: '学院',
-                value: '杭州国际服务工程学院',
+                value: '',
                 type: SELECT,
-                options: [
-                  {
-                    value: "杭州国际服务工程学院",
-                    label: "杭州国际服务工程学院"
-                  },
-                  {
-                    value: "沈钧儒法学院",
-                    label: "沈钧儒法学院"
-                  }
-                ],
+                options: [],
                 span: 1
               },
               {
                 key: 'studentMajor',
                 name: '专业',
-                value: '软件工程',
+                value: '',
                 type: SELECT,
-                options: [
-                  {
-                    value: "软件工程",
-                    label: "软件工程"
-                  },
-                  {
-                    value: "计算机",
-                    label: "计算机"
-                  }
-                ],
+                options: [],
                 span: 1
               },
               {
                 key: 'studentClass',
                 name: '班级',
-                value: '152',
+                value: '',
                 type: SELECT,
-                options: [
-                  {
-                    value: "152",
-                    label: "152"
-                  },
-                  {
-                    value: "151",
-                    label: "151"
-                  }
-                ],
-                span: 1
-              },
-            ]
-          }
-        },
-        {
-          attachInfo: {
-            infoTitle: "学生附加信息",
-            iconCode: "&#xe621;",
-            items: [
-              {
-                key: 'college',
-                name: '学院',
-                value: '杭州国际服务工程学院',
-                type: SELECT,
-                options: [
-                  {
-                    value: "杭州国际服务工程学院",
-                    label: "杭州国际服务工程学院"
-                  },
-                  {
-                    value: "沈钧儒法学院",
-                    label: "沈钧儒法学院"
-                  }
-                ],
-                span: 1
-              },
-              {
-                key: 'department',
-                name: '系部',
-                value: '计算机',
-                type: SELECT,
-                options: [
-                  {
-                    value: "计算机",
-                    label: "计算机"
-                  },
-                  {
-                    value: "物联网",
-                    label: "物联网"
-                  }
-                ],
-                span: 1
-              },
-              {
-                key: 'major',
-                name: '专业',
-                value: '软件工程',
-                type: SELECT,
-                options: [
-                  {
-                    value: "软件工程",
-                    label: "软件工程"
-                  },
-                  {
-                    value: "计算机",
-                    label: "计算机"
-                  }
-                ],
-                span: 1
-              },
-              {
-                key: 'class',
-                name: '班级',
-                value: '152',
-                type: SELECT,
-                options: [
-                  {
-                    value: "152",
-                    label: "152"
-                  },
-                  {
-                    value: "151",
-                    label: "151"
-                  }
-                ],
+                options: [],
                 span: 1
               },
             ]

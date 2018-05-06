@@ -2,7 +2,7 @@
 
   <div class="info-wrapper">
     <div class="avatar-wrapper">
-      <img src="../../../src/assets/img/avatar.png" alt="用户头像" class="avatar">
+      <img src="../../../src/assets/img/invoker.jpg" alt="用户头像" class="avatar">
       <span class="edit-avatar">修改头像</span>
     </div>
     <div class="teacher-info">
@@ -48,11 +48,43 @@
             <el-input type="password" v-model="info.user_pwd"></el-input>
           </div>
         </div>
-        <div class="info-item">
+        <div class="info-item" v-if="type == '教师'">
           学<span class="fill-text">填充</span>历：{{info.teacher_bachelor}}
         </div>
-        <div class="info-item">
+        <div class="info-item" v-if="type == '教师'">
           专<span class="fill-text">填充</span>业：{{info.teacher_major}}
+        </div>
+        <div class="info-item" v-if="type == '企业'">
+          <div class="key">
+            企业名称：
+          </div>
+          <div class="value">
+            <el-input v-model="info.company_name"></el-input>
+          </div>
+        </div>
+        <div class="info-item" v-if="type == '企业'">
+          <div class="key">
+            企业电话：
+          </div>
+          <div class="value">
+            <el-input v-model="info.company_phone"></el-input>
+          </div>
+        </div>
+        <div class="info-item" v-if="type == '企业'">
+          <div class="key">
+            负责人员：
+          </div>
+          <div class="value">
+            <el-input v-model="info.company_principal"></el-input>
+          </div>
+        </div>
+        <div class="info-item" v-if="type == '企业'">
+          <div class="key">
+            企业地址：
+          </div>
+          <div class="value">
+            <el-input v-model="info.company_address"></el-input>
+          </div>
         </div>
         <div class="info-item">
           用户状态：{{info.account_state}}
@@ -67,6 +99,9 @@
 import axios from '@/utils/https'
 export default {
   mounted() {
+    let user =  JSON.parse(window.localStorage.getItem('user')) || this.$store.state.user
+    console.log('u', user)
+    this.type = user.type
     axios
       .post("/api/th/baseInfo/myInfo")
       .then(res => {
@@ -80,7 +115,8 @@ export default {
   },
   data() {
     return {
-      info: {}
+      info: {},
+      type: ''
     };
   },
   methods: {
@@ -91,8 +127,19 @@ export default {
         user_mail: this.info.user_mail,
         user_pwd: this.info.user_pwd
       }
+      let company = {}
+      if (this.type == '企业') {
+        company = {
+          user_id: user.user_id,
+          company_name: this.info.company_name,
+          company_phone: this.info.company_phone,
+          company_principal: this.info.company_principal,
+          company_address: this.info.company_address
+        }
+      }
       axios.post('/api/th/baseInfo/change/info', {
-        user
+        user,
+        company
       })
         .then(res => {
           if (res.status == 200 && res.data.code == 200) {
@@ -179,5 +226,9 @@ export default {
   display: flex;
   align-items: center;
   padding: 1.5rem 0 0 3rem;
+}
+
+.value {
+  width: 400px;
 }
 </style>
