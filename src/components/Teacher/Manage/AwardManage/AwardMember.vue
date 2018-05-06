@@ -45,20 +45,6 @@
         label="操作"
         :resizable="false"
         min-width="150">
-        <template scope="scope">
-          <el-button
-            size="small"
-            type="primary"
-            @click="handleMore(scope.$index, scope.row)">更多</el-button>
-          <el-button
-            size="small"
-            class="edit-btn"
-            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button
-            size="small"
-            type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-        </template>
       </el-table-column>
     </el-table>
     <!--分页-->

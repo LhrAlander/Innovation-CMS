@@ -290,7 +290,7 @@ export default {
     },
     //        编辑按钮事件
     handleEdit(index, row) {
-      this.$router.push({ name: "ProjectInfoEdit" });
+      this.$router.push(`/edit/projectinfo/${row.projectId}`);
     },
     //        单页大小改变回调事件
     handleSizeChange(val) {

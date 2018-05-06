@@ -54,10 +54,6 @@
             size="small"
             class="edit-btn"
             @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button
-            size="small"
-            type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -229,7 +225,7 @@ export default {
     },
     //        编辑按钮事件
     handleEdit(index, row) {
-      console.log(index, row);
+      this.$router.push(`/edit/teamInfo/${row.teamId}`);
     },
     //        单页大小改变回调事件
     handleSizeChange(val) {

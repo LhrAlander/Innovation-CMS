@@ -2,7 +2,7 @@
   <div class="wrapper">
     <el-row class="info-wrapper">
       <el-col :span="4" class="avatar-wrapper">
-        <img src="../../../src/assets/img/avatar.png" alt="用户头像" class="avatar">
+        <img src="../../../src/assets/img/invoker.jpg" alt="用户头像" class="avatar">
       </el-col>
       <el-col :span="4" :offset="1">
         <div class="operate-wrapper">
