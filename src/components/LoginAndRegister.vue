@@ -1,7 +1,7 @@
 <template>
   <div class="container loginAndRegister">
     <div class="decorate">
-      <div class="project_title"><i class="iconfont" style="font-size: 40px;">&#xe62b;</i> 项目标题</div>
+      <div class="project_title"><i class="iconfont" style="font-size: 40px;">&#xe62b;</i> 注册登录</div>
     </div>
 
     <div class="box">
