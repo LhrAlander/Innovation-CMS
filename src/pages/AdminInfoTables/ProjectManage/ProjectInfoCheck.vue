@@ -49,6 +49,25 @@
           <!--材料展示-->
           <el-row :gutter="200" class="info-content">
              <el-col :span="24" class="info-item file-item">
+              <span class="item-name">项目中期材料</span>
+              
+              <div class="item-content file-item-content">
+                <el-button @click='downloadMidFile' type='success' size='mini' v-if="midFile.length > 0">下载</el-button>
+              </div>
+            </el-col>
+          </el-row>
+
+          <el-row :gutter="200" class="info-content" v-if="midFile.length > 0">
+             <el-col :span="24" class="info-item file-item">
+              <ul>
+                <li v-for="file in midFile" :key='file.fileName'>{{ file.fileName }}</li>
+              </ul>
+            </el-col>
+          </el-row>
+
+          <!--材料展示-->
+          <el-row :gutter="200" class="info-content">
+             <el-col :span="24" class="info-item file-item">
               <span class="item-name">项目结题材料</span>
               
               <div class="item-content file-item-content">
@@ -341,20 +360,9 @@ export default {
   data() {
     return {
       baseInfo: DISPLAY_INFO,
-      regFile: {
-        fileName: "无材料",
-        filePath: null,
-        fileType: 1,
-        projectId: "1231",
-        state: false
-      },
-      finishFile: {
-        fileName: "无材料",
-        filePath: null,
-        fileType: 2,
-        projectId: "1231",
-        state: false
-      },
+      regFile: [],
+      finishFile: [],
+      midFile: [],
       leader: {
         userId: 2015210405043,
         name: "林海瑞",
@@ -413,15 +421,16 @@ export default {
           });
           if (res.data.regFile != undefined) {
             this.regFile = res.data.regFile;
-            this.regFile.state = true;
           }
           if (res.data.finishFile != undefined) {
             this.finishFile = res.data.finishFile;
-            this.regFile.state = true;
+          }
+          if (res.data.midFile != undefined) {
+            this.midFile = res.data.midFile;
           }
           this.teacher = res.data.teacher;
           this.leader = res.data.leader;
-          this.members = res.data.members
+          this.members = res.data.members;
         })
         .catch(err => {
           console.log(err);
@@ -448,6 +457,22 @@ export default {
           this.regFile[i].filePath +
           "&fileName=" +
           this.regFile[i].fileName;
+        iframe.onload = function() {
+          document.body.removeChild(iframe);
+        };
+        document.body.appendChild(iframe);
+      }
+    },
+    downloadMidFile() {
+      for (let i = 0; i < this.midFile.length; i++) {
+        console.log(this.midFile[i]);
+        let iframe = document.createElement("iframe");
+        iframe.style.display = "none";
+        iframe.src =
+          "/api/download?filePath=" +
+          this.midFile[i].filePath +
+          "&fileName=" +
+          this.midFile[i].fileName;
         iframe.onload = function() {
           document.body.removeChild(iframe);
         };

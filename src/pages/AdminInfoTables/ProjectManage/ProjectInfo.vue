@@ -56,6 +56,34 @@
               </div>
             </el-col>
             <el-col :span="12" class="info-item file-item">
+              <span class="item-name">项目中期材料</span>
+              <div class="item-content">
+                <el-upload
+                  class="upload-demo"
+                  ref="midUpload"
+                  action="/api/upload/project"
+                  :on-preview="handlePreview"
+                  :on-remove="handleRemove"
+                  :on-change="handleChange"
+                  :on-success="finishUploadSuccess"
+                  :file-list="midFile"
+                  :auto-upload="false"
+                  name="uploadFile"
+                  :data='fileData'
+                  :on-progress='fileOnProgress'
+                  >
+                  <el-button slot="trigger" size="mini" type="primary">选取文件</el-button>
+                  <el-button style="margin-left: 10px;" size="mini" type="success" @click="uploadMidFile">上传到服务器</el-button>
+                  <el-button style="margin-left: 10px;"   size="mini" type="danger" @click='deleteAllMidFiles'>删除全部</el-button>
+                  <!-- <div slot="tip" class="el-upload__tip">只能上传zip/rar文件，且不超过10MB</div> -->
+                </el-upload>
+
+              </div>
+            </el-col>
+          </el-row>
+
+          <el-row :gutter="200" class="info-content">
+             <el-col :span="12" class="info-item file-item">
               <span class="item-name">项目结题材料</span>
               <div class="item-content">
                 <el-upload
@@ -77,12 +105,9 @@
                   <el-button style="margin-left: 10px;"   size="mini" type="danger" @click='deleteAllFinishFiles'>删除全部</el-button>
                   <!-- <div slot="tip" class="el-upload__tip">只能上传zip/rar文件，且不超过10MB</div> -->
                 </el-upload>
-
               </div>
             </el-col>
           </el-row>
-
-
 
         </span>
     </div>
@@ -198,7 +223,7 @@
 import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp";
 import projectApi from "@/api/projectApi";
 import axios from "@/utils/https";
-import utils from "@/utils/utils"
+import utils from "@/utils/utils";
 
 const INPUT = 1;
 const SELECT = 2;
@@ -363,8 +388,8 @@ export default {
   data() {
     return {
       isAdd: false,
-      addUserId: '',
-      teamId: '',
+      addUserId: "",
+      teamId: "",
       baseInfo: DISPLAY_INFO,
       regFile: [
         {
@@ -375,6 +400,7 @@ export default {
           state: false
         }
       ],
+      midFile: [],
       finishFile: [
         {
           fileName: "无材料",
@@ -413,7 +439,7 @@ export default {
         this.initData();
       })
       .catch(err => {
-        this.$store.commit('clearAuth')
+        this.$store.commit("clearAuth");
       });
   },
   methods: {
@@ -429,6 +455,7 @@ export default {
       ])
         .then(res => {
           // 项目基本信息
+          console.log(res[0])
           this.baseInfo.forEach(item => {
             item.value = res[0].data.project[item.key];
           });
@@ -449,6 +476,16 @@ export default {
                 state: true,
                 name: res[0].data.finishFile[i].fileName,
                 filePath: res[0].data.finishFile[i].filePath
+              });
+            }
+          }
+          if (res[0].data.midFile != undefined) {
+            this.midFile = [];
+            for (let i = 0; i < res[0].data.midFile.length; i++) {
+              this.midFile.push({
+                state: true,
+                name: res[0].data.midFile[i].fileName,
+                filePath: res[0].data.midFile[i].filePath
               });
             }
           }
@@ -538,6 +575,11 @@ export default {
       this.fileData.type = 2;
       this.$refs.finishUpload.submit();
     },
+    uploadMidFile() {
+      this.fileData.projectId = this.$route.params.id;
+      this.fileData.type = 3;
+      this.$refs.midUpload.submit();
+    },
     deleteAllRegFiles() {
       axios
         .post("/api/project/delete/files", {
@@ -560,10 +602,19 @@ export default {
           }
         });
     },
-    handleRemove(file, fileList) {
+    deleteAllMidFiles() {
+      axios
+        .post("/api/project/delete/files", {
+          files: this.midFile
+        })
+        .then(res => {
+          if (res.status == 200 && res.data.code == 200) {
+            this.finishFile = [];
+          }
+        });
     },
-    handleChange(file, fileList) {
-    },
+    handleRemove(file, fileList) {},
+    handleChange(file, fileList) {},
     regUploadSuccess(file) {
       axios
         .post("/api/project/project", {
@@ -638,56 +689,58 @@ export default {
         .post("/api/project/change/project", {
           project: info
         })
-        .then(res => {
-        })
+        .then(res => {})
         .catch(err => {
           console.log(err);
         });
       // console.log(new Date(this.baseInfo[8].value).toLocaleDateString());
     },
     confirmAdd() {
-      console.log(this.addUserId)
-      let addTime = new Date()
-      addTime = `${addTime.getFullYear()}-${addTime.getMonth() + 1}-${addTime.getDate()}`
-      console.log(addTime)
-      axios.post('/api/project/add/project/user', {
-        user: {
-          project_id: this.$route.params.id,
-          user_id: this.addUserId,
-          add_time: addTime,
-          teamId: this.teamId
-        }
-      })
-      .then(res => {
-        console.log(res)
-        this.isAdd = false
-      })
-      .catch(err => {
-        console.log(err)
-        this.isAdd = false
-      })
+      console.log(this.addUserId);
+      let addTime = new Date();
+      addTime = `${addTime.getFullYear()}-${addTime.getMonth() +
+        1}-${addTime.getDate()}`;
+      console.log(addTime);
+      axios
+        .post("/api/project/add/project/user", {
+          user: {
+            project_id: this.$route.params.id,
+            user_id: this.addUserId,
+            add_time: addTime,
+            teamId: this.teamId
+          }
+        })
+        .then(res => {
+          console.log(res);
+          this.isAdd = false;
+        })
+        .catch(err => {
+          console.log(err);
+          this.isAdd = false;
+        });
     },
     cancelAdd() {
-      console.log('cancel')
-      this.addUserId=''
-      this.isAdd = false
+      console.log("cancel");
+      this.addUserId = "";
+      this.isAdd = false;
     },
     deleteMember(member) {
-      console.log(member.userId)
-      axios.post('/api/project/del/project/user', {
-        user: {
-          projectId: this.$route.params.id,
-          userId: member.userId,
-          del: true,
-          teamId: this.teamId
-        }
-      })
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+      console.log(member.userId);
+      axios
+        .post("/api/project/del/project/user", {
+          user: {
+            projectId: this.$route.params.id,
+            userId: member.userId,
+            del: true,
+            teamId: this.teamId
+          }
+        })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };

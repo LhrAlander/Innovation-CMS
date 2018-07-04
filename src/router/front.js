@@ -19,6 +19,10 @@ import Award from '@/pages/Awards/Award'
 import Recruitment from '@/pages/Recruitment/Recruitment'
 // 招聘详细界面
 import RecruitmentDetail from '@/pages/Recruitment/RecruitmentDetail'
+// 立项界面
+import PendProject from '@/pages/PendProjects/Project'
+// 立项详细界面
+import PendProjectDetail from '@/pages/PendProjects/PendProjectDetail'
 
 export default [
   {
@@ -93,5 +97,17 @@ export default [
     name: 'RecruitmentDetail',
     path: '/recruitmentDetail/:id',
     component: RecruitmentDetail
+  },
+  // 立项界面路由
+  {
+    name: 'PendProject',
+    path: '/pendProjects',
+    component: PendProject
+  },
+  // 立项详细界面
+  {
+    name: 'PendProjectDetail',
+    path: '/pendProjectDetail/:id',
+    component: PendProjectDetail
   }
 ]
