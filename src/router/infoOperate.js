@@ -32,6 +32,9 @@ import RecruitmentAdd from 'pages/AdminInfoTables/RecruitmentManage/RecruitmentA
 import RecruitSignUp from 'pages/AdminInfoTables/RecruitSignUp/SignUp'
 import RecruitSignUpCheck from 'pages/AdminInfoTables/RecruitSignUp/SignUpCheck'
 import RecruitSignUpAdd from 'pages/AdminInfoTables/RecruitSignUp/SignUpAdd'
+import PendProjectAdd from 'pages/AdminInfoTables/ProjectManage/PendProjectAdd'
+import PendProjectCheck from 'pages/AdminInfoTables/ProjectManage/PendProjectCheck'
+import PendProject from 'pages/AdminInfoTables/ProjectManage/PendProjectInfo'
 
 export default [
   // 基本用户信息查看
@@ -107,6 +110,22 @@ export default [
     name: "DependentUnitInfoCheck",
     path: "/check/depUnitInfo/:id",
     component: DependentUnitInfoCheck
+  },
+  // 立项添加
+  {
+    name: "PendProjectAdd",
+    path: '/add/pendProjectInfo',
+    component: PendProjectAdd
+  },
+  {
+    name: "PendProjectCheck",
+    path: '/check/pendProjectInfo/:id',
+    component: PendProjectCheck
+  },
+  {
+    name: "PendProject",
+    path: '/edit/pendProjectInfo/:id',
+    component: PendProject
   },
   // 项目基本信息编辑
   {

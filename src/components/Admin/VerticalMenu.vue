@@ -85,6 +85,16 @@
             <p class="item-text">项目成员管理</p>
           </el-menu-item>
         </router-link>
+        <router-link :to="{name: 'CreateProjectManage'}">
+          <el-menu-item index="3-4" class="last">
+            <p class="item-text">项目申请管理</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'PendProjectManage'}">
+          <el-menu-item index="3-4" class="last">
+            <p class="item-text">项目审核管理</p>
+          </el-menu-item>
+        </router-link>
       </el-submenu>
 
       <el-submenu index="4">

@@ -9,6 +9,8 @@ import Others from 'components/Admin/Manage/UserManage/Others'
 
 import ProjectInfo from 'components/Admin/Manage/ProjectManage/ProjectInfo'
 import ProjectMember from 'components/Admin/Manage/ProjectManage/ProjectMember'
+import ProjectSignup from 'components/Admin/Manage/ProjectManage/ProjectSignup'
+import ProjectPend from 'components/Admin/Manage/ProjectManage/ProjectPend'
 
 import Notification from 'components/Admin/Manage/Notification/Notification'
 
@@ -224,6 +226,26 @@ export default [
           iconCode: '&#xe631;',
           firstLevel: '招募信息管理',
           secondLevel: '报名管理'
+        },
+      },
+      {
+        name: 'CreateProjectManage',
+        path: 'CreateProjectManage',
+        component: ProjectSignup,
+        meta: {
+          iconCode: '&#xe631;',
+          firstLevel: '项目管理',
+          secondLevel: '项目申请管理'
+        },
+      },
+      {
+        name: 'PendProjectManage',
+        path: 'PendProjectManage',
+        component: ProjectPend,
+        meta: {
+          iconCode: '&#xe631;',
+          firstLevel: '项目管理',
+          secondLevel: '项目审核管理'
         },
       }
     ]
