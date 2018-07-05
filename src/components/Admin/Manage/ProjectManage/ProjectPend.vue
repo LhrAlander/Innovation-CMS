@@ -7,7 +7,7 @@
         {{keyFormater(key)}}({{valueFormater(key, value, valueLabelMap)}})
       </el-tag>
     </div>
-    <el-button class="addInfo" type="success" size="large" @click="enterAdd">添加信息</el-button>
+    <!-- <el-button class="addInfo" type="success" size="large" @click="enterAdd">添加信息</el-button> -->
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
     <el-button class="exit-filter" size="large" @click="quitFilter">退出筛选</el-button>
     <!--筛选框-->
