@@ -30,7 +30,7 @@
 
           <!--材料展示-->
           <el-row :gutter="200" class="info-content">
-             <el-col :span="12" class="info-item file-item">
+             <el-col :span="12" class="info-item file-item" v-if="!(this.pendStatus == '已结题' || this.pendStatus != '立项申请中')">
               <span class="item-name">项目申请材料</span>
               <div class="item-content">
                 <el-upload
@@ -55,7 +55,7 @@
 
               </div>
             </el-col>
-            <el-col :span="12" class="info-item file-item">
+            <el-col :span="12" class="info-item file-item" v-if="!(this.pendStatus == '已结题' || this.pendStatus != '中期检查中')">
               <span class="item-name">项目中期材料</span>
               <div class="item-content">
                 <el-upload
@@ -82,7 +82,7 @@
             </el-col>
           </el-row>
 
-          <el-row :gutter="200" class="info-content">
+          <el-row :gutter="200" class="info-content" v-if="!(this.pendStatus == '已结题' || this.pendStatus != '结题检查中')">
              <el-col :span="12" class="info-item file-item">
               <span class="item-name">项目结题材料</span>
               <div class="item-content">
@@ -424,7 +424,8 @@ export default {
         projectId: "",
         type: ""
       },
-      members: []
+      members: [],
+      pendStatus: ''
     };
   },
   components: {
@@ -459,6 +460,7 @@ export default {
           this.baseInfo.forEach(item => {
             item.value = res[0].data.project[item.key];
           });
+          this.pendStatus = res[0].data.project.pendStatus
           if (res[0].data.regFile != undefined) {
             this.regFile = [];
             for (let i = 0; i < res[0].data.regFile.length; i++) {
@@ -566,16 +568,25 @@ export default {
         });
     },
     uploadRegFile() {
+      if (this.pendStatus == '已结题' || this.pendStatus != '立项申请中') {
+        return
+      }
       this.fileData.projectId = this.$route.params.id;
       this.fileData.type = 1;
       this.$refs.regUpload.submit();
     },
     uploadFinishFile() {
+      if (this.pendStatus == '已结题' || this.pendStatus != '结题检查中') {
+        return
+      }
       this.fileData.projectId = this.$route.params.id;
       this.fileData.type = 2;
       this.$refs.finishUpload.submit();
     },
     uploadMidFile() {
+      if (this.pendStatus == '已结题' || this.pendStatus != '中期检查中') {
+        return
+      }
       this.fileData.projectId = this.$route.params.id;
       this.fileData.type = 3;
       this.$refs.midUpload.submit();

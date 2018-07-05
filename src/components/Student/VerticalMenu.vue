@@ -28,8 +28,18 @@
           </el-menu-item>
         </router-link>
         <router-link :to="{name: 'StudentProjectMember'}">
-          <el-menu-item index="2-2" class="last">
+          <el-menu-item index="2-2">
             <p class="item-text">项目成员管理</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'StudentProjectSignup'}">
+          <el-menu-item index="2-3">
+            <p class="item-text">项目申请</p>
+          </el-menu-item>
+        </router-link>
+        <router-link :to="{name: 'ProjectPending'}">
+          <el-menu-item index="2-4" class="last">
+            <p class="item-text">项目审核情况</p>
           </el-menu-item>
         </router-link>
       </el-submenu>
