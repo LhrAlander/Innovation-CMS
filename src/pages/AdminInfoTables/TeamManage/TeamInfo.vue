@@ -120,7 +120,7 @@
 import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp";
 import E from "wangeditor";
 import api from "@/api/teamApi";
-import utils from "@/utils/utils"
+import utils from "@/utils/utils";
 import axios from "@/utils/https";
 
 const INPUT = 1;
@@ -150,8 +150,9 @@ const DISPLAY_INFO = [
     key: "teamTeacher",
     name: "指导老师",
     value: "石兴民",
-    type: INPUT,
-    span: 1
+    type: SELECT,
+    span: 1,
+    options: []
   },
   {
     key: "supportOrg",
@@ -205,6 +206,7 @@ export default {
   },
   mounted() {
     this.teamId = this.$route.params.teamId;
+
     axios
       .post("/api/auth/edit/teamInfo", { teamId: this.teamId })
       .then(res => {
@@ -224,6 +226,14 @@ export default {
   },
   methods: {
     initData() {
+      axios
+        .get("/api/teacher/teacher/choices")
+        .then(res => {
+          this.baseInfo[2].options = res.data.names;
+        })
+        .catch(err => {
+          console.log(err);
+        });
       axios
         .post("/api/team/team", {
           teamId: this.teamId
@@ -299,6 +309,7 @@ export default {
         })
         .then(res => {
           console.log(res);
+          this.$router.push(`/check/teamInfo/${this.teamId}`);
         })
         .catch(err => {
           this.$store.commit("clearAuth");

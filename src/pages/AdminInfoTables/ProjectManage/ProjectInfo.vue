@@ -271,19 +271,10 @@ const DISPLAY_INFO = [
     key: "projectTeacher",
     name: "指导老师",
     value: "石兴民",
-    type: INPUT,
+    type: SELECT,
     span: 1,
     disabled: false,
-    options: [
-      {
-        value: "石兴民",
-        label: "石兴民"
-      },
-      {
-        value: "某某某",
-        label: "某某某"
-      }
-    ]
+    options: []
   },
   {
     key: "projectDep",
@@ -381,11 +372,7 @@ export default {
           state: false
         }
       ],
-      teacher: {
-        userId: 123456789,
-        name: "石兴民",
-        userPhone: 123456789
-      },
+      teacher: {},
       leader: {
         userId: 2015210405043,
         name: "林海瑞",
@@ -396,7 +383,8 @@ export default {
         type: ""
       },
       members: [],
-      pendStatus: ''
+      pendStatus: '',
+      teachers: []
     };
   },
   components: {
@@ -417,6 +405,13 @@ export default {
   methods: {
     initData() {
       const projectId = this.$route.params.id;
+      axios.get('/api/teacher/teacher/choices')
+      .then(res => {
+        this.baseInfo[4].options = res.data.names
+      })
+      .catch(err => {
+        console.log(err)
+      })
       Promise.all([
         axios.post("/api/project/project", {
           projectId: projectId
@@ -467,6 +462,7 @@ export default {
           this.members = res[0].data.members;
           this.teamId = res[0].data.project.teamId;
 
+          this.baseInfo[4].value = this.teacher.userId
           // 项目级别
           const levels = res[1].data.data.map(item => {
             return {

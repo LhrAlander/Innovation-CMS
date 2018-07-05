@@ -20,26 +20,24 @@
           立项信息
         </span>
       <el-row :gutter="200" class="info-content">
-        <el-col :span="8" class="info-item">
+        <!-- <el-col :span="8" class="info-item">
           <span class="item-name">项目名称</span>
           <div class="item-content">
             <el-input disabled v-model="baseInfo.projectName"></el-input>
           </div>
-        </el-col>
-				<el-col :span="8" class="info-item">
+        </el-col> -->
+				<!-- <el-col :span="8" class="info-item">
           <span class="item-name">依托单位</span>
 					<el-input disabled v-model="baseInfo.dependentUnit"></el-input>
           <div class="item-content">
           </div>
-        </el-col>
+        </el-col> -->
 				<el-col :span="8" class="info-item">
           <span class="item-name">申请时间</span>
           <div class="item-content">
 						<el-input disabled v-model="baseInfo.applyYear"></el-input>
           </div>
         </el-col>
-      </el-row>
-			<el-row :gutter="200" class="info-content">
         <el-col :span="8" class="info-item">
           <span class="item-name">截止时间</span>
           <div class="item-content">
@@ -52,23 +50,21 @@
 						<el-input disabled v-model="baseInfo.projectCategory"></el-input>
           </div>
         </el-col>
+      </el-row>
+			<el-row :gutter="200" class="info-content">
 				<el-col :span="8" class="info-item">
           <span class="item-name">项目级别</span>
           <div class="item-content">
 						<el-input disabled v-model="baseInfo.projectLevel"></el-input>
           </div>
         </el-col>
-        
-      </el-row>
-			<el-row :gutter="200" class="info-content">
-				
-				<el-col :span="8" class="info-item">
+        <el-col :span="8" class="info-item">
           <span class="item-name">状态</span>
           <div class="item-content">
 						<el-input disabled v-model="baseInfo.status"></el-input>
           </div>
         </el-col>
-			</el-row>
+      </el-row>
       <span>发布内容简介</span>
       <el-row :gutter="200" class="info-content less-z-index">
         <el-col :span="24" class="info-item">

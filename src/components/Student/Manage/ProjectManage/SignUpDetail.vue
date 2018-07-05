@@ -27,6 +27,7 @@
             <el-input v-model="baseInfo.projectName"></el-input>
           </div>
         </el-col>
+        
 				 <el-col :span="8" class="info-item">
           <span class="item-name">项目类别</span>
           <div class="item-content">
@@ -95,7 +96,12 @@
 				<el-col :span="8" class="info-item">
           <span class="item-name">指导老师</span>
           <div class="item-content">
-            <el-input v-model="baseInfo.teacher" placeholder="请填写指导老师工号"/>
+            <!-- <el-select v-model="baseInfo.teacher">
+              <el-option v-for="t in teachers" :key="t.id" :label="t.name" :value="t.id"/>
+            </el-select> -->
+            <el-select v-model="teacher">
+              <el-option v-for="l in teachers" :key="l.value" :label="l.label" :value="l.value"/>
+            </el-select>
           </div>
         </el-col>
 				<el-col :span="8" class="info-item">
@@ -236,7 +242,6 @@
 <script>
 import InfoDisplayTemp from "components/Admin/InfoOperate/BaseCompent/InfoDisplayTemp";
 import axios from "@/utils/https";
-import E from "wangeditor";
 
 const INPUT = 1;
 const SELECT = 2;
@@ -293,7 +298,9 @@ export default {
       addUserId: "",
       projectUsers: [],
       members: [],
-      user: {}
+      user: {},
+      teachers: [],
+      teacher: ''
     };
   },
   mounted() {
@@ -312,12 +319,15 @@ export default {
           userId: user.userId
         })
         .then(res => {
-          console.log(res);
           this.members.push({
             userId: user.userId,
             username: res.data.data[0].user_name,
             userPhone: res.data.data[0].user_phone
           });
+          return axios.get('/api/teacher/teacher/choices')
+        })
+        .then(res => {
+          this.teachers = res.data.names
         })
         .catch(err => {
           console.log(err);
@@ -333,6 +343,7 @@ export default {
           this.baseInfo = JSON.parse(JSON.stringify(res[3].data.data));
           this.baseInfo.student = user.username;
           this.baseInfo.status = "立项申请中";
+          this.baseInfo.teacher = ''
 
           let categories = res[0].data.data.map(l => {
             return l.level_name;
@@ -343,7 +354,6 @@ export default {
           // 构建级联选择器
           let options = [];
           let selectors = res[2].data.data;
-          console.log(selectors);
           let _c = [];
           for (let i = 0; i < selectors.length; i++) {
             let selector = selectors[i];
@@ -399,21 +409,19 @@ export default {
         team_id: this.baseInfo.dependentUnit[
           this.baseInfo.dependentUnit.length - 1
         ],
-        project_teacher: this.baseInfo.teacher,
+        project_teacher: this.teacher,
         project_principal: this.user.userId,
         register_year: this.baseInfo.applyYear,
         start_year: this.baseInfo.applyYear,
         finish_year: this.baseInfo.deadlineYear,
         pend_status: "立项申请中"
       };
-      console.log(info);
       axios
         .post("/api/st/project/create/project", {
           project: info,
           users: this.projectUsers
         })
         .then(res => {
-          console.log(res);
           this.fileData.projectId = res.data.projectId
           this.fileData.type = 1;
           this.$refs.regUpload.submit();
@@ -427,10 +435,8 @@ export default {
       this.regFile = [];
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
     },
     handlePreview(file) {
-      console.log(file);
     },
     uploadFile() {},
     deleteAllFiles() {
@@ -439,18 +445,15 @@ export default {
           files: this.files
         })
         .then(res => {
-          console.log("del", res);
           if (res.status == 200 && res.data.code == 200) {
             this.files = [];
           }
         });
     },
     confirmAdd() {
-      console.log(this.addUserId);
       let addTime = new Date();
       addTime = `${addTime.getFullYear()}-${addTime.getMonth() +
         1}-${addTime.getDate()}`;
-      console.log(addTime);
       this.projectUsers.push({
         user_id: this.addUserId,
         add_time: addTime
@@ -461,7 +464,6 @@ export default {
           userId: this.addUserId
         })
         .then(res => {
-          console.log(res);
           this.members.push({
             userId: this.addUserId,
             username: res.data.data[0].user_name,
@@ -482,7 +484,6 @@ export default {
       //   })
     },
     cancelAdd() {
-      console.log("cancel");
       this.addUserId = "";
       this.isAdd = false;
     },

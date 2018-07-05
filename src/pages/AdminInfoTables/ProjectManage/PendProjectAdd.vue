@@ -20,7 +20,7 @@
           立项信息
         </span>
       <el-row :gutter="200" class="info-content">
-        <el-col :span="8" class="info-item">
+        <!-- <el-col :span="8" class="info-item">
           <span class="item-name">项目名称</span>
           <div class="item-content">
             <el-input v-model="baseInfo.projectName"></el-input>
@@ -35,8 +35,8 @@
             v-model="baseInfo.dependentUnit"
             >
     </el-cascader>
-          </div>
-        </el-col>
+          </div> -->
+        <!-- </el-col> -->
 				<el-col :span="8" class="info-item">
           <span class="item-name">申请时间</span>
           <div class="item-content">
@@ -49,8 +49,6 @@
             </el-date-picker>
           </div>
         </el-col>
-      </el-row>
-			<el-row :gutter="200" class="info-content">
         <el-col :span="8" class="info-item">
           <span class="item-name">截止时间</span>
           <div class="item-content">
@@ -71,6 +69,9 @@
             </el-select>
           </div>
         </el-col>
+      </el-row>
+			<el-row :gutter="200" class="info-content">
+        
 				<el-col :span="8" class="info-item">
           <span class="item-name">项目级别</span>
           <div class="item-content">
@@ -79,11 +80,7 @@
             </el-select>
           </div>
         </el-col>
-        
-      </el-row>
-			<el-row :gutter="200" class="info-content">
-				
-				<el-col :span="8" class="info-item">
+        <el-col :span="8" class="info-item">
           <span class="item-name">状态</span>
           <div class="item-content">
             <el-select v-model="baseInfo.status">
@@ -95,7 +92,7 @@
             </el-select>
           </div>
         </el-col>
-			</el-row>
+      </el-row>
       <span>发布内容简介</span>
       <el-row :gutter="200" class="info-content less-z-index">
         <el-col :span="24" class="info-item">

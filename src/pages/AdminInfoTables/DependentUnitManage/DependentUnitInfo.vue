@@ -107,25 +107,17 @@ const DISPLAY_INFO = [
     name: "单位类别",
     value: "实验室",
     type: SELECT,
-    options: [
-      {
-        value: "实验室",
-        label: "实验室"
-      },
-      {
-        value: "企业1",
-        label: "企业1"
-      }
-    ],
+    options: [],
     span: 1
   },
   {
     key: "unitPerson",
     name: "单位负责人",
     value: "石兴民",
-    type: INPUT,
+    type: SELECT,
     span: 1,
-    disabled: false
+    disabled: false,
+    options: []
   },
   {
     key: "unitAddress",
@@ -159,29 +151,7 @@ export default {
         name: "石兴民",
         userPhone: 123456789
       },
-      teamInfo: [
-        [
-          {
-            name: "team1"
-          },
-          {
-            name: "team2"
-          }
-        ],
-        [
-          {
-            name: "team3"
-          },
-          {
-            name: "team4"
-          }
-        ],
-        [
-          {
-            name: "team5"
-          }
-        ]
-      ]
+      teamInfo: []
     };
   },
   components: {
@@ -202,6 +172,14 @@ export default {
   methods: {
     initData() {
       const unitId = this.$route.params.id;
+       axios
+        .get("/api/dependent/leader/choices")
+        .then(res => {
+          this.baseInfo[2].options = res.data.names;
+        })
+        .catch(err => {
+          console.log(err);
+        });
       axios
         .post("/api/dependent/dependent", {
           unitId
@@ -247,6 +225,7 @@ export default {
       })
       .then(res => {
         console.log(res)
+        this.$router.push(`/check/depUnitInfo/${this.$route.params.id}`)
       })
       .catch(err => {
         console.log(err)
