@@ -66,7 +66,8 @@ const filterName = {
     principalName: 'studentName',
     guideTeacherName: 'teacherName',
     userId: 'user_id',
-    username: 'user_name'
+    username: 'user_name',
+    pendStatus: 'pend_status'
   },
   team: {
     teamName: 'team_name',
@@ -149,9 +150,11 @@ function filter2Mysql(type, filter) {
       console.log('ddd', key, value)
       if (value && value != null && value != '' && value != undefined) {
         let _key = item[key] || key
-        filter[_key] = value
+        if (_key !== key) {
+          filter[_key] = value
+          delete filter[key]
+        }
       }
-      delete filter[key]
     }
     console.log('complete', filter)
   }
@@ -242,8 +245,8 @@ function displayInfo2MySql(type, displayInfo) {
       return transform(filterName.notification)
       break
     case filterName.FILE_SYSTEM:
-        return transform(filterName.fileSystem)
-        break
+      return transform(filterName.fileSystem)
+      break
   }
 }
 
@@ -260,7 +263,7 @@ function downloadFile(files) {
       escape(files[i].fileName);
     console.log(src)
     iframe.src = src
-    iframe.onload = function() {
+    iframe.onload = function () {
       document.body.removeChild(iframe);
     };
     document.body.appendChild(iframe);

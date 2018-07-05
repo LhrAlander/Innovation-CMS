@@ -110,8 +110,78 @@ export default {
         principalName: "项目负责人用户名",
         guideTeacherName: "指导老师用户名"
       },
-      infoAddTmpl: {},
-      infoAddRules: {},
+      infoAddTmpl: {
+        projectName: {
+          label: "项目名称",
+          inputType: 0 // 0 代表 input
+        },
+        projectCategory: {
+          label: "项目类别",
+          inputType: 1 // 0 代表 input
+        },
+        projectLevel: {
+          label: "项目级别",
+          inputType: 1
+        },
+        applyYear: {
+          label: "项目申请年份",
+          inputType: 2
+        },
+        projectId: {
+          label: "项目编号",
+          inputType: 0
+        },
+        dependentUnit: {
+          label: "项目依托单位",
+          inputType: 4
+        },
+        beginYear: {
+          label: "项目开始年份",
+          inputType: 2
+        },
+        deadlineYear: {
+          label: "项目截至年份",
+          inputType: 2
+        },
+        principalName: {
+          label: "项目负责人用户名",
+          inputType: 0
+        },
+        guideTeacher: {
+          label: "指导老师用户名",
+          inputType: 0
+        }
+      },
+
+      infoAddRules: {
+        projectName: [
+          { required: true, message: "请输入项目名称", trigger: "blur" }
+        ],
+        projectCategory: [
+          { required: true, message: "请输入项目类别", trigger: "blur" }
+        ],
+        projectLevel: [
+          { required: true, message: "请输入项目级别", trigger: "blur" }
+        ],
+        applyYear: [
+          { required: true, message: "请输入项目申请年份", trigger: "blur" }
+        ],
+        projectId: [
+          { required: true, message: "请输入项目编号", trigger: "blur" }
+        ],
+        beginYear: [
+          { required: true, message: "请输入项目开始年份", trigger: "blur" }
+        ],
+        deadlineYear: [
+          { required: true, message: "请输入项目截至年份", trigger: "blur" }
+        ],
+        principalName: [
+          { required: true, message: "请输入项目负责人用户名", trigger: "blur" }
+        ],
+        guideTeacherName: [
+          { required: true, message: "请输入指导老师用户名", trigger: "blur" }
+        ]
+      },
       //        获取表格数据的地址
       url: "/api/st/project/pendProjects",
       filterTmpl: {
@@ -127,13 +197,13 @@ export default {
           label: "项目级别",
           inputType: 1
         },
-        guideTeacher: {
-          label: "指导老师",
-          inputType: 0
-        },
         applyYear: {
           label: "项目申请年份",
           inputType: 3
+        },
+        pendStatus: {
+          label: "状态",
+          inputType: 1
         },
         dependentUnit: {
           label: "项目依托单位",
@@ -147,14 +217,14 @@ export default {
           label: "项目截至年份",
           inputType: 3
         },
+        guideTeacher: {
+          label: "指导老师用户名",
+          inputType: 1
+        },
         principalName: {
           label: "项目负责人用户名",
           inputType: 0
         },
-        guideTeacherName: {
-          label: "指导老师用户名",
-          inputType: 0
-        }
       },
       filter: {
         //搜索条件
@@ -162,13 +232,13 @@ export default {
         projectCategory: "", //项目类别
         projectLevel: "", //项目级别
         guideTeacher: "", //指导老师
-        projectId: "", //项目编号
+        pendStatus: "", //项目编号
         dependentUnit: "", //项目依托单位
         applyYear: "", //项目申请年份
         beginYear: "", //项目开始年份
         deadlineYear: "", //项目截至年份
         principalName: "", //项目负责人用户名
-        guideTeacherName: "" //指导老师用户名
+        guideTeacher: "" //指导老师用户名
       },
       pageSize: 10, //每页大小
       currentPage: 1, //当前页
@@ -186,16 +256,13 @@ export default {
   methods: {
     expandChange(row, expandedRows) {
       const index = this.tableData.indexOf(row);
-      console.log(index);
       if (!("dependentUnit" in row)) {
         axios
           .post("/api/st/project/project/detail", { projectId: row.projectId })
           .then(res => {
             for (let key in res.data.data[0]) {
-              console.log(key, res.data.data[0][key]);
               row[key] = res.data.data[0][key];
             }
-            console.log(row);
             this.$set(this.tableData[index], row);
           })
           .catch(err => {
@@ -208,6 +275,13 @@ export default {
     },
     //        异步加载数据
     loadData(filter, pageNum, pageSize) {
+      axios.get('/api/teacher/teacher/choices')
+      .then(res => {
+        this.valueLabelMap.guideTeacher = res.data.names
+      })
+      .catch(err => {
+        console.log(err)
+      })
       axios
         .get(this.url, {
           params: {
@@ -217,7 +291,6 @@ export default {
           }
         })
         .then(res => {
-          console.log(res);
           this.tableData = [];
           this.tableData = res.data.data;
           this.totalCount = res.data.count;
@@ -258,12 +331,36 @@ export default {
     // 点击筛选触发的事件
     async enterFilter() {
       if (this.valueLabelMap.projectCategory.length < 1) {
+        this.valueLabelMap.pendStatus = [
+          {
+            label: '立项申请中',
+            value: '立项申请中'
+          },
+          {
+            label: '立项失败',
+            value: '立项失败'
+          },
+          {
+            label: '中期检查中',
+            value: '中期检查中'
+          },
+          {
+            label: '中期审核不通过',
+            value: '中期审核不通过'
+          },
+          {
+            label: '结题审查中',
+            value: '结题审查中'
+          },
+          {
+            label: '已结题',
+            value: '已结题'
+          }
+        ]
         let res = await this.$store.dispatch("getSelectors");
-        console.log(res);
         this.valueLabelMap.projectCategory = res[0];
         this.valueLabelMap.projectLevel = res[1];
         this.filterTmpl.dependentUnit.options = res[2];
-        this.infoAddTmpl.dependentUnit.options = res[2];
         this.showFilterBox = true;
       } else {
         this.showFilterBox = true;
@@ -297,7 +394,6 @@ export default {
             this.loadData(this.filter, this.currentPage, this.pageSize);
           },
           function() {
-            console.log("failed");
           }
         );
       }

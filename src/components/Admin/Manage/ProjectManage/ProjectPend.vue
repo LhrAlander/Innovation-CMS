@@ -56,37 +56,37 @@
         min-width="200">
         <template scope="scope">
           <el-button
-						v-if="!isPendingNow"
+						v-if="!scope.row.isPendingNow"
             size="small"
             type="primary"
             @click="handleMore(scope.$index, scope.row)">更多
           </el-button>
           <el-button
-						v-if="!isPendingNow"
+						v-if="!scope.row.isPendingNow"
             size="small"
             class="edit-btn"
             @click="handleEdit(scope.$index, scope.row)">编辑
           </el-button>
 					<el-button
-						v-if="!isPendingNow && scope.row.status != '已结题'"
+						v-if="!scope.row.isPendingNow && scope.row.status != '已结题'"
             size="small"
 						type="warning"
-            @click="isPendingNow = true">审核
+            @click="scope.row.isPendingNow = true">审核
           </el-button>
 					 <el-button
-					 	v-if="isPendingNow"
+					 	v-if="scope.row.isPendingNow"
             size="small"
 						type="primary"
             @click="pend(scope.$index, scope.row, true)">审核通过
           </el-button>
 					<el-button
-					 	v-if="isPendingNow"
+					 	v-if="scope.row.isPendingNow"
             size="small"
 						type="danger"
             @click="pend(scope.$index, scope.row, false)">审核不通过
           </el-button>
 					<el-button
-					 	v-if="!isPendingNow && !scope.row.status.startsWith('立项')"
+					 	v-if="!scope.row.isPendingNow && !scope.row.status.startsWith('立项')"
             size="small"
 						type="info"
             @click="lastLevel(scope.$index, scope.row)">上一阶段
@@ -128,7 +128,8 @@ export default {
       tableData: [],
       valueLabelMap: {
         projectCategory: [],
-        projectLevel: []
+        projectLevel: [],
+        guideTeacher: []
       },
 
       keyFormatMap: {
@@ -187,7 +188,7 @@ export default {
           label: "项目负责人用户名",
           inputType: 0
         },
-        guideTeacherName: {
+        guideTeacher: {
           label: "指导老师用户名",
           inputType: 0
         }
@@ -227,27 +228,23 @@ export default {
       filterTmpl: {
         projectName: {
           label: "项目名称",
-          inputType: 0 // 0 代表 input
+          inputType: 0
         },
         projectCategory: {
           label: "项目类别",
-          inputType: 1 // 0 代表 input
+          inputType: 1
         },
         projectLevel: {
           label: "项目级别",
           inputType: 1
         },
-        // guideTeacher: {
-        //   label: "指导老师",
-        //   inputType: 0
-        // },
         applyYear: {
           label: "项目申请年份",
           inputType: 3
         },
-        projectId: {
-          label: "项目编号",
-          inputType: 0
+        pendStatus: {
+          label: "状态",
+          inputType: 1
         },
         dependentUnit: {
           label: "项目依托单位",
@@ -261,14 +258,14 @@ export default {
           label: "项目截至年份",
           inputType: 3
         },
-        // principalName: {
-        //   label: "项目负责人用户名",
-        //   inputType: 0
-        // },
-        guideTeacherName: {
+        guideTeacher: {
           label: "指导老师用户名",
+          inputType: 1
+        },
+        principalName: {
+          label: "项目负责人用户名",
           inputType: 0
-        }
+        },
       },
       filter: {
         //搜索条件
@@ -276,13 +273,13 @@ export default {
         projectCategory: "", //项目类别
         projectLevel: "", //项目级别
         guideTeacher: "", //指导老师
-        projectId: "", //项目编号
+        pendStatus: "", //项目编号
         dependentUnit: "", //项目依托单位
         applyYear: "", //项目申请年份
         beginYear: "", //项目开始年份
         deadlineYear: "", //项目截至年份
         principalName: "", //项目负责人用户名
-        guideTeacherName: "" //指导老师用户名
+        guideTeacher: "" //指导老师用户名
       },
       pageSize: 10, //每页大小
       currentPage: 1, //当前页
@@ -306,6 +303,17 @@ export default {
       if ("team_id" in filter) {
         filter.team_id = filter.team_id.split(",")[1];
       }
+      if ("studentName" in filter) {
+        filter.studentId = filter.studentName
+        delete filter.studentName
+      }
+      axios.get('/api/teacher/teacher/choices')
+      .then(res => {
+        this.valueLabelMap.guideTeacher = res.data.names
+      })
+      .catch(err => {
+        console.log(err)
+      })
       axios
         .get(this.url, {
           params: {
@@ -315,7 +323,6 @@ export default {
           }
         })
         .then(res => {
-          console.log(res);
           this.tableData = [];
           this.tableData = res.data.data;
           this.totalCount = res.data.count;
@@ -334,7 +341,6 @@ export default {
     },
 
     handleMore(index, row) {
-      console.log(row);
       this.$router.push(`/check/projectinfo/${row.projectId}`);
     },
     //        编辑按钮事件
@@ -355,11 +361,36 @@ export default {
     async enterFilter() {
       if (this.valueLabelMap.projectCategory.length < 1) {
         let res = await this.$store.dispatch("getSelectors");
-        console.log(res);
         this.valueLabelMap.projectCategory = res[0];
         this.valueLabelMap.projectLevel = res[1];
         this.filterTmpl.dependentUnit.options = res[2];
         this.infoAddTmpl.dependentUnit.options = res[2];
+        this.valueLabelMap.pendStatus = [
+          {
+            label: '立项申请中',
+            value: '立项申请中'
+          },
+          {
+            label: '立项失败',
+            value: '立项失败'
+          },
+          {
+            label: '中期检查中',
+            value: '中期检查中'
+          },
+          {
+            label: '中期审核不通过',
+            value: '中期审核不通过'
+          },
+          {
+            label: '结题审查中',
+            value: '结题审查中'
+          },
+          {
+            label: '已结题',
+            value: '已结题'
+          }
+        ]
         this.showFilterBox = true;
       } else {
         this.showFilterBox = true;
@@ -390,7 +421,6 @@ export default {
     enterAdd: async function() {
       if (this.valueLabelMap.projectCategory.length < 1) {
         let res = await this.$store.dispatch("getSelectors");
-        console.log(res);
         this.valueLabelMap.projectCategory = res[0];
         this.valueLabelMap.projectLevel = res[1];
         this.filterTmpl.dependentUnit.options = res[2];
@@ -437,7 +467,7 @@ export default {
 				st = res ? '已结题' : '结题审核不通过'
 			}
 			this.changeStatus(row, st)
-			this.isPendingNow = false
+			row.isPendingNow = false
 		},
 		lastLevel(index, row) {
 			let status = row.status
@@ -464,7 +494,6 @@ export default {
 				project
 			})
 			.then(res => {
-				console.log(res)
 			})
 			.catch(err => {
 				console.log(err)

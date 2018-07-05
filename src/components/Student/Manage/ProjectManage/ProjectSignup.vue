@@ -102,43 +102,21 @@ export default {
 
       keyFormatMap: {
         // 格式化标签映射表
-        projectName: "项目名称",
         projectCategory: "项目类别",
         projectLevel: "项目级别",
         applyYear: "项目申请年份",
+        deadlineYear: "项目截至年份",
         status: "状态"
       },
       expandFormatMap: {
         // 格式化额外信息映射表
-        dependentUnit: "项目依托单位",
-        deadlineYear: "项目截至年份"
       },
       infoAddTmpl: {},
 
-      infoAddRules: {
-        projectName: [
-          { required: true, message: "请输入项目名称", trigger: "blur" }
-        ],
-        projectCategory: [
-          { required: true, message: "请输入项目类别", trigger: "blur" }
-        ],
-        projectLevel: [
-          { required: true, message: "请输入项目级别", trigger: "blur" }
-        ],
-        applyYear: [
-          { required: true, message: "请输入项目申请年份", trigger: "blur" }
-        ],
-        deadlineYear: [
-          { required: true, message: "请输入项目截至年份", trigger: "blur" }
-        ]
-      },
+      infoAddRules: {},
       //        获取表格数据的地址
       url: "/api/project/pend/all",
       filterTmpl: {
-        projectName: {
-          label: "项目名称",
-          inputType: 0 // 0 代表 input
-        },
         projectCategory: {
           label: "项目类别",
           inputType: 1 // 0 代表 input
@@ -150,10 +128,6 @@ export default {
         applyYear: {
           label: "项目申请年份",
           inputType: 3
-        },
-        dependentUnit: {
-          label: "项目依托单位",
-          inputType: 4
         },
         deadlineYear: {
           label: "项目截至年份",

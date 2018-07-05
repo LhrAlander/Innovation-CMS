@@ -87,6 +87,9 @@ export default {
     };
   },
   computed: {},
+  mounted() {
+    console.log('filter', this.tmpl, this.valueLabelMap)
+  },
   methods: {
     handleCancel() {
       this.$emit("sendFilter");
