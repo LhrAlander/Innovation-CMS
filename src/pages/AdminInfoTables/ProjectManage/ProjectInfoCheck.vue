@@ -214,16 +214,7 @@ const DISPLAY_INFO = [
     name: "项目类别",
     value: "实验室",
     type: SELECT,
-    options: [
-      {
-        value: "实验室",
-        label: "实验室"
-      },
-      {
-        value: "企业1",
-        label: "企业1"
-      }
-    ],
+    options: [],
     span: 1
   },
   {
@@ -232,24 +223,7 @@ const DISPLAY_INFO = [
     value: "国家级",
     type: SELECT,
     span: 1,
-    options: [
-      {
-        value: "国家级",
-        label: "国家级"
-      },
-      {
-        value: "省部级",
-        label: "省部级"
-      },
-      {
-        value: "校级",
-        label: "校级"
-      },
-      {
-        value: "院级",
-        label: "院级"
-      }
-    ],
+    options: [],
     disabled: false
   },
   {
@@ -281,20 +255,11 @@ const DISPLAY_INFO = [
   {
     key: "projectDep",
     name: "项目依托单位",
-    value: "实验室1",
+    value: [],
     type: SELECT,
     span: 1,
     disabled: false,
-    options: [
-      {
-        value: "实验室1",
-        label: "实验室1"
-      },
-      {
-        value: "众创空间",
-        label: "众创空间"
-      }
-    ]
+    options: []
   },
   {
     key: "registerYear",

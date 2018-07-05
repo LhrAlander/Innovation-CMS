@@ -417,6 +417,7 @@ export default {
           this.fileData.projectId = res.data.projectId
           this.fileData.type = 1;
           this.$refs.regUpload.submit();
+          this.$router.push('/student/ProjectPending')
         })
         .catch(err => {
           console.log(err);

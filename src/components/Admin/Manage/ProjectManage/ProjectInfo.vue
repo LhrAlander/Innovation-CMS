@@ -362,12 +362,13 @@ export default {
     },
     // 接收子组件filterbox传递的筛选条件数据
     receiveFilter(filter) {
+      console.log("receive");
       if (filter !== undefined) {
         this.filter = filter;
+        utils.filter2Mysql(utils.filterName.PROJECT, this.filter);
+        this.loadData(this.filter, this.currentPage, this.pageSize);
       }
       this.showFilterBox = false;
-      utils.filter2Mysql(utils.filterName.PROJECT, this.filter);
-      this.loadData(this.filter, this.currentPage, this.pageSize);
     },
     //        标签的key格式化器
     keyFormater: function(value) {
@@ -378,6 +379,7 @@ export default {
     resetObject: utils.resetObject,
     valueFormater: utils.valueFormater,
     quitFilter: function() {
+      console.log("quit");
       this.filter = this.resetObject(this.filter, this.filterTmpl);
       utils.filter2Mysql(utils.filterName.PROJECT, this.filter);
       this.loadData(this.filter, this.currentPage, this.pageSize);

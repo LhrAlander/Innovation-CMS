@@ -13,6 +13,7 @@
               <el-row class="article-info"  type="flex" justify="center">
                 <span>上传时间：{{uploadTime}}</span>
                 <span>截止时间：{{endTime}}</span>
+                <span class="signup-link" @click="signUp">报名点我！</span>
               </el-row>
               <el-row class="article" v-html="article">
               </el-row>
@@ -84,7 +85,7 @@ export default {
           return axios.get("/api/front/projects/pendSide");
         })
         .then(res => {
-					console.log(res)
+          console.log(res);
           this.recentPendProjects = res.data.data;
         })
         .catch(err => {
@@ -99,6 +100,14 @@ export default {
     },
     goDetail(id) {
       this.$router.push(`/pendProjectDetail/${id}`);
+    },
+    signUp() {
+      const user = JSON.parse(window.localStorage.getItem("user"));
+      if (user && user.type == "学生") {
+        this.$router.push(`/signup/project/${this.$route.params.id}`);
+      } else {
+        this.$message.error("请以注册学生用户登录再进行操作");
+      }
     }
   },
   watch: {
@@ -196,5 +205,9 @@ export default {
   color: #000000;
   font-size: 14px;
   line-height: 20px;
+}
+.signup-link {
+  color: #5394c5;
+  cursor: pointer;
 }
 </style>

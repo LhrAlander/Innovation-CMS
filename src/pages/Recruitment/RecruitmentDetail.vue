@@ -14,6 +14,7 @@
                 <span>作者:{{author}}</span>
                 <span>上传时间：{{uploadTime}}</span>
                 <span>截止时间：{{endTime}}</span>
+                <span class="signup-link" @click="goSignUp">报名点我！</span>
               </el-row>
               <el-row class="article" v-html="article">
               </el-row>
@@ -101,6 +102,15 @@ export default {
     },
     goDetail(id) {
       this.$router.push(`/recruitmentDetail/${id}`);
+    },
+    goSignUp() {
+      const user = JSON.parse(window.localStorage.getItem("user"));
+      if (user && user.type == "学生") {
+        this.$router.push(`/add/recruitSignUpInfo`);
+      }
+      else {
+        this.$message.error('请以注册学生用户登录再进行操作')
+      }
     }
   },
   watch: {
@@ -198,5 +208,9 @@ export default {
   color: #000000;
   font-size: 14px;
   line-height: 20px;
+}
+.signup-link {
+  color: #5394c5;
+  cursor: pointer;
 }
 </style>

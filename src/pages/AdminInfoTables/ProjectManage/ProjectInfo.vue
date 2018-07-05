@@ -30,7 +30,7 @@
 
           <!--材料展示-->
           <el-row :gutter="200" class="info-content">
-             <el-col :span="12" class="info-item file-item" v-if="!(this.pendStatus == '已结题' || this.pendStatus != '立项申请中')">
+             <el-col :span="12" class="info-item file-item" v-if="!(this.pendStatus == '已结题' || !this.pendStatus.startsWith('立项'))">
               <span class="item-name">项目申请材料</span>
               <div class="item-content">
                 <el-upload
@@ -55,7 +55,7 @@
 
               </div>
             </el-col>
-            <el-col :span="12" class="info-item file-item" v-if="!(this.pendStatus == '已结题' || this.pendStatus != '中期检查中')">
+            <el-col :span="12" class="info-item file-item" v-if="!(this.pendStatus == '已结题' || !this.pendStatus.startsWith('中期'))">
               <span class="item-name">项目中期材料</span>
               <div class="item-content">
                 <el-upload
@@ -82,7 +82,7 @@
             </el-col>
           </el-row>
 
-          <el-row :gutter="200" class="info-content" v-if="!(this.pendStatus == '已结题' || this.pendStatus != '结题检查中')">
+          <el-row :gutter="200" class="info-content" v-if="!(this.pendStatus == '已结题' || !this.pendStatus.startsWith('结题'))">
              <el-col :span="12" class="info-item file-item">
               <span class="item-name">项目结题材料</span>
               <div class="item-content">
@@ -293,36 +293,7 @@ const DISPLAY_INFO = [
     type: MULTI_SELECT,
     span: 1,
     disabled: false,
-    options: [
-      {
-        value: "实验室1",
-        label: "实验室1",
-        children: [
-          {
-            value: "123",
-            label: "团队1"
-          },
-          {
-            value: "团队2",
-            label: "团队2"
-          }
-        ]
-      },
-      {
-        value: "企业1",
-        label: "企业1",
-        children: [
-          {
-            value: "团队1",
-            label: "团队1"
-          },
-          {
-            value: "团队2",
-            label: "团队2"
-          }
-        ]
-      }
-    ]
+    options: []
   },
   {
     key: "registerYear",
@@ -542,23 +513,28 @@ export default {
             }
             options.push(option);
           }
+          options.push({
+            label: '无',
+            value: '无'
+          })
           this.baseInfo.forEach(item => {
             if (item.key == "projectDep") {
+              let _c = ['无']
               // 构造当前值
-              let teamName = item.value;
               for (let i = 0; i < options.length; i++) {
                 let unit = options[i];
-                for (let i = 0; i < unit.children.length; i++) {
+                for (let i = 0; unit.children && i < unit.children.length; i++) {
                   let team = unit.children[i];
                   if (team.label == item.value) {
-                    item.value = [unit.value, team.value];
+                    _c = [unit.value, team.value];
                   }
                 }
                 if (item.value instanceof Array > 0) {
                   break;
                 }
               }
-              item.value = item.value instanceof Array ? item.value : [];
+              console.log('here', _c)
+              item.value = _c;
               item.options = options;
             }
           });
@@ -676,9 +652,10 @@ export default {
       return (rowIndex - 1) * 3 + colIndex - 1;
     },
     confirmChange() {
+      let baseInfo = JSON.parse(JSON.stringify(this.baseInfo))
       let info = utils.displayInfo2MySql(
         utils.filterName.PROJECT,
-        this.baseInfo
+        baseInfo
       );
       info.team_id = info.team_id.pop();
       // 判断指导老师
@@ -696,11 +673,14 @@ export default {
           info[key] = new Date(info[key]).toLocaleDateString();
         }
       });
+      console.log(info)
       axios
         .post("/api/project/change/project", {
           project: info
         })
-        .then(res => {})
+        .then(res => {
+          this.$router.push(`/check/projectinfo/${this.$route.params.id}`)
+        })
         .catch(err => {
           console.log(err);
         });
