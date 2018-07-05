@@ -178,7 +178,8 @@ export default {
             token: res.data.token,
             user: res.data.user
           });
-          if (this.loginForm.isRememberPassword) {
+          // if (this.loginForm.isRememberPassword) {
+          if (true) {
             window.localStorage.setItem("token", res.data.token);
             window.localStorage.setItem("user", JSON.stringify(res.data.user));
           }
