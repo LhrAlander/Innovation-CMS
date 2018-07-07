@@ -5,6 +5,11 @@
       <span v-if="!tagEmpty" style="font-weight: bold; font-size: .9rem;">筛选条件</span>
       <el-tag v-for="(value,key) in filter" :key='key' v-if="value !== ''" class="tag" >{{keyFormater(key)}}({{valueFormater(key,value,valueLabelMap)}})</el-tag>
     </div>
+    
+    <el-button class="addInfo" type="success" size="large" @click="dialogVisible = true">导入信息</el-button>
+    <el-dialog title="导入excel数据" :visible.sync="dialogVisible">
+      <input type="file" placeholder="选择导入文件" @change="sendfile" ref="dataFile"/>
+    </el-dialog>
     <el-button class="addInfo" type="success" size="large" @click="enterAdd">添加信息</el-button>
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
     <el-button class="exit-filter" size="large" @click="quitFilter">退出筛选</el-button>
@@ -85,11 +90,14 @@
 import axios from "@/utils/https.js";
 import FilterBox from "components/Admin/Manage/FilterBox";
 import InfoAdd from "components/Admin/Manage/InfoAdd";
-import utils from "@/utils/utils"
+import utils from "@/utils/utils";
+import XLSX from "xlsx";
 export default {
   components: { FilterBox, InfoAdd },
   data() {
     return {
+      dialogVisible: false,
+      excelFile: [],
       tableData: [],
       valueLabelMap: {
         role: [
@@ -182,7 +190,7 @@ export default {
       showFilterBox: false, // 是否显示筛选框
       tagEmpty: true, //标签是否为空
       showInfoAdd: false // 是否显示信息添加框
-    }
+    };
   },
   mounted: function() {
     // utils.filter2Mysql(utils.filterName.USER, this.filter);
@@ -209,6 +217,32 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    sendfile(t) {
+      let obj = this.$refs.dataFile;
+      let _this = this;
+      if (!obj.files) {
+        return;
+      }
+      let f = obj.files[0];
+      let reader = new FileReader();
+      reader.readAsBinaryString(f);
+      reader.onload = function(e) {
+        let data = e.target.result;
+        let wb = XLSX.read(data, { type: "binary" });
+        let users = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+        axios.post('/api/user/insert/usersfromexcel', {
+          users
+        })
+        .then(res => {
+          console.log(res)
+          _this.dialogVisible = false
+          obj.value = ''
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      };
     },
     unique(array) {
       var r = [];

@@ -7,6 +7,7 @@
         {{keyFormater(key)}}({{valueFormater(key, value, valueLabelMap)}})
       </el-tag>
     </div>
+    <el-button class="addInfo" type="success" size="large" @click="downloadExcel">导出信息</el-button>
     <el-button class="addInfo" type="success" size="large" @click="enterAdd">添加信息</el-button>
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
     <el-button class="exit-filter" size="large" @click="quitFilter">退出筛选</el-button>
@@ -91,6 +92,8 @@ import axios from "@/utils/https";
 import FilterBox from "@/components/Admin/Manage/FilterBox";
 import InfoAdd from "@/components/Admin/Manage/InfoAdd";
 import utils from "@/utils/utils";
+import XLSX from "xlsx";
+import XLSX_SAVE from "file-saver";
 
 export default {
   components: { FilterBox, InfoAdd },
@@ -276,6 +279,69 @@ export default {
     this.loadData(this.filter, this.currentPage, this.pageSize);
   },
   methods: {
+    downloadExcel() {
+      function s2ab(s) {
+        const buf = new ArrayBuffer(s.length);
+        const view = new Uint8Array(buf);
+        for (let i = 0; i !== s.length; ++i) {
+          view[i] = s.charCodeAt(i) & 0xff;
+        }
+        return buf;
+      }
+      utils.filter2Mysql(utils.filterName.PROJECT, this.filter);
+      console.log(this.filter);
+      if ("team_id" in this.filter) {
+        this.filter.team_id = this.filter.team_id.split(",")[1];
+      }
+      axios
+        .get(this.url, {
+          params: {
+            param: this.filter,
+            pageNum: 1,
+            pageSize: this.totalCount
+          }
+        })
+        .then(res => {
+          console.log(res);
+          let projects = res.data.data;
+          let data = [
+            [
+              "项目类别",
+              "项目级别",
+              "项目名称",
+              "项目负责人",
+              "项目指导老师",
+              "项目申请日期",
+              "项目截止日期"
+            ]
+          ];
+          for (let i = 0; i < projects.length; i++) {
+            let p = projects[i];
+            let _d = [
+              p.projectCategory,
+              p.projectLevel,
+              p.projectName,
+              p.principal,
+              p.guideTeacherName,
+              p.applyYear,
+              p.deadlineYear
+            ];
+            data.push(_d);
+          }
+          console.log(data)
+          const ws = XLSX.utils.aoa_to_sheet(data);
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+          const wbout = XLSX.write(wb, { type: "binary", bookType: "xlsx" });
+          XLSX_SAVE.saveAs(
+            new Blob([s2ab(wbout)], { type: "application/octet-stream" }),
+            "项目导出.xlsx"
+          );
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     getRowKeys(row) {
       return row.id;
     },
