@@ -1,7 +1,8 @@
 <template>
   <el-row>
     <el-col :span="6" class="image">
-      <img src="../assets/img/logoTitle.png" alt="">
+      <img v-if="!team.photo" src="../assets/img/logoTitle.png" alt="">
+      <img v-if="team.photo" :src="team.photo" alt="">
     </el-col>
     <el-col :span="18" class="content">
       <div class="cnt-wrapper" @click="goDetail">

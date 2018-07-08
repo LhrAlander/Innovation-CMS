@@ -11,6 +11,18 @@
             </div>
             <div class="team-msg" v-html="team.introduction">
             </div>
+
+            <!--展示该团队的照片-->
+            <div class="info-wrapper">
+                <span class="info-title">
+                  <el-carousel :interval="5000" arrow="always">
+                    <el-carousel-item v-for="item in team.photos" :key="item">
+                      <img :src="item" alt="photo" class="photo">
+                    </el-carousel-item>
+                  </el-carousel>
+                </span>
+            </div>
+
             <div class="team-table">
               <table border="1" cellspacing="0">
                 <tr>
@@ -38,7 +50,7 @@
           </el-col>
           <el-col :span="6">
             <div class="top">
-              <img src="../../../static/img/policyc.png" class="right-img"/>
+              <img src="/static/img/policyc.png" class="right-img"/>
               其他团队
             </div>
             <div class="right-bg">
@@ -186,5 +198,10 @@ export default {
   width: 20px;
   height: 20px;
   padding-right: 5px;
+}
+
+
+img.photo {
+  width: 100%;
 }
 </style>

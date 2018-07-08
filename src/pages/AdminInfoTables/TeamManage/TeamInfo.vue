@@ -28,8 +28,33 @@
             </el-col>
           </el-row>
         </span>
+
+        <span class="info-title">团队照片展示</span>
+        <el-button style="margin-left: 10px;" size="small" type="success" @click="uploadPhotos">上传到服务器</el-button>
+        <el-row :gutter='200' class="info-content">
+          <el-col span="24" class="info-item">
+             <el-upload
+              action="/api/upload/teamPhotos"
+              list-type="picture-card"
+              :auto-upload='false'
+              ref="upload"
+              :file-list="files"
+              :on-preview="handlePictureCardPreview"
+              :data="teamInfo"
+              :on-remove="handleRemove"
+              name="uploadFile">
+              <i class="el-icon-plus"></i>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisible" style="z-index: 999999">
+              <img width="100%" :src="dialogImageUrl" alt="">
+            </el-dialog>
+          </el-col>
+        </el-row>
+       
+
+
         <span class="info-title">发布内容简介</span>
-          <el-row :gutter="200" class="info-content">
+          <el-row :gutter="200" class="info-content" style="z-index: 99">
              <el-col :span="24" class="info-item">
               <div class="item-content">
                 <div id="editor-ele"></div>
@@ -198,7 +223,13 @@ export default {
       proInfo: [],
       teamId: "",
       teamIntro: "",
-      editor: ""
+      editor: "",
+      dialogImageUrl: "",
+      dialogVisible: false,
+      files: [],
+      teamInfo: {
+        teamId: ''
+      }
     };
   },
   components: {
@@ -206,7 +237,7 @@ export default {
   },
   mounted() {
     this.teamId = this.$route.params.teamId;
-
+    this.teamInfo.teamId = this.teamId
     axios
       .post("/api/auth/edit/teamInfo", { teamId: this.teamId })
       .then(res => {
@@ -230,6 +261,13 @@ export default {
         .get("/api/teacher/teacher/choices")
         .then(res => {
           this.baseInfo[2].options = res.data.names;
+          return axios.post('/api/team/get/teamPhotos', {
+            teamId: this.teamId
+          })
+        })
+        .then(res => {
+          console.log(res)
+          this.files = res.data.photos
         })
         .catch(err => {
           console.log(err);
@@ -291,6 +329,9 @@ export default {
           console.log(err);
         });
     },
+    uploadPhotos() {
+      this.$refs.upload.submit();      
+    },
     confirmChange() {
       axios
         .post("/api/auth/edit/teamInfo", { teamId: this.teamId })
@@ -329,12 +370,50 @@ export default {
     },
     getItemIndex(rowIndex, colIndex) {
       return (rowIndex - 1) * 3 + colIndex - 1;
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+      axios
+        .post("/api/team/delete/photo", {
+          files: file.filePath
+        })
+        .then(res => {
+          console.log(res)
+        });
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
     }
   }
 };
 </script>
 
 <style scoped>
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+
 .admin-check-info-wrapper {
   /*background-color: #ECF0F1;*/
   background-color: #fff;

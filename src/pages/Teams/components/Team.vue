@@ -7,7 +7,8 @@
       </router-link>
     </header>
     <main>
-      <img src="/static/img/defaultProject.png" alt="team" class='project-img'>
+      <img v-if="!team.photo" src="/static/img/defaultProject.png" alt="team" class='project-img'>
+      <img v-if="team.photo" :src="team.photo" alt="team" class='project-img'>
       <span class="detail">
           {{team.introduction}}
       </span>

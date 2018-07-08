@@ -39,6 +39,20 @@
           </el-row>
     </div>
 
+
+    <!--展示该团队的照片-->
+    <div class="info-wrapper">
+        <span class="info-title">
+          <i class="iconfont box">&#xe621;</i>
+          团队照片展示
+          <div class="photo-wall">
+            <div class="photo" v-for="i in photos" :key="i">
+              <img :src="i.url" alt="照片啦">
+            </div>
+          </div>
+        </span>
+    </div>
+
     <!--展示该团队的负责人-->
     <div class="info-wrapper">
         <span class="info-title">
@@ -192,7 +206,7 @@ const DISPLAY_INFO = [
     value: "152",
     type: INPUT,
     span: 1
-  },
+  }
 ];
 
 export default {
@@ -233,7 +247,8 @@ export default {
         ]
       ],
       teamId: "",
-      teamIntro: ''
+      teamIntro: "",
+      photos: []
     };
   },
   mounted() {
@@ -246,7 +261,7 @@ export default {
         this.initData();
       })
       .catch(err => {
-        this.$store.commit('clearAuth')
+        this.$store.commit("clearAuth");
       });
   },
   components: {
@@ -254,6 +269,17 @@ export default {
   },
   methods: {
     initData() {
+      axios
+        .post("/api/team/get/teamPhotos", {
+          teamId: this.teamId
+        })
+        .then(res => {
+          console.log(res)
+          this.photos = res.data.photos;
+        })
+        .catch(err => {
+          console.log(err);
+        });
       axios
         .post("/api/team/team", {
           teamId: this.teamId
@@ -264,7 +290,7 @@ export default {
             let info = this.baseInfo[i];
             info.value = res.team[info.key];
           }
-          this.teamIntro = res.team.teamInfo
+          this.teamIntro = res.team.teamInfo;
           this.leader = res.leader;
           this.teacher = res.teacher;
           let info = [];
@@ -277,9 +303,9 @@ export default {
             tmp.push(res.proInfo[i]);
           }
           if (tmp.length > 0) {
-            info.push(tmp)
+            info.push(tmp);
           }
-          this.proInfo = info
+          this.proInfo = info;
         })
         .catch(err => {
           console.log(err);
@@ -292,13 +318,13 @@ export default {
       return (rowIndex - 1) * 3 + colIndex - 1;
     },
     checkProject(project) {
-      this.$router.push(`/check/projectInfo/${project.projectId}`)
+      this.$router.push(`/check/projectInfo/${project.projectId}`);
     },
     checkLeader() {
-      this.$router.push(`/check/studentInfo/${this.leader.userId}`)
+      this.$router.push(`/check/studentInfo/${this.leader.userId}`);
     },
     checkTeacher() {
-      this.$router.push(`/check/teacherInfo/${this.teacher.userId}`)
+      this.$router.push(`/check/teacherInfo/${this.teacher.userId}`);
     },
     // 进入编辑模式
     goForEdit() {
@@ -390,5 +416,23 @@ h1 {
   height: 1.8rem;
   padding: 0.3rem;
   margin-left: 1rem;
+}
+
+.photo-wall {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.photo {
+  width: 30%;
+  margin: 10px;
+}
+
+.photo img {
+  width: 100%;
 }
 </style>
