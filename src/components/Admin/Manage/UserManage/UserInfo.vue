@@ -8,7 +8,16 @@
     
     <el-button class="addInfo" type="success" size="large" @click="dialogVisible = true">导入信息</el-button>
     <el-dialog title="导入excel数据" :visible.sync="dialogVisible">
-      <input type="file" placeholder="选择导入文件" @change="sendfile" ref="dataFile"/>
+      <el-row style="margin-bottom: 20px">
+        <el-col :span="24">
+        <el-button type="success" size="large" @click="downloadExcelModel">下载表格模板填入信息</el-button>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <input type="file" placeholder="选择导入文件" @change="sendfile" ref="dataFile"/>
+        </el-col>
+      </el-row>
     </el-dialog>
     <el-button class="addInfo" type="success" size="large" @click="enterAdd">添加信息</el-button>
     <el-button class="filter" size="large" @click="enterFilter">筛选信息</el-button>
@@ -92,6 +101,7 @@ import FilterBox from "components/Admin/Manage/FilterBox";
 import InfoAdd from "components/Admin/Manage/InfoAdd";
 import utils from "@/utils/utils";
 import XLSX from "xlsx";
+import XLSX_SAVE from "file-saver";
 export default {
   components: { FilterBox, InfoAdd },
   data() {
@@ -218,6 +228,32 @@ export default {
           console.log(err);
         });
     },
+    downloadExcelModel() {
+      function s2ab(s) {
+        const buf = new ArrayBuffer(s.length);
+        const view = new Uint8Array(buf);
+        for (let i = 0; i !== s.length; ++i) {
+          view[i] = s.charCodeAt(i) & 0xff;
+        }
+        return buf;
+      }
+      let data = [
+        [
+          "学号/工号",
+          "姓名",
+          "性别",
+          "账号类别（仅限学生、教师、企业）"
+        ]
+      ];
+      const ws = XLSX.utils.aoa_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+      const wbout = XLSX.write(wb, { type: "binary", bookType: "xlsx" });
+      XLSX_SAVE.saveAs(
+        new Blob([s2ab(wbout)], { type: "application/octet-stream" }),
+        "用户信息模板.xlsx"
+      );
+    },
     sendfile(t) {
       let obj = this.$refs.dataFile;
       let _this = this;
@@ -231,17 +267,18 @@ export default {
         let data = e.target.result;
         let wb = XLSX.read(data, { type: "binary" });
         let users = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-        axios.post('/api/user/insert/usersfromexcel', {
-          users
-        })
-        .then(res => {
-          console.log(res)
-          _this.dialogVisible = false
-          obj.value = ''
-        })
-        .catch(err => {
-          console.log(err)
-        })
+        axios
+          .post("/api/user/insert/usersfromexcel", {
+            users
+          })
+          .then(res => {
+            console.log(res);
+            _this.dialogVisible = false;
+            obj.value = "";
+          })
+          .catch(err => {
+            console.log(err);
+          });
       };
     },
     unique(array) {

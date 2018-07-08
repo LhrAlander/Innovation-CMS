@@ -7,7 +7,16 @@
     </div> 
     <el-button class="addInfo" type="success" size="large" @click="dialogVisible = true">导入信息</el-button>
     <el-dialog title="导入excel数据" :visible.sync="dialogVisible">
-      <input type="file" placeholder="选择导入文件" @change="sendfile" ref="dataFile"/>
+      <el-row style="margin-bottom: 20px">
+        <el-col :span="24">
+        <el-button type="success" size="large" @click="downloadExcelModel">下载表格模板填入信息</el-button>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <input type="file" placeholder="选择导入文件" @change="sendfile" ref="dataFile"/>
+        </el-col>
+      </el-row>
     </el-dialog>
     <el-button class="addInfo" type="success" size="large" @click="downloadExcel">导出信息</el-button>
     <el-button class="addInfo" type="success" size="large" @click="enterAdd">添加信息</el-button>
@@ -77,7 +86,7 @@
         :current-page="currentPage"
         :page-size="pageSize"
         layout="total, prev, pager, next, jumper"
-        :total="totalCount">
+        :total="realTotalCount">
       </el-pagination>
     </div>
   </div>
@@ -86,7 +95,7 @@
 import axios from "@/utils/https";
 import FilterBox from "@/components/Admin/Manage/FilterBox";
 import InfoAdd from "@/components/Admin/Manage/InfoAdd";
-import utils from "@/utils/utils"
+import utils from "@/utils/utils";
 import XLSX from "xlsx";
 import XLSX_SAVE from "file-saver";
 export default {
@@ -94,7 +103,8 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      tableData: [],
+      tableData: [], // 要展示的信息
+      allData: [],  // 全部的信息
       valueLabelMap: {
         name: [],
         awardLevel: [],
@@ -106,7 +116,6 @@ export default {
         awardName: "获奖名称",
         projectName: "项目名称",
         username: "用户姓名",
-        contact: "联系方式"
       },
       expandFormatMap: {
         // 格式化额外信息映射表
@@ -184,10 +193,11 @@ export default {
         projectName: "", //项目名称
         username: "" //用户姓名
       },
-      pageSize: 15, //每页大小
+      pageSize: 10, //每页大小
       currentPage: 1, //当前页
       start: 1, //查询的页码
-      totalCount: 30, //返回的记录总数
+      totalCount: 0, //返回的记录总数
+      realTotalCount: 0,
       showFilterBox: false, // 是否显示筛选框
       tagEmpty: true, //标签是否为空
       showInfoAdd: false // 是否显示信息添加框
@@ -230,13 +240,15 @@ export default {
               "奖项等级",
               "获奖日期",
               "项目名称",
-              "获奖人员",
+              "获奖人员"
             ]
           ];
-          let members = {}
+          let members = {};
           for (let i = 0; i < projects.length; i++) {
             let p = projects[i];
-            let key = `${p.name}${p.awardLevel}${p.awardSecondLevel}${new Date(p.awardTime).getFullYear()}${p.projectName}`
+            let key = `${p.name}${p.awardLevel}${p.awardSecondLevel}${new Date(
+              p.awardTime
+            ).getFullYear()}${p.projectName}`;
             if (!members[key]) {
               members[key] = {
                 name: p.name,
@@ -245,23 +257,22 @@ export default {
                 year: new Date(p.awardTime).getFullYear(),
                 projectName: p.projectName,
                 members: []
-              }
+              };
             }
-            members[key].members.push(p.username)
+            members[key].members.push(p.username);
           }
           for (let k in members) {
-            let p = members[k]
+            let p = members[k];
             let _d = [
               p.name,
               p.awardLevel,
               p.awardSecondLevel,
               p.year,
               p.projectName,
-              p.members.join('、'),
+              p.members.join("、")
             ];
-            data.push(_d)
+            data.push(_d);
           }
-          console.log(data)
           const ws = XLSX.utils.aoa_to_sheet(data);
           const wb = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
@@ -274,6 +285,34 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    downloadExcelModel() {
+      function s2ab(s) {
+        const buf = new ArrayBuffer(s.length);
+        const view = new Uint8Array(buf);
+        for (let i = 0; i !== s.length; ++i) {
+          view[i] = s.charCodeAt(i) & 0xff;
+        }
+        return buf;
+      }
+      let data = [
+        [
+          "奖项名称",
+          "奖项类别",
+          "奖项等级",
+          "获奖年份（四位数字）",
+          "获奖项目（个人或者项目名称）",
+          "获奖人员（以中文半角顿号分隔多个名字）"
+        ]
+      ];
+      const ws = XLSX.utils.aoa_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+      const wbout = XLSX.write(wb, { type: "binary", bookType: "xlsx" });
+      XLSX_SAVE.saveAs(
+        new Blob([s2ab(wbout)], { type: "application/octet-stream" }),
+        "获奖用户信息模板.xlsx"
+      );
     },
     sendfile(t) {
       let obj = this.$refs.dataFile;
@@ -288,19 +327,20 @@ export default {
         let data = e.target.result;
         let wb = XLSX.read(data, { type: "binary" });
         let users = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-        console.log(users)
-        obj.value = ''
-        axios.post('/api/award/insert/awardusersfromexcel', {
-          users
-        })
-        .then(res => {
-          console.log(res)
-          _this.dialogVisible = false
-          obj.value = ''
-        })
-        .catch(err => {
-          console.log(err)
-        })
+        console.log(users);
+        obj.value = "";
+        axios
+          .post("/api/award/insert/awardusersfromexcel", {
+            users
+          })
+          .then(res => {
+            console.log(res);
+            _this.dialogVisible = false;
+            obj.value = "";
+          })
+          .catch(err => {
+            console.log(err);
+          });
       };
     },
     getRowKeys(row) {
@@ -325,6 +365,56 @@ export default {
           this.tableData = [];
           this.tableData = res.data.data;
           this.totalCount = res.data.count;
+          return axios.get(this.url, {
+            params: {
+              param: this.filter,
+              pageNum: 1,
+              pageSize: this.totalCount
+            }
+          });
+        })
+        .then(res => {
+          let projects = res.data.data;
+          let members = {};
+          let data = []
+          for (let i = 0; i < projects.length; i++) {
+            let p = projects[i];
+            let key = `${p.name}${p.awardLevel}${p.awardSecondLevel}${new Date(
+              p.awardTime
+            ).getFullYear()}${p.projectName}`;
+            if (!members[key]) {
+              members[key] = {
+                name: p.name,
+                awardLevel: p.awardLevel,
+                awardSecondLevel: p.awardSecondLevel,
+                year: new Date(p.awardTime).getFullYear(),
+                projectName: p.projectName,
+                members: []
+              };
+            }
+            members[key].members.push(p.username);
+          }
+          for (let k in members) {
+            let p = members[k];
+            let info = {
+              awardName: `${p.year}年${p.name}${p.awardLevel}${p.awardSecondLevel}`,
+              projectName: p.projectName,
+              username: p.members.join("、"),
+              contact: "联系方式"
+            };
+            data.push(info);
+          }
+          this.allData = data
+          this.realTotalCount = data.length
+          let start = (pageNum - 1) * pageSize
+          let end = pageNum * pageSize - 1
+          this.tableData = []
+          for (let i = start; i <= end; i++) {
+            let d = this.allData[i]
+            if (d) {
+              this.tableData.push(d)
+            }
+          }
         })
         .catch(err => {
           console.log(err);
@@ -353,7 +443,7 @@ export default {
         .post("/api/award/delete/user", { award })
         .then(res => {
           console.log(res);
-          this.loadData(this.filter, this.currentPage, this.pageSize)
+          this.loadData(this.filter, this.currentPage, this.pageSize);
         })
         .catch(err => {
           console.log(err);
@@ -455,9 +545,8 @@ export default {
           .then(res => {
             console.log(res);
             if (res.data.code == 500) {
-              this.$message.error('没有该获奖信息')
-            }
-            else {
+              this.$message.error("没有该获奖信息");
+            } else {
               this.loadData(this.filter, this.currentPage, this.pageSize);
             }
           })

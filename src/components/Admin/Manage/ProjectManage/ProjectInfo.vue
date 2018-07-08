@@ -312,7 +312,8 @@ export default {
               "项目负责人",
               "项目指导老师",
               "项目申请日期",
-              "项目截止日期"
+              "项目截止日期",
+              "项目成员"
             ]
           ];
           for (let i = 0; i < projects.length; i++) {
@@ -324,7 +325,8 @@ export default {
               p.principal,
               p.guideTeacherName,
               p.applyYear,
-              p.deadlineYear
+              p.deadlineYear,
+              p.members.split(',').join('、')
             ];
             data.push(_d);
           }
